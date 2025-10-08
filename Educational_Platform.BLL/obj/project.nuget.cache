@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "q464vmlyJSw=",
+  "dgSpecHash": "AxC1tp2VKwE=",
   "success": true,
-  "projectFilePath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.BLL\\Educational_Platform.BLL.csproj",
+  "projectFilePath": "C:\\Users\\engab\\Downloads\\Final_Project_Test\\Educational_Platform.BLL\\Educational_Platform.BLL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.aspnetcore.hosting\\2.3.0\\microsoft.aspnetcore.hosting.2.3.0.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.aspnetcore.hosting.abstractions\\2.3.0\\microsoft.aspnetcore.hosting.abstractions.2.3.0.nupkg.sha512",

@@ -29,7 +29,7 @@ namespace Educational_Platform.DAL.Configurations.Courses
 				.HasForeignKey(c => c.SubCategoryId)
 				.OnDelete(DeleteBehavior.Restrict);
 
-			builder.HasMany(c => c.CourseLessons)
+			builder.HasMany(c => c.Lessons)
 				.WithOne(cl => cl.Course)
 				.HasForeignKey(cl => cl.CourseId)
 				.OnDelete(DeleteBehavior.Cascade);

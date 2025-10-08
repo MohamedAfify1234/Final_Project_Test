@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Educational_Platform.DAL.Entities.Courses;
+using Educational_Platform.DAL.Entities.Lessons;
 using Educational_Platform.ViewModels.CoursesViewModels;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Educational_Platform.ViewModels.LessonsViewModels;
 namespace Educational_Platform.Mappings
 {
 	public class MappingProfile: Profile
@@ -10,11 +11,12 @@ namespace Educational_Platform.Mappings
 		{
 
 			CreateMap<Course, CreateCourseViewModel>().ReverseMap();
+			CreateMap<Lesson, CreateLessonViewModel>().ReverseMap();
 			CreateMap<Course, EditCourseViewModel>().ReverseMap();
+			CreateMap<Lesson, EditLessonViewModel>().ReverseMap();
+
+
 			CreateMap<Course, Course>().ReverseMap();
-
-
-
 		    // الشرح 
 			//CreateMap<Notification, NotificationDTO>();
 			//CreateMap<NotificationDTO, Notification>();

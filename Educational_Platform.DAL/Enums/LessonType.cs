@@ -8,7 +8,7 @@ namespace Educational_Platform.DAL.Enums
 {
 	public enum LessonType
 	{
-		Video,          // فيديو
+		Video=1,          // فيديو
 		Article,        // مقال
 		Quiz,           // اختبار
 		Assignment,     //واجب 

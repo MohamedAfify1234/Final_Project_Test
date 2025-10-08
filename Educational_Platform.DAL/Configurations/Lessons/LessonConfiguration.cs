@@ -13,16 +13,12 @@ namespace Educational_Platform.DAL.Configurations.Lessons
 	{
 		public void Configure(EntityTypeBuilder<Lesson> builder)
 		{ 
-			// العلاقات
-			builder.HasMany(l => l.CourseLessons)
-				.WithOne(cl => cl.Lesson)
-				.HasForeignKey(cl => cl.LessonId)
-				.OnDelete(DeleteBehavior.Cascade);
-
-			builder.HasMany(l => l.Questions)
-				.WithOne(q => q.Lesson)
-				.HasForeignKey(q => q.LessonId)
-				.OnDelete(DeleteBehavior.Cascade);
+			// العلاقات  
+			builder.HasOne(q => q.Course)
+				.WithMany(e => e.Lessons)
+				.HasForeignKey(q => q.CourseId)
+				.OnDelete(DeleteBehavior.NoAction);
+			 
 		}
 	}
 }

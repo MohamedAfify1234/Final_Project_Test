@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "35jUzp8ezjk=",
+  "dgSpecHash": "W3/GxrjaDho=",
   "success": true,
-  "projectFilePath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform\\Educational_Platform.csproj",
+  "projectFilePath": "C:\\Users\\engab\\Downloads\\Final_Project_Test\\Educational_Platform\\Educational_Platform.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\engab\\.nuget\\packages\\automapper\\15.0.1\\automapper.15.0.1.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
@@ -93,6 +93,7 @@
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.entityframeworkcore.design\\8.0.20\\microsoft.entityframeworkcore.design.8.0.20.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.entityframeworkcore.relational\\8.0.20\\microsoft.entityframeworkcore.relational.8.0.20.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.entityframeworkcore.sqlserver\\8.0.20\\microsoft.entityframeworkcore.sqlserver.8.0.20.nupkg.sha512",
+    "C:\\Users\\engab\\.nuget\\packages\\microsoft.entityframeworkcore.tools\\8.0.11\\microsoft.entityframeworkcore.tools.8.0.11.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.extensions.caching.abstractions\\8.0.0\\microsoft.extensions.caching.abstractions.8.0.0.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.extensions.caching.memory\\8.0.1\\microsoft.extensions.caching.memory.8.0.1.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\microsoft.extensions.configuration\\8.0.0\\microsoft.extensions.configuration.8.0.0.nupkg.sha512",

@@ -26,9 +26,7 @@ namespace Educational_Platform.DAL.Data
 		public DbSet<CourseCategory> CourseCategories { get; set; }
 		public DbSet<SubCategory> SubCategories { get; set; }
 		public DbSet<Lesson> Lessons { get; set; }
-		public DbSet<CourseLesson> CourseLessons { get; set; }
-		public DbSet<Question> Questions { get; set; }
-		public DbSet<Answer> Answers { get; set; }
+ 		public DbSet<Answer> Answers { get; set; }
 		public DbSet<Exam> Exams { get; set; }
 		public DbSet<ExamAttempt> ExamAttempts { get; set; }
 		public DbSet<Subscription> Subscriptions { get; set; }

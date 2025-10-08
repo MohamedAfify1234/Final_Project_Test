@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "sdxzp0uPw78=",
+  "dgSpecHash": "YTxgkduiDkU=",
   "success": true,
-  "projectFilePath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.DAL\\Educational_Platform.DAL.csproj",
+  "projectFilePath": "C:\\Users\\engab\\Downloads\\Final_Project_Test\\Educational_Platform.DAL\\Educational_Platform.DAL.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\engab\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\engab\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",

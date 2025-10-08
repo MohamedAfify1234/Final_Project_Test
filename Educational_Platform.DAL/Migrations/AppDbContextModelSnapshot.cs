@@ -294,9 +294,6 @@ namespace Educational_Platform.DAL.Migrations
                     b.Property<bool>("IsResolved")
                         .HasColumnType("bit");
 
-                    b.Property<Guid?>("LessonId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -310,38 +307,9 @@ namespace Educational_Platform.DAL.Migrations
 
                     b.HasIndex("ExamId");
 
-                    b.HasIndex("LessonId");
-
                     b.HasIndex("UserId");
 
-                    b.ToTable("Questions");
-                });
-
-            modelBuilder.Entity("Educational_Platform.DAL.Entities.Lessons.CourseLesson", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsRequired")
-                        .HasColumnType("bit");
-
-                    b.Property<Guid>("LessonId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("OrderInCourse")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("LessonId");
-
-                    b.ToTable("CourseLessons");
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Educational_Platform.DAL.Entities.Lessons.Lesson", b =>
@@ -357,6 +325,9 @@ namespace Educational_Platform.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<Guid>("CourseId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -368,6 +339,9 @@ namespace Educational_Platform.DAL.Migrations
                         .HasColumnType("bit");
 
                     b.Property<int>("Order")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderInCourse")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -382,6 +356,8 @@ namespace Educational_Platform.DAL.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
 
                     b.ToTable("Lessons");
                 });
@@ -883,11 +859,6 @@ namespace Educational_Platform.DAL.Migrations
                         .HasForeignKey("ExamId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Educational_Platform.DAL.Entities.Lessons.Lesson", "Lesson")
-                        .WithMany("Questions")
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
                     b.HasOne("Educational_Platform.DAL.Entities.Users.User", "User")
                         .WithMany("Questions")
                         .HasForeignKey("UserId")
@@ -898,28 +869,18 @@ namespace Educational_Platform.DAL.Migrations
 
                     b.Navigation("Exam");
 
-                    b.Navigation("Lesson");
-
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Educational_Platform.DAL.Entities.Lessons.CourseLesson", b =>
+            modelBuilder.Entity("Educational_Platform.DAL.Entities.Lessons.Lesson", b =>
                 {
                     b.HasOne("Educational_Platform.DAL.Entities.Courses.Course", "Course")
-                        .WithMany("CourseLessons")
+                        .WithMany("Lessons")
                         .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Educational_Platform.DAL.Entities.Lessons.Lesson", "Lesson")
-                        .WithMany("CourseLessons")
-                        .HasForeignKey("LessonId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Course");
-
-                    b.Navigation("Lesson");
                 });
 
             modelBuilder.Entity("Educational_Platform.DAL.Entities.Reviews.CourseReview", b =>
@@ -1020,11 +981,11 @@ namespace Educational_Platform.DAL.Migrations
 
             modelBuilder.Entity("Educational_Platform.DAL.Entities.Courses.Course", b =>
                 {
-                    b.Navigation("CourseLessons");
-
                     b.Navigation("CourseReviews");
 
                     b.Navigation("Exams");
+
+                    b.Navigation("Lessons");
 
                     b.Navigation("Subscribes");
                 });
@@ -1051,13 +1012,6 @@ namespace Educational_Platform.DAL.Migrations
             modelBuilder.Entity("Educational_Platform.DAL.Entities.Learning.Question", b =>
                 {
                     b.Navigation("Answers");
-                });
-
-            modelBuilder.Entity("Educational_Platform.DAL.Entities.Lessons.Lesson", b =>
-                {
-                    b.Navigation("CourseLessons");
-
-                    b.Navigation("Questions");
                 });
 
             modelBuilder.Entity("Educational_Platform.DAL.Entities.Subscriptions.Subscription", b =>

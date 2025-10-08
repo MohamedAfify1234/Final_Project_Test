@@ -26,7 +26,7 @@ namespace Educational_Platform.DAL.Repositorys.Implementations
 			return await _dbSet.ToListAsync();
 		}
 
-		public async Task<T?> GetByIdAsync(Guid id)
+		public async Task<T> GetByIdAsync(Guid id)
 		{
 			return await _dbSet.FindAsync(id);
 		}

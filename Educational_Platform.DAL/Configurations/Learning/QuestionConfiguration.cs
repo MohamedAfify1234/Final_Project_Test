@@ -14,11 +14,6 @@ namespace Educational_Platform.DAL.Configurations.Learning
 		public void Configure(EntityTypeBuilder<Question> builder)
 		{ 
 			// العلاقات
-			builder.HasOne(q => q.Lesson)
-				.WithMany(l => l.Questions)
-				.HasForeignKey(q => q.LessonId)
-				.OnDelete(DeleteBehavior.NoAction);
-			  
 			builder.HasOne(q => q.Exam)
 				.WithMany(e => e.Questions)
 				.HasForeignKey(q => q.ExamId)
