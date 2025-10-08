@@ -32,7 +32,11 @@ namespace Educational_Platform.Controllers.Lessons
         [HttpGet]
         public IActionResult Index(Guid id)
         {
-            var lessons = _repoLesson.Query().Where(i => i.CourseId == id).ToList();
+			var lessons = _repoLesson.Query()
+				.Where(i => i.CourseId == id)
+				.OrderBy(i => i.OrderInCourse)
+				.ToList();
+			
             ViewBag.courseId = id;
 			return View(lessons);
         }
