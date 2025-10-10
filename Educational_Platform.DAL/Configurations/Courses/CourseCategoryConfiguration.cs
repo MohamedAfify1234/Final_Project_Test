@@ -13,7 +13,6 @@ namespace Educational_Platform.DAL.Configurations.Courses
 	{
 		public void Configure(EntityTypeBuilder<CourseCategory> builder)
 		{
-			// العلاقات
 			builder.HasMany(cc => cc.SubCategories)
 				.WithOne(sc => sc.Category)
 				.HasForeignKey(sc => sc.CategoryId)

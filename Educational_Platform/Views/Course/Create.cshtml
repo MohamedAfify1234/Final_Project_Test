@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="ShortDescription" class="form-label"></label>
+                                <label asp-for="ShortDescription" class="form-label">Short Description</label>
                                 <input asp-for="ShortDescription" class="form-control" />
                                 <span asp-validation-for="ShortDescription" class="text-danger"></span>
                             </div>
@@ -52,14 +52,14 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="ThumbnailUrl" class="form-label"></label>
+                                <label asp-for="ThumbnailUrl" class="form-label">Thumbnail Url</label>
                                 <input asp-for="ThumbnailUrl" class="form-control" />
                                 <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group mb-3">
-                                <label asp-for="PreviewVideoUrl" class="form-label"></label>
+                                <label asp-for="PreviewVideoUrl" class="form-label">Preview Video Url</label>
                                 <input asp-for="PreviewVideoUrl" class="form-control" />
                                 <span asp-validation-for="PreviewVideoUrl" class="text-danger"></span>
                             </div>
@@ -67,20 +67,7 @@
                     </div>
 
                     <div class="row mt-3">
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="TotalDuration" class="form-label">Duration (Hours)</label>
-                                <input asp-for="TotalDuration" class="form-control" />
-                                <span asp-validation-for="TotalDuration" class="text-danger"></span>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="form-group mb-3">
-                                <label asp-for="TotalLessons" class="form-label">Total Lessons</label>
-                                <input asp-for="TotalLessons" class="form-control" />
-                                <span asp-validation-for="TotalLessons" class="text-danger"></span>
-                            </div>
-                        </div>
+                        
                         <div class="col-md-4 d-flex align-items-center">
                             <div class="form-group form-check mb-3">
                                 <input class="form-check-input" asp-for="IsFree" />

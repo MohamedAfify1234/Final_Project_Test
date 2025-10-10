@@ -21,16 +21,14 @@ namespace Educational_Platform.DAL.Entities.Learning
 		public Guid Id { get; set; }                       // المعرف الفريد للسؤال
 		public string Title { get; set; }                  // عنوان السؤال
 		public string Content { get; set; }                // محتوى السؤال
- 
+
 		// المستخدم
 		public DateTime AskedDate { get; set; } = DateTime.Now; // تاريخ السؤال
 		public bool IsResolved { get; set; } = false;      // تم الحل/لم يتم
 
 
 		// العلاقات		
-		public Guid? LessonId { get; set; }                // الدرس المرتبط
-		public Lesson Lesson { get; set; }                 // الدرس
-	    public Guid? CourseId { get; set; }                // الكورس المرتبط
+		public Guid? CourseId { get; set; }                // الكورس المرتبط
 		public Course Course { get; set; }                 // الكورس
 		public Guid? ExamId { get; set; }                  // الامتحان المرتبط
 		public Exam Exam { get; set; }                     // الامتحان

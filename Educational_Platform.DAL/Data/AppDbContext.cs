@@ -11,24 +11,33 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Educational_Platform.DAL.Data
 {
-	public class AppDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>
-	{
-		public AppDbContext(DbContextOptions<AppDbContext> options)
-		 : base(options)
-		{
-		}
+	public class AppDbContext : DbContext
+    {
+		//public AppDbContext(DbContextOptions<AppDbContext> options)
+		// : base(options)
+		//{
+		//}
 
-		// DbSets
-		public DbSet<Student> Students { get; set; }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=EducationalPlatform;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Apply all configurations automatically
+
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+        }
+
+        // DbSets
+        public DbSet<Student> Students { get; set; }
 		public DbSet<Teacher> Teachers { get; set; }
 		public DbSet<Admin> Admins { get; set; }
 		public DbSet<Course> Courses { get; set; }
 		public DbSet<CourseCategory> CourseCategories { get; set; }
 		public DbSet<SubCategory> SubCategories { get; set; }
 		public DbSet<Lesson> Lessons { get; set; }
-		public DbSet<CourseLesson> CourseLessons { get; set; }
-		public DbSet<Question> Questions { get; set; }
-		public DbSet<Answer> Answers { get; set; }
+ 		public DbSet<Answer> Answers { get; set; }
 		public DbSet<Exam> Exams { get; set; }
 		public DbSet<ExamAttempt> ExamAttempts { get; set; }
 		public DbSet<Subscription> Subscriptions { get; set; }
@@ -37,14 +46,6 @@ namespace Educational_Platform.DAL.Data
 
 
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
-		{
-			base.OnModelCreating(modelBuilder);
-
-			// Apply all configurations automatically
-
-			modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
-		}
 
 		// تطبيق جميع الـ Configurations تلقائياً من الـ Assembly
 		//builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());

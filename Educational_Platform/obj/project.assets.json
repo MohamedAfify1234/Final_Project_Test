@@ -1581,6 +1581,18 @@
           }
         }
       },
+      "Microsoft.EntityFrameworkCore.Tools/8.0.20": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Design": "8.0.20"
+        },
+        "compile": {
+          "lib/net8.0/_._": {}
+        },
+        "runtime": {
+          "lib/net8.0/_._": {}
+        }
+      },
       "Microsoft.Extensions.Caching.Abstractions/8.0.0": {
         "type": "package",
         "dependencies": {
@@ -3120,6 +3132,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Educational_Platform.DAL": "1.0.0",
           "Microsoft.AspNetCore.Hosting": "2.3.0",
           "Microsoft.AspNetCore.Http.Features": "5.0.17"
         },
@@ -5472,6 +5485,32 @@
         "lib/net8.0/Microsoft.EntityFrameworkCore.SqlServer.xml",
         "microsoft.entityframeworkcore.sqlserver.8.0.20.nupkg.sha512",
         "microsoft.entityframeworkcore.sqlserver.nuspec"
+      ]
+    },
+    "Microsoft.EntityFrameworkCore.Tools/8.0.20": {
+      "sha512": "88Kfqg2BAb8l+aH3vHeCQGlcZ/sFGpc/6jm7ejH14WHRfV1VNebb9AvPPucqCM5ZFj+txc+xHkdgW9UzLkA8Dg==",
+      "type": "package",
+      "path": "microsoft.entityframeworkcore.tools/8.0.20",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "docs/PACKAGE.md",
+        "lib/net8.0/_._",
+        "microsoft.entityframeworkcore.tools.8.0.20.nupkg.sha512",
+        "microsoft.entityframeworkcore.tools.nuspec",
+        "tools/EntityFrameworkCore.PS2.psd1",
+        "tools/EntityFrameworkCore.PS2.psm1",
+        "tools/EntityFrameworkCore.psd1",
+        "tools/EntityFrameworkCore.psm1",
+        "tools/about_EntityFrameworkCore.help.txt",
+        "tools/init.ps1",
+        "tools/net461/any/ef.exe",
+        "tools/net461/win-arm64/ef.exe",
+        "tools/net461/win-x86/ef.exe",
+        "tools/netcoreapp2.0/any/ef.dll",
+        "tools/netcoreapp2.0/any/ef.runtimeconfig.json"
       ]
     },
     "Microsoft.Extensions.Caching.Abstractions/8.0.0": {
@@ -8301,27 +8340,29 @@
       "Educational_Platform.BLL >= 1.0.0",
       "Educational_Platform.DAL >= 1.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.20",
+      "Microsoft.EntityFrameworkCore.SqlServer >= 8.0.20",
+      "Microsoft.EntityFrameworkCore.Tools >= 8.0.20",
       "Microsoft.VisualStudio.Web.CodeGeneration.Design >= 8.0.7"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\engab\\.nuget\\packages\\": {},
+    "C:\\Users\\MASHTOUL_COMPANY\\.nuget\\packages\\": {},
     "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform\\Educational_Platform.csproj",
-      "projectName": "Educational_Platform",
-      "projectPath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform\\Educational_Platform.csproj",
-      "packagesPath": "C:\\Users\\engab\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform\\obj\\",
+      "projectUniqueName": "E:\\full stack web\\Project\\TestProject\\Educational_Platform\\Educational_Platform.csproj",
+      "projectName": "Educational_Platform_Test",
+      "projectPath": "E:\\full stack web\\Project\\TestProject\\Educational_Platform\\Educational_Platform.csproj",
+      "packagesPath": "C:\\Users\\MASHTOUL_COMPANY\\.nuget\\packages\\",
+      "outputPath": "E:\\full stack web\\Project\\TestProject\\Educational_Platform\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\engab\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\MASHTOUL_COMPANY\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -8336,11 +8377,11 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.BLL\\Educational_Platform.BLL.csproj": {
-              "projectPath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.BLL\\Educational_Platform.BLL.csproj"
+            "E:\\full stack web\\Project\\TestProject\\Educational_Platform.BLL\\Educational_Platform.BLL.csproj": {
+              "projectPath": "E:\\full stack web\\Project\\TestProject\\Educational_Platform.BLL\\Educational_Platform.BLL.csproj"
             },
-            "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.DAL\\Educational_Platform.DAL.csproj": {
-              "projectPath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.DAL\\Educational_Platform.DAL.csproj"
+            "E:\\full stack web\\Project\\TestProject\\Educational_Platform.DAL\\Educational_Platform.DAL.csproj": {
+              "projectPath": "E:\\full stack web\\Project\\TestProject\\Educational_Platform.DAL\\Educational_Platform.DAL.csproj"
             }
           }
         }
@@ -8371,6 +8412,16 @@
             "target": "Package",
             "version": "[8.0.20, )"
           },
+          "Microsoft.EntityFrameworkCore.SqlServer": {
+            "target": "Package",
+            "version": "[8.0.20, )"
+          },
+          "Microsoft.EntityFrameworkCore.Tools": {
+            "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+            "suppressParent": "All",
+            "target": "Package",
+            "version": "[8.0.20, )"
+          },
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
             "target": "Package",
             "version": "[8.0.7, )"
@@ -8395,7 +8446,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.300/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
       }
     }
   }

@@ -1,0 +1,115 @@
+﻿@using Educational_Platform.DAL.Entities.Lessons
+@model Lesson
+
+@{
+    ViewData["Title"] = "Lesson Details: " + Model.Title;
+
+    // 🔧 Ensure the YouTube link is in embed format
+    string videoUrl = Model.VideoUrl;
+    if (!string.IsNullOrEmpty(videoUrl))
+    {
+        if (videoUrl.Contains("youtu.be"))
+        {
+            var videoId = videoUrl.Split('/').Last().Split('?')[0];
+            videoUrl = $"https://www.youtube.com/embed/{videoId}";
+        }
+        else if (videoUrl.Contains("watch?v="))
+        {
+            var videoId = videoUrl.Split("watch?v=")[1].Split('&')[0];
+            videoUrl = $"https://www.youtube.com/embed/{videoId}";
+        }
+    }
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="mb-3 fw-bold">@Model.Title</h1>
+            <h5 class="text-muted">Part of: <strong>@Model.Course.Title</strong> (Order: @Model.OrderInCourse)</h5>
+            <hr />
+        </div>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+
+            @if (!string.IsNullOrEmpty(videoUrl))
+            {
+                <div class="card shadow-lg mb-4 border-0">
+                    <div class="card-header bg-dark text-white">
+                        <h5 class="mb-0"><i class="bi bi-play-circle me-1"></i> Lesson Video</h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="ratio ratio-16x9">
+                            <iframe src="@videoUrl"
+                                    title="YouTube video player"
+                                    allowfullscreen
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="card shadow mb-4 border-0">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0"><i class="bi bi-file-text me-1"></i> Lesson Content</h5>
+                </div>
+                <div class="card-body">
+                    <p class="lead">@Model.Description</p>
+                    <hr />
+                    <div class="lesson-main-content">
+                        @Html.DisplayFor(model => model.Content)
+                    </div>
+                </div>
+            </div>
+
+            @if (!string.IsNullOrEmpty(Model.AttachmentUrl))
+            {
+                <div class="mb-4">
+                    <a href="@Model.AttachmentUrl" target="_blank" class="btn btn-outline-primary btn-lg w-100">
+                        <i class="bi bi-download"></i> Download Attachments
+                    </a>
+                </div>
+            }
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card shadow mb-4 border-0">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle me-1"></i> Lesson Details</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row mb-0">
+                        <dt class="col-sm-5">Duration:</dt>
+                        <dd class="col-sm-7">@Model.Duration Minutes</dd>
+
+                        <dt class="col-sm-5">Order:</dt>
+                        <dd class="col-sm-7">@Model.Order</dd>
+
+                        <dt class="col-sm-5">Type:</dt>
+                        <dd class="col-sm-7">@Model.Type</dd>
+
+                        <dt class="col-sm-5">Is Free:</dt>
+                        <dd class="col-sm-7">
+                            <span class="badge @(Model.IsFree ? "bg-success" : "bg-danger")">
+                                @(Model.IsFree ? "Yes (Preview)" : "No")
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="d-grid gap-2">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning w-100">Edit Lesson</a>
+                <a asp-action="Index" class="btn btn-outline-secondary w-100">Back to Course List</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

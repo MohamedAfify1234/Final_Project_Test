@@ -13,7 +13,7 @@ namespace Educational_Platform.DAL.Entities.Courses
 		{
 			Id = Guid.NewGuid();
 		}
-		
+
 		public Guid Id { get; set; }                       // المعرف الفريد للكورس
 		public string Title { get; set; }                  // عنوان الكورس
 		public string Description { get; set; }            // الوصف الكامل
@@ -21,11 +21,11 @@ namespace Educational_Platform.DAL.Entities.Courses
 		public string ThumbnailUrl { get; set; }           // صورة الغلاف
 		public string PreviewVideoUrl { get; set; }        // فيديو المعاينة
 
- 		public bool IsFree { get; set; } = false;          // مجاني/مدفوع
+		public bool IsFree { get; set; } = false;          // مجاني/مدفوع
 
 		// الحالة
 		public bool IsPublished { get; set; } = false;     // منشور/غير منشور
- 
+
 		// التواريخ
 		public DateTime CreatedDate { get; set; } = DateTime.Now; // تاريخ الإنشاء
 		public DateTime? UpdatedDate { get; set; }         // تاريخ التحديث
@@ -46,10 +46,10 @@ namespace Educational_Platform.DAL.Entities.Courses
 		public Guid? SubCategoryId { get; set; }           // التصنيف الفرعي
 		public SubCategory? SubCategory { get; set; }       // التصنيف الفرعي
 
-		public ICollection<CourseLesson> CourseLessons { get; set; } // دروس الكورس
+		public ICollection<Lesson> Lessons { get; set; } // دروس الكورس
 		public ICollection<CourseReview> CourseReviews { get; set; } // التقييمات
 		public ICollection<SubscriptionPlan> Subscribes { get; set; }      // الاشتراكات
 		public ICollection<Exam> Exams { get; set; }                // الامتحانات
 	}
-	 
+
 }

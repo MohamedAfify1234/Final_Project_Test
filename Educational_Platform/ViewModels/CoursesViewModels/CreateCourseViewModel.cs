@@ -24,8 +24,8 @@ namespace Educational_Platform.ViewModels.CoursesViewModels
 		// الإحصائيات
 		public int TotalEnrollments { get; set; } = 0;          // عدد المسجلين
 		public double AverageRating { get; set; } = 0;         // متوسط التقييم
-		public int TotalLessons { get; set; }          // عدد الدروس
-		public int TotalDuration { get; set; }         // المدة الإجمالية (دقائق)
+		public int TotalLessons { get; set; } = 0;         // عدد الدروس
+		public int TotalDuration { get; set; } = 0;       // المدة الإجمالية (دقائق)
 
 		 
 	}

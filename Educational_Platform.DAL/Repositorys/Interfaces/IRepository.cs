@@ -11,7 +11,7 @@ namespace Educational_Platform.DAL.Repositorys.Interfaces
 	{
  		Task<IEnumerable<T>> GetAllAsync();
 
- 		Task<T?> GetByIdAsync(Guid id);
+ 		Task<T> GetByIdAsync(Guid id);
 
  		Task<IEnumerable<T>> FindAsync(Expression<Func<T, bool>> predicate);
 
