@@ -1,14 +1,30 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\engab\\Downloads\\Educational_Platform\\",
+  "WorkspaceRootPath": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|c:\\users\\engab\\downloads\\educational_platform\\educational_platform\\controllers\\lessons\\lessoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|solutionrelative:educational_platform\\controllers\\lessons\\lessoncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|d:\\.net developer\\gradution_project_depi\\project2\\educational_platform\\controllers\\exams\\examcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|solutionrelative:educational_platform\\controllers\\exams\\examcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{30B2AB1F-5CE5-4297-B854-9488370D4F9F}|Educational_Platform.DAL\\Educational_Platform.DAL.csproj|c:\\users\\engab\\downloads\\educational_platform\\educational_platform.dal\\entities\\lessons\\lesson.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{30B2AB1F-5CE5-4297-B854-9488370D4F9F}|Educational_Platform.DAL\\Educational_Platform.DAL.csproj|solutionrelative:educational_platform.dal\\entities\\lessons\\lesson.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|d:\\.net developer\\gradution_project_depi\\project2\\educational_platform\\views\\exam\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}",
+      "RelativeMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|solutionrelative:educational_platform\\views\\exam\\details.cshtml||{40D31677-CBC0-4297-A9EF-89D907823A98}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|d:\\.net developer\\gradution_project_depi\\project2\\educational_platform\\viewmodels\\examsviewmodels\\examviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|solutionrelative:educational_platform\\viewmodels\\examsviewmodels\\examviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|d:\\.net developer\\gradution_project_depi\\project2\\educational_platform\\controllers\\learning\\questioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|solutionrelative:educational_platform\\controllers\\learning\\questioncontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|d:\\.net developer\\gradution_project_depi\\project2\\educational_platform\\viewmodels\\learningviewmodels\\questionviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|solutionrelative:educational_platform\\viewmodels\\learningviewmodels\\questionviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|d:\\.net developer\\gradution_project_depi\\project2\\educational_platform\\viewmodels\\learningviewmodels\\questionlistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5C8E25E2-7B9B-4CE8-B696-EDFD853F26B9}|Educational_Platform\\Educational_Platform.csproj|solutionrelative:educational_platform\\viewmodels\\learningviewmodels\\questionlistviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -18,32 +34,89 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 7,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{1c4feeaa-4718-4aa9-859d-94ce25d182ba}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "LessonController.cs",
-              "DocumentMoniker": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform\\Controllers\\Lessons\\LessonController.cs",
-              "RelativeDocumentMoniker": "Educational_Platform\\Controllers\\Lessons\\LessonController.cs",
-              "ToolTip": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform\\Controllers\\Lessons\\LessonController.cs",
-              "RelativeToolTip": "Educational_Platform\\Controllers\\Lessons\\LessonController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAACAAAAAAAAAA==",
+              "DocumentIndex": 2,
+              "Title": "ExamViewModel.cs",
+              "DocumentMoniker": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\ViewModels\\ExamsViewModels\\ExamViewModel.cs",
+              "RelativeDocumentMoniker": "Educational_Platform\\ViewModels\\ExamsViewModels\\ExamViewModel.cs",
+              "ToolTip": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\ViewModels\\ExamsViewModels\\ExamViewModel.cs",
+              "RelativeToolTip": "Educational_Platform\\ViewModels\\ExamsViewModels\\ExamViewModel.cs",
+              "ViewState": "AgIAAAIAAAAAAAAAAAAAABsAAAAFAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-05T23:29:10.542Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-10-15T04:19:54.257Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Lesson.cs",
-              "DocumentMoniker": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.DAL\\Entities\\Lessons\\Lesson.cs",
-              "RelativeDocumentMoniker": "Educational_Platform.DAL\\Entities\\Lessons\\Lesson.cs",
-              "ToolTip": "C:\\Users\\engab\\Downloads\\Educational_Platform\\Educational_Platform.DAL\\Entities\\Lessons\\Lesson.cs",
-              "RelativeToolTip": "Educational_Platform.DAL\\Entities\\Lessons\\Lesson.cs",
-              "ViewState": "AgIAAAwAAAAAAAAAAAA5wBQAAABKAAAAAAAAAA==",
+              "Title": "Details.cshtml",
+              "DocumentMoniker": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\Views\\Exam\\Details.cshtml",
+              "RelativeDocumentMoniker": "Educational_Platform\\Views\\Exam\\Details.cshtml",
+              "ToolTip": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\Views\\Exam\\Details.cshtml",
+              "RelativeToolTip": "Educational_Platform\\Views\\Exam\\Details.cshtml",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAACsAAABvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000759|",
+              "WhenOpened": "2025-10-15T04:15:12.623Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "QuestionController.cs",
+              "DocumentMoniker": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\Controllers\\Learning\\QuestionController.cs",
+              "RelativeDocumentMoniker": "Educational_Platform\\Controllers\\Learning\\QuestionController.cs",
+              "ToolTip": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\Controllers\\Learning\\QuestionController.cs",
+              "RelativeToolTip": "Educational_Platform\\Controllers\\Learning\\QuestionController.cs",
+              "ViewState": "AgIAAHYAAAAAAAAAAAAuwCoAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-10-05T23:28:39.464Z"
+              "WhenOpened": "2025-10-15T04:10:56.259Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "QuestionViewModel.cs",
+              "DocumentMoniker": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\ViewModels\\LearningViewModels\\QuestionViewModel.cs",
+              "RelativeDocumentMoniker": "Educational_Platform\\ViewModels\\LearningViewModels\\QuestionViewModel.cs",
+              "ToolTip": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\ViewModels\\LearningViewModels\\QuestionViewModel.cs",
+              "RelativeToolTip": "Educational_Platform\\ViewModels\\LearningViewModels\\QuestionViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T04:10:37.325Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "QuestionListViewModel.cs",
+              "DocumentMoniker": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\ViewModels\\LearningViewModels\\QuestionListViewModel.cs",
+              "RelativeDocumentMoniker": "Educational_Platform\\ViewModels\\LearningViewModels\\QuestionListViewModel.cs",
+              "ToolTip": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\ViewModels\\LearningViewModels\\QuestionListViewModel.cs",
+              "RelativeToolTip": "Educational_Platform\\ViewModels\\LearningViewModels\\QuestionListViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T04:10:33.913Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "ExamController.cs",
+              "DocumentMoniker": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\Controllers\\Exams\\ExamController.cs",
+              "RelativeDocumentMoniker": "Educational_Platform\\Controllers\\Exams\\ExamController.cs",
+              "ToolTip": "D:\\.Net Developer\\Gradution_Project_DEPI\\Project2\\Educational_Platform\\Controllers\\Exams\\ExamController.cs",
+              "RelativeToolTip": "Educational_Platform\\Controllers\\Exams\\ExamController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAJcAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T15:55:44.103Z",
+              "EditorCaption": ""
             }
           ]
         }

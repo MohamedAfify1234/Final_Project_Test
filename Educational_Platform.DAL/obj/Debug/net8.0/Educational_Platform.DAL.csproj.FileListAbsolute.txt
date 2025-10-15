@@ -12,3 +12,32 @@ C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.DAL\obj\Debug
 C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.pdb
 C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.genruntimeconfig.cache
 C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.DAL\obj\Debug\net8.0\ref\Educational_Platform.DAL.dll
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.deps.json
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.runtimeconfig.json
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.dll
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.pdb
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.csproj.AssemblyReference.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.AssemblyInfoInputs.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.AssemblyInfo.cs
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.csproj.CoreCompileInputs.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.dll
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\refint\Educational_Platform.DAL.dll
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.pdb
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.genruntimeconfig.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.DAL\obj\Debug\net8.0\ref\Educational_Platform.DAL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.deps.json
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.runtimeconfig.json
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\bin\Debug\net8.0\Educational_Platform.DAL.pdb
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.csproj.AssemblyReference.cache
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.GeneratedMSBuildEditorConfig.editorconfig
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.AssemblyInfoInputs.cache
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.AssemblyInfo.cs
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.csproj.CoreCompileInputs.cache
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.sourcelink.json
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\refint\Educational_Platform.DAL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.pdb
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\Educational_Platform.DAL.genruntimeconfig.cache
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.DAL\obj\Debug\net8.0\ref\Educational_Platform.DAL.dll

@@ -28,11 +28,11 @@ namespace Educational_Platform.DAL.Entities.Exams
 
 		// التواريخ
 		public DateTime CreatedDate { get; set; } = DateTime.Now; // تاريخ الإنشاء
-		public DateTime? AvailableFrom { get; set; }       // متاح من تاريخ
-		public DateTime? AvailableTo { get; set; }         // متاح إلى تاريخ
+		public DateTime? AvailableFrom { get; set; }    // متاح من تاريخ
+		public DateTime? AvailableTo { get; set; }    // متاح إلى تاريخ
 
-		// العلاقات	
-		public Guid CourseId { get; set; }                 // الكورس المرتبط
+        // العلاقات	
+        public Guid CourseId { get; set; }                 // الكورس المرتبط
 		public Course Course { get; set; }                 // الكورس
 
 		public ICollection<Question> Questions { get; set; } // أسئلة الامتحان

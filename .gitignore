@@ -1,0 +1,10 @@
+# Visual Studio temporary files
+.vs/
+
+# Binaries
+[Bb]in/
+[Oo]bj/
+
+# Packages
+*.nupkg
+**/node_modules/

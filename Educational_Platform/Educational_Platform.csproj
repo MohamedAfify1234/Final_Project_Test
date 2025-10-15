@@ -7,8 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\Exams\" />
-    <Folder Include="Controllers\Learning\" />
     <Folder Include="Controllers\Users\" />
     <Folder Include="Controllers\Subscriptions\" />
     <Folder Include="Controllers\Reviews\" />

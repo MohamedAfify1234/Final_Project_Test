@@ -1,0 +1,35 @@
+﻿@model Exam
+
+@{
+    ViewData["Title"] = "Delete Exam";
+}
+
+<h2 class="text-center text-danger mb-4">Delete Exam</h2>
+
+<div class="alert alert-warning text-center">
+    <strong>هل أنت متأكد أنك تريد حذف هذا الامتحان؟</strong>
+</div>
+
+<div class="card shadow-sm p-4">
+    <dl class="row">
+        <dt class="col-sm-3">Title</dt>
+        <dd class="col-sm-9">@Model.Title</dd>
+
+        <dt class="col-sm-3">Description</dt>
+        <dd class="col-sm-9">@Model.Description</dd>
+
+        <dt class="col-sm-3">Duration</dt>
+        <dd class="col-sm-9">@Model.Duration دقيقة</dd>
+
+        <dt class="col-sm-3">Pass Mark</dt>
+        <dd class="col-sm-9">@Model.PassMark</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <div class="text-center mt-3">
+            <button type="submit" class="btn btn-danger px-4">Delete</button>
+            <a asp-action="Index" class="btn btn-secondary px-4 ms-2">Cancel</a>
+        </div>
+    </form>
+</div>

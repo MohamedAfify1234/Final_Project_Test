@@ -10,3 +10,28 @@ C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.BLL\obj\Debug
 C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.pdb
 C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.BLL\obj\Debug\net8.0\ref\Educational_Platform.BLL.dll
 C:\Users\engab\Downloads\Educational_Platform\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.csproj.AssemblyReference.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\bin\Debug\net8.0\Educational_Platform.BLL.deps.json
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\bin\Debug\net8.0\Educational_Platform.BLL.dll
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\bin\Debug\net8.0\Educational_Platform.BLL.pdb
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.csproj.AssemblyReference.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.AssemblyInfoInputs.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.AssemblyInfo.cs
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.csproj.CoreCompileInputs.cache
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.dll
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\refint\Educational_Platform.BLL.dll
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.pdb
+D:\.Net Developer\Project\Final_Project_Test-main\Educational_Platform.BLL\obj\Debug\net8.0\ref\Educational_Platform.BLL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\bin\Debug\net8.0\Educational_Platform.BLL.deps.json
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\bin\Debug\net8.0\Educational_Platform.BLL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\bin\Debug\net8.0\Educational_Platform.BLL.pdb
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.csproj.AssemblyReference.cache
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.GeneratedMSBuildEditorConfig.editorconfig
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.AssemblyInfoInputs.cache
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.AssemblyInfo.cs
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.csproj.CoreCompileInputs.cache
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.sourcelink.json
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\refint\Educational_Platform.BLL.dll
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\Educational_Platform.BLL.pdb
+D:\.Net Developer\Gradution_Project_DEPI\Project2\Educational_Platform.BLL\obj\Debug\net8.0\ref\Educational_Platform.BLL.dll
