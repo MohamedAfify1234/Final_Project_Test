@@ -1,0 +1,39 @@
+﻿@model AnswerViewModel
+
+@{
+    ViewData["Title"] = "Delete Answer";
+}
+
+<h2 class="mb-4 text-center text-danger">Delete Answer</h2>
+
+<div class="alert alert-warning text-center">
+    <strong>Are you sure you want to delete this answer?</strong>
+</div>
+
+<div class="card shadow-sm p-4">
+    <dl class="row mb-0">
+        <dt class="col-sm-3">Content</dt>
+        <dd class="col-sm-9">@Model.Content</dd>
+
+        <dt class="col-sm-3">Answered Date</dt>
+        <dd class="col-sm-9">@Model.AnsweredDate.ToString("g")</dd>
+
+        <dt class="col-sm-3">Is Correct</dt>
+        <dd class="col-sm-9">@(Model.IsCorrect ? "Yes" : "No")</dd>
+
+        <dt class="col-sm-3">Is Accepted</dt>
+        <dd class="col-sm-9">@(Model.IsAccepted ? "Yes" : "No")</dd>
+
+        <dt class="col-sm-3">Question ID</dt>
+        <dd class="col-sm-9">@Model.QuestionId</dd>
+
+        <dt class="col-sm-3">User ID</dt>
+        <dd class="col-sm-9">@Model.UserId</dd>
+    </dl>
+</div>
+
+<form asp-action="Delete" method="post" class="text-center mt-4">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger px-4">Confirm Delete</button>
+    <a asp-action="Index" class="btn btn-secondary ms-2 px-4">Cancel</a>
+</form>

@@ -1,0 +1,74 @@
+﻿@model IEnumerable<ExamAttempt>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.StartTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EndTime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Score)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TotalQuestions)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CorrectAnswers)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsPassed)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AttemptNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Exam)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Student)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.StartTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EndTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Score)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TotalQuestions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CorrectAnswers)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsPassed)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AttemptNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Exam.Description)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

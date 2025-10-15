@@ -1,0 +1,108 @@
+﻿@using Skillup_Academy.ViewModels.CoursesViewModels
+@model CreateCourseViewModel
+
+@{
+    ViewData["Title"] = "Create New Course";
+}
+
+<h1>Create New Course</h1>
+<hr />
+
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <form asp-action="Create" method="post">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Basic Course Create</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="Title" class="form-label"></label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="ShortDescription" class="form-label">Short Description</label>
+                                <input asp-for="ShortDescription" class="form-control" />
+                                <span asp-validation-for="ShortDescription" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Description" class="form-label"></label>
+                        <textarea asp-for="Description" class="form-control" rows="4"></textarea> @* Changed to textarea for better UX *@
+                        <span asp-validation-for="Description" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Media & Metrics</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="ThumbnailUrl" class="form-label">Thumbnail Url</label>
+                                <input asp-for="ThumbnailUrl" class="form-control" />
+                                <span asp-validation-for="ThumbnailUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="PreviewVideoUrl" class="form-label">Preview Video Url</label>
+                                <input asp-for="PreviewVideoUrl" class="form-control" />
+                                <span asp-validation-for="PreviewVideoUrl" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        
+                        <div class="col-md-4 d-flex align-items-center">
+                            <div class="form-group form-check mb-3">
+                                <input class="form-check-input" asp-for="IsFree" />
+                                <label class="form-check-label" asp-for="IsFree">
+                                    @Html.DisplayNameFor(model => model.IsFree)
+                                </label>
+                            </div>
+                            <div class="form-group form-check mb-3 ms-4">
+                                <input class="form-check-input" asp-for="IsPublished" />
+                                <label class="form-check-label" asp-for="IsPublished">
+                                    @Html.DisplayNameFor(model => model.IsPublished)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Categorization fields (Teacher, Category, SubCategory) are often needed here but were missing in the ViewModel/Input. 
+               If needed, they would go here in a third card. *@
+
+            <div class="form-group pt-3 text-center">
+                <input type="submit" value="Create Course" class="btn btn-primary btn-lg px-5" />
+            </div>
+
+        </form>
+    </div>
+</div>
+
+<div class="mt-4 text-center">
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

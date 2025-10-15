@@ -1,0 +1,70 @@
+﻿@model IEnumerable<AnswerViewModel>
+
+@{
+    ViewData["Title"] = "Answers List";
+}
+
+<h2 class="mb-4 text-center">Answers List</h2>
+
+<div class="text-end mb-3">
+    <a asp-action="Create" class="btn btn-success px-4">Create New Answer</a>
+</div>
+
+<table class="table table-bordered table-striped align-middle">
+    <thead class="table-dark text-center">
+        <tr>
+            <th>Content</th>
+            <th>Answered Date</th>
+            <th>Is Correct</th>
+            <th>Is Accepted</th>
+            <th>Question ID</th>
+            <th>User ID</th>
+            <th style="width: 200px;">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Content</td>
+                    <td>@item.AnsweredDate.ToString("g")</td>
+                    <td>
+                        @if (item.IsCorrect)
+                        {
+                            <span class="badge bg-success">✔</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">✘</span>
+                        }
+                    </td>
+                    <td>
+                        @if (item.IsAccepted)
+                        {
+                            <span class="badge bg-primary">Accepted</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Pending</span>
+                        }
+                    </td>
+                    <td>@item.QuestionId</td>
+                    <td>@item.UserId</td>
+                    <td class="text-center">
+                        <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-sm btn-info me-1">Details</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-warning me-1">Edit</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="7" class="text-center text-muted">No answers found.</td>
+            </tr>
+        }
+    </tbody>
+</table>

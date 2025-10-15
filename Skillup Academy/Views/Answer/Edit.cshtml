@@ -1,0 +1,50 @@
+﻿@model AnswerViewModel
+
+@{
+    ViewData["Title"] = "Create New Answer";
+}
+
+<h2 class="mb-4 text-center">Create New Answer</h2>
+
+<form asp-action="Create" method="post" class="card shadow-sm p-4">
+    <div class="mb-3">
+        <label asp-for="Content" class="form-label"></label>
+        <textarea asp-for="Content" class="form-control" rows="3"></textarea>
+        <span asp-validation-for="Content" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="QuestionId" class="form-label">Question</label>
+        <select asp-for="QuestionId" asp-items="ViewBag.Questions" class="form-select">
+            <option value="">-- Select Question --</option>
+        </select>
+        <span asp-validation-for="QuestionId" class="text-danger"></span>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="UserId" class="form-label">User</label>
+        <select asp-for="UserId" asp-items="ViewBag.Users" class="form-select">
+            <option value="">-- Select User --</option>
+        </select>
+        <span asp-validation-for="UserId" class="text-danger"></span>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsCorrect" class="form-check-input" />
+        <label asp-for="IsCorrect" class="form-check-label"></label>
+    </div>
+
+    <div class="form-check mb-3">
+        <input asp-for="IsAccepted" class="form-check-input" />
+        <label asp-for="IsAccepted" class="form-check-label"></label>
+    </div>
+
+    <div class="text-center mt-3">
+        <button type="submit" class="btn btn-primary px-4">Create</button>
+        <a asp-action="Index" class="btn btn-secondary ms-2 px-4">Cancel</a>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

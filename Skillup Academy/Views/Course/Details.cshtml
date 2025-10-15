@@ -1,0 +1,132 @@
+﻿@model Course
+
+@{
+    ViewData["Title"] = "Course Details";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-10">
+            <h1 class="mb-4">@Model.Title Details</h1>
+            <hr />
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Core Information</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Title)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Title)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ShortDescription)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.ShortDescription)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Description)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Description)</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Media & Status</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.ThumbnailUrl)</dt>
+                        <dd class="col-sm-9">
+                            @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
+                            {
+                                <a href="@Model.ThumbnailUrl" target="_blank">View Thumbnail Link</a>
+                            }
+                            else
+                            {
+                                @:N/A
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PreviewVideoUrl)</dt>
+                        <dd class="col-sm-9">
+                            @if (!string.IsNullOrEmpty(Model.PreviewVideoUrl))
+                            {
+                                <a href="@Model.PreviewVideoUrl" target="_blank">Watch Video Link</a>
+                            }
+                            else
+                            {
+                                @:N/A
+                            }
+                        </dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsFree)</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge @(Model.IsFree ? "bg-success" : "bg-danger")">
+                                @Html.DisplayFor(model => model.IsFree)
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.IsPublished)</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge @(Model.IsPublished ? "bg-success" : "bg-warning text-dark")">
+                                @Html.DisplayFor(model => model.IsPublished)
+                            </span>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Categorization & Instructor</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Teacher)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Teacher.FullName) / ID: @Html.DisplayFor(model => model.TeacherId)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.Category)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.Category.Name)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.SubCategory)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.SubCategory.Name)</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">Metrics & Timestamps</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TotalEnrollments)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalEnrollments)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.AverageRating)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.AverageRating)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TotalLessons)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalLessons)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.TotalDuration)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.TotalDuration)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.CreatedDate)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.CreatedDate)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.UpdatedDate)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.UpdatedDate)</dd>
+
+                        <dt class="col-sm-3">@Html.DisplayNameFor(model => model.PublishedDate)</dt>
+                        <dd class="col-sm-9">@Html.DisplayFor(model => model.PublishedDate)</dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="mt-4 text-center">
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-lg me-3">Edit Course</a>
+                <a asp-action="Index" class="btn btn-outline-secondary btn-lg">Back to List</a>
+            </div>
+        </div>
+    </div>
+</div>
