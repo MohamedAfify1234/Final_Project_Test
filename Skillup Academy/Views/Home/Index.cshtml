@@ -1,8 +1,179 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+<section class="hero">
+    <div class="hero-content">
+        <h2>Join Hundreds of Thousands of Creators Now</h2>
+        <p>Hundreds of training courses "and more" with a single subscription that opens the doors to the future for you. Start your educational journey today.</p>
+        <div class="hero-buttons">
+            <button class="hero-btn btn-primary">Subscribe Now</button>
+            <button class="hero-btn btn-secondary">Browse Courses</button>
+        </div>
+    </div>
+</section>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="stats-section">
+    <div class="stats-grid">
+        <div class="stat-item">
+            <h3>442,803</h3>
+            <p>Arabic Learners</p>
+        </div>
+        <div class="stat-item">
+            <h3>400+</h3>
+            <p>Training Courses</p>
+        </div>
+        <div class="stat-item">
+            <h3>211,474</h3>
+            <p>Certificates Issued</p>
+        </div>
+        <div class="stat-item">
+            <h3>52,481,006</h3>
+            <p>Minutes Watched</p>
+        </div>
+    </div>
+</section>
+
+<section class="features">
+    <div class="section-title">
+        <h2>Why Choose Bedaya Platform?</h2>
+        <p>We provide you with a unique learning experience that combines quality and flexibility</p>
+    </div>
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">📚</div>
+            <h3>Thousands of Courses</h3>
+            <p>Diverse courses in various fields suitable for all levels</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">👨‍🏫</div>
+            <h3>Professional Instructors</h3>
+            <p>Learn from the best instructors and experts in their fields</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">⏱️</div>
+            <h3>Fully Flexible</h3>
+            <p>Study anytime, anywhere that suits you</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📜</div>
+            <h3>Accredited Certificates</h3>
+            <p>Get accredited certificates upon completion of courses</p>
+        </div>
+    </div>
+</section>
+
+<section class="categories">
+    <div class="section-title">
+        <h2>Categories</h2>
+        <p>Explore a wide range of educational fields</p>
+    </div>
+    <div class="categories-grid">
+        <div class="category-card">
+            <div class="category-icon">🎨</div>
+            <p>Art & Design</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">📈</div>
+            <p>Marketing</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">💻</div>
+            <p>Information Technology</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">💼</div>
+            <p>Business</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">🎥</div>
+            <p>Photography & Filmmaking</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">📝</div>
+            <p>Content Creation</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">🎬</div>
+            <p>Animation</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">🌐</div>
+            <p>Languages</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">👥</div>
+            <p>Human Resources</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">👗</div>
+            <p>Fashion & Handicrafts</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">💪</div>
+            <p>Nutrition & Fitness</p>
+        </div>
+        <div class="category-card">
+            <div class="category-icon">📚</div>
+            <p>All Categories</p>
+        </div>
+    </div>
+</section>
+
+<section class="courses">
+    <div class="section-header">
+        <div class="section-title">
+            <h2>Most Popular</h2>
+        </div>
+        <a href="#" class="view-all"> View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="courses-grid" id="popularCourses">
+    </div>
+</section>
+
+<section class="courses">
+    <div class="section-header">
+        <div class="section-title">
+            <h2>Newly Added</h2>
+        </div>
+        <a href="#" class="view-all"> View All <i class="fas fa-arrow-right"></i></a>
+    </div>
+    <div class="courses-grid" id="newCourses">
+    </div>
+</section>
+
+<section class="roles">
+    <div class="section-title">
+        <h2>Join Bedaya Platform</h2>
+        <p>Choose your role and start your journey with us</p>
+    </div>
+    <div class="roles-grid">
+        <div class="role-card">
+            <div class="role-icon">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <h3>Student</h3>
+            <p>Join as a student to learn from the best instructors and develop your skills</p>
+            <button class="btn btn-register">Join as a Student</button>
+        </div>
+        <div class="role-card">
+            <div class="role-icon">
+                <i class="fas fa-chalkboard-teacher"></i>
+            </div>
+            <h3>Instructor</h3>
+            <p>Join as an instructor to share your knowledge and teach others</p>
+            <button class="btn btn-register">Join as an Instructor</button>
+        </div>
+
+    </div>
+</section>
+
+<section class="newsletter">
+    <div class="newsletter-content">
+        <h2>Subscribe to Our Newsletter</h2>
+        <p>Be the first to know about new courses and special offers</p>
+        <form class="newsletter-form">
+            <input type="email" placeholder="Enter your email address">
+            <button>Subscribe</button>
+        </form>
+    </div>
+</section>
