@@ -22,8 +22,8 @@ namespace Skillup_Academy.ViewModels.ExamsViewModels
         public DateTime? AvailableTo { get; set; }         // متاح إلى تاريخ
 
         // العلاقات	
-        public Guid CourseId { get; set; }                 // الكورس المرتبط
-        public IEnumerable<SelectListItem> Courses { get; set; } // للـ dropdown list
+        public Guid? CourseId { get; set; }                 // الكورس المرتبط
+        public IEnumerable<SelectListItem>? Courses { get; set; } // للـ dropdown list
 
     }
 }

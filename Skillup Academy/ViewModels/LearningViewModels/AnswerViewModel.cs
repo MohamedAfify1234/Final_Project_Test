@@ -15,7 +15,7 @@ namespace Skillup_Academy.ViewModels.LearningViewModels
         public Guid UserId { get; set; }
 
         // Dropdowns
-        public IEnumerable<SelectListItem> Questions { get; set; }
-        public IEnumerable<SelectListItem> Users { get; set; }
+        public IEnumerable<SelectListItem>? Questions { get; set; }
+        public IEnumerable<SelectListItem>? Users { get; set; }
     }
 }

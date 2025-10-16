@@ -141,5 +141,15 @@ namespace Skillup_Academy.Controllers.Exams
             await repository.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        public async Task<IActionResult> Details(Guid id)
+        {
+            var exam = await repository.GetByIdAsync(id);
+            if (exam == null)
+            {
+                return NotFound();
+            }
+            var model = mapper.Map<ExamViewModel>(exam);
+            return View(model);
+        }
     }
 }
