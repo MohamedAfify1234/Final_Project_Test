@@ -1,22 +1,30 @@
-﻿using Infrastructure.Services.Subscriptions;
+﻿using Core.Interfaces.Subscriptions;
 using Core.Models.Exams;
 using Core.Models.Subscriptions;
+using Infrastructure.Repositories.Subscriptions;
+using Infrastructure.Services.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Skillup_Academy.Controllers.Subscriptions
 {
     public class SubscriptionController : Controller
     {
-        SubscriptionBL subscriptionbl = new SubscriptionBL();
+        //_subscriptionRepository _subscriptionRepository = new _subscriptionRepository();
+        ISubscriptionRepository _subscriptionRepository;
+        public SubscriptionController(ISubscriptionRepository subscriptionRepository)
+        {
+            _subscriptionRepository = subscriptionRepository;
+        }
+
         // /Subscription/ShowAll
         public IActionResult ShowAll()
         {
-            List<Subscription> subscriptionList = subscriptionbl.ShowAll();
+            List<Subscription> subscriptionList = _subscriptionRepository.ShowAll();
             return View("ShowAll", subscriptionList);
         }
         public IActionResult ShowDetails(Guid id)
         {
-            Subscription subscriptiondetails = subscriptionbl.ShowDetails(id);
+            Subscription subscriptiondetails = _subscriptionRepository.ShowDetails(id);
             return View("ShowDetails", subscriptiondetails);
         }
 
@@ -29,7 +37,8 @@ namespace Skillup_Academy.Controllers.Subscriptions
         {
             if (ModelState.IsValid)
             {
-                subscriptionbl.SubscriptionAdd(subscription);
+                _subscriptionRepository.SubscriptionAdd(subscription);
+                _subscriptionRepository.Save();
                 return RedirectToAction("ShowAll");
             }
             return View(nameof(Create), subscription);
@@ -37,7 +46,7 @@ namespace Skillup_Academy.Controllers.Subscriptions
 
         public IActionResult Edit(Guid id)
         {
-            Subscription subscriptionEdit = subscriptionbl.ShowDetails(id);
+            Subscription subscriptionEdit = _subscriptionRepository.ShowDetails(id);
             if (ModelState.IsValid)
             {
                 return RedirectToAction(nameof(ShowAll));
@@ -46,7 +55,7 @@ namespace Skillup_Academy.Controllers.Subscriptions
         }
         public IActionResult SaveEdit(Subscription subscriptionSent, Guid id)
         {
-            Subscription Oldsubscription = subscriptionbl.ShowDetails(id);
+            Subscription Oldsubscription = _subscriptionRepository.ShowDetails(id);
             if (ModelState.IsValid)
             {
                 Oldsubscription.DurationDays = subscriptionSent.DurationDays;
@@ -56,22 +65,24 @@ namespace Skillup_Academy.Controllers.Subscriptions
                 Oldsubscription.Description = subscriptionSent.Description;
                 Oldsubscription.Price = subscriptionSent.Price;
                 Oldsubscription.Type = subscriptionSent.Type;
-                subscriptionbl.SaveInDB();
+                _subscriptionRepository.Update(Oldsubscription);
+                _subscriptionRepository.Save();
                 return RedirectToAction(nameof(ShowAll));
             }
             return View("Edit", subscriptionSent);
         }
         public IActionResult Delete(Guid id)
         {
-            Subscription subscriptionDelete = subscriptionbl.ShowDetails(id);
+            Subscription subscriptionDelete = _subscriptionRepository.ShowDetails(id);
             return View("Delete", subscriptionDelete);
         }
         public IActionResult SaveDelete(Guid id)
         {
-            Subscription subscriptionDelete = subscriptionbl.ShowDetails(id);
+            Subscription subscriptionDelete = _subscriptionRepository.ShowDetails(id);
             if (subscriptionDelete != null)
             {
-                subscriptionbl.DeleteFromDB(subscriptionDelete);
+                _subscriptionRepository.DeleteFromDB(subscriptionDelete);
+                _subscriptionRepository.Save();
                 return RedirectToAction(nameof(ShowAll));
             }
             return NotFound();

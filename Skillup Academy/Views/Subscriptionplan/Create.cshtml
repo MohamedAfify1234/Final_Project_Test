@@ -1,5 +1,5 @@
-﻿@model SubscriptionPlan
-
+﻿@* @model SubscriptionPlan *@
+@model SubscriptionPlanViewModel
 <h4>SubscriptionPlan</h4>
 <hr />
 <div class="row">
@@ -33,15 +33,21 @@
             </div>
             <div class="form-group">
                 <label asp-for="UserId" class="control-label"></label>
-                <select asp-for="UserId" class ="form-control" asp-items="ViewBag.UserId"></select>
+                <select asp-for="UserId" class ="form-control" asp-items="@Model.Users">
+                    <option value="0">-- Select Users --</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="SubscriptionId" class="control-label"></label>
-                <select asp-for="SubscriptionId" class ="form-control" asp-items="ViewBag.SubscriptionId"></select>
+                <select asp-for="SubscriptionId" class ="form-control" asp-items="@Model.Subscriptions">
+                    <option value="0">-- Select Subscriptions --</option>
+                </select>
             </div>
             <div class="form-group">
                 <label asp-for="CourseId" class="control-label"></label>
-                <select asp-for="CourseId" class ="form-control" asp-items="ViewBag.CourseId"></select>
+                <select asp-for="CourseId" class ="form-control" asp-items="@Model.Courses">
+                    <option value="0">-- Select Courses --</option>
+                </select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-primary" />

@@ -1,11 +1,15 @@
 using Core.Interfaces;
+using Core.Interfaces;
 using Core.Interfaces.Courses;
+using Core.Interfaces.Exams;
 using Core.Interfaces.Reviews;
+using Core.Interfaces.Subscriptions;
 using Infrastructure.Data;
 using Infrastructure.Repositories.Courses;
+using Infrastructure.Repositories.Exams;
 using Infrastructure.Repositories.Implementation;
-using Core.Interfaces;
 using Infrastructure.Repositories.Reviews;
+using Infrastructure.Repositories.Subscriptions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Skillup_Academy.AppSettingsImages;
@@ -24,6 +28,9 @@ namespace Skillup_Academy
             builder.Services.AddScoped<ICourseCategoryRepsitory, CourseCategoryRepository>();
             builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             builder.Services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
+            builder.Services.AddScoped<IExamAttemptRepository, ExamAttemptRepository>();
+            builder.Services.AddScoped<ISubscriptionRepository,SubscriptionRepository>();
+            builder.Services.AddScoped<ISubscriptionPlanRepository,SubscriptionPlanRepository>();
             builder.Services.AddDbContext<AppDbContext>(Options =>
             { Options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
             });

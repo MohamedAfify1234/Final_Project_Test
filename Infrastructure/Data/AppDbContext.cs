@@ -23,7 +23,7 @@ namespace Infrastructure.Data
 
         //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         //{
-        //   optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=Skillup_Academy;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=EducationalPlatform;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
         //}
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
