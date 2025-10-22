@@ -1,5 +1,4 @@
-﻿@using Core.Enums
-@model CreateLessonViewModel
+﻿@model CreateLessonViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -97,7 +96,14 @@
                         <div class="col-md-4">
                             <div class="form-group mb-3">
                                 <label asp-for="Type" class="form-label"></label>
-                                <select asp-for="Type" asp-items="Html.GetEnumSelectList<LessonType>()" class="form-control form-select"></select>
+                                <select asp-for="Type" class="form-control form-select">
+                                    <option value="">-- Select Lesson Type --</option>
+                                    <option value="0">Video</option>
+                                    <option value="1">Article</option>
+                                    <option value="2">Quiz</option>
+                                    <option value="3">Assignment</option>
+                                    <option value="4">Live</option>
+                                </select>
                                 <span asp-validation-for="Type" class="text-danger"></span>
                             </div>
                         </div>
