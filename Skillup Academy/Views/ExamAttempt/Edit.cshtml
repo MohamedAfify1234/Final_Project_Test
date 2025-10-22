@@ -1,68 +1,83 @@
-﻿@model ExamAttempt
+﻿@model Skillup_Academy.ViewModels.ExamsViewModels.ExamViewModel
 
-<h4>ExamAttempt</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="SaveEdit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="StartTime" class="control-label"></label>
-                <input asp-for="StartTime" class="form-control" />
-                <span asp-validation-for="StartTime" class="text-danger"></span>
+@{
+    ViewData["Title"] = "Delete Exam";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <h1 class="text-danger mb-4">Confirm Deletion</h1>
+
+            <div class="alert alert-danger shadow-sm p-4" role="alert">
+                <h3>Are you sure you want to delete the exam: **@Model.Title**?</h3>
+                <p class="lead mt-3">This action cannot be undone. All related exam attempts, questions, and results will be permanently removed from the system.</p>
             </div>
-            <div class="form-group">
-                <label asp-for="EndTime" class="control-label"></label>
-                <input asp-for="EndTime" class="form-control" />
-                <span asp-validation-for="EndTime" class="text-danger"></span>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Exam Summary</h5>
+                </div>
+                <div class="card-body">
+                    <dl class="row">
+                        <dt class="col-sm-3">Title</dt>
+                        <dd class="col-sm-9">@Model.Title</dd>
+
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+
+                        <dt class="col-sm-3">Exam ID</dt>
+                        <dd class="col-sm-9">@Model.Id</dd>
+
+                        <dt class="col-sm-3">Duration</dt>
+                        <dd class="col-sm-9">@Model.Duration minutes</dd>
+
+                        <dt class="col-sm-3">Total Questions</dt>
+                        <dd class="col-sm-9">@Model.TotalQuestions</dd>
+
+                        <dt class="col-sm-3">Pass Mark</dt>
+                        <dd class="col-sm-9">@Model.PassMark%</dd>
+
+                        <dt class="col-sm-3">Max Attempts</dt>
+                        <dd class="col-sm-9">@Model.MaxAttempts</dd>
+
+                        <dt class="col-sm-3">Status</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge @(Model.IsPublished ? "bg-success" : "bg-secondary")">
+                                @(Model.IsPublished ? "Published" : "Draft")
+                            </span>
+                        </dd>
+
+                        @if (Model.CourseId.HasValue)
+                        {
+                            <dt class="col-sm-3">Course ID</dt>
+                            <dd class="col-sm-9">@Model.CourseId</dd>
+                        }
+
+                        @if (Model.AvailableFrom.HasValue)
+                        {
+                            <dt class="col-sm-3">Available From</dt>
+                            <dd class="col-sm-9">@Model.AvailableFrom.Value.ToString("dd MMM yyyy HH:mm")</dd>
+                        }
+
+                        @if (Model.AvailableTo.HasValue)
+                        {
+                            <dt class="col-sm-3">Available To</dt>
+                            <dd class="col-sm-9">@Model.AvailableTo.Value.ToString("dd MMM yyyy HH:mm")</dd>
+                        }
+                    </dl>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="Score" class="control-label"></label>
-                <input asp-for="Score" class="form-control" />
-                <span asp-validation-for="Score" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TotalQuestions" class="control-label"></label>
-                <input asp-for="TotalQuestions" class="form-control" />
-                <span asp-validation-for="TotalQuestions" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CorrectAnswers" class="control-label"></label>
-                <input asp-for="CorrectAnswers" class="form-control" />
-                <span asp-validation-for="CorrectAnswers" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsPassed" /> @Html.DisplayNameFor(model => model.IsPassed)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="AttemptNumber" class="control-label"></label>
-                <input asp-for="AttemptNumber" class="form-control" />
-                <span asp-validation-for="AttemptNumber" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ExamId" class="control-label"></label>
-                <select asp-for="ExamId" class="form-control" asp-items="ViewBag.ExamId"></select>
-                <span asp-validation-for="ExamId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="StudentId" class="control-label"></label>
-                <select asp-for="StudentId" class="form-control" asp-items="ViewBag.StudentId"></select>
-                <span asp-validation-for="StudentId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+
+            <hr class="mt-4" />
+
+            <form asp-action="Delete" method="post" class="text-center">
+                <input type="hidden" asp-for="Id" />
+                <button type="submit" class="btn btn-danger btn-lg px-5 me-3">
+                    <i class="bi bi-trash"></i> Delete Permanently
+                </button>
+                <a asp-action="Index" class="btn btn-secondary btn-lg">Cancel & Back to List</a>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="ShowAll">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

@@ -4,57 +4,108 @@
     ViewData["Title"] = "Edit Question";
 }
 
-<h2 class="text-center mb-4">Edit Question</h2>
+<h1>Edit Question: @Model.Title</h1>
+<hr />
 
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
+<div class="row justify-content-center">
+    <div class="col-lg-9">
+        <form asp-action="Edit" method="post">
 
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+            <div asp-validation-summary="ModelOnly" class="text-danger" role="alert"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Basic Question Details</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group mb-3">
+                                <label asp-for="Title" class="form-label"></label>
+                                <input asp-for="Title" class="form-control" />
+                                <span asp-validation-for="Title" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label asp-for="Content" class="form-label"></label>
+                        <textarea asp-for="Content" class="form-control" rows="4"></textarea>
+                        <span asp-validation-for="Content" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Relations & Context</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="CourseId" class="form-label">Course</label>
+                                <select asp-for="CourseId" asp-items="ViewBag.Courses" class="form-control">
+                                    <option value="">-- Select Course --</option>
+                                </select>
+                                <span asp-validation-for="CourseId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="LessonId" class="form-label">Lesson</label>
+                                <select asp-for="LessonId" asp-items="ViewBag.Lessons" class="form-control">
+                                    <option value="">-- Select Lesson --</option>
+                                </select>
+                                <span asp-validation-for="LessonId" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group mb-3">
+                                <label asp-for="ExamId" class="form-label">Exam</label>
+                                <select asp-for="ExamId" asp-items="ViewBag.Exams" class="form-control">
+                                    <option value="">-- Select Exam --</option>
+                                </select>
+                                <span asp-validation-for="ExamId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card shadow mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Status</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row mt-3">
+                        <div class="col-md-4 d-flex align-items-center">
+                            <div class="form-group form-check mb-3">
+                                <input class="form-check-input" asp-for="IsResolved" />
+                                <label class="form-check-label" asp-for="IsResolved">
+                                    @Html.DisplayNameFor(model => model.IsResolved)
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group pt-3 text-center">
+                <input type="submit" value="Save Changes" class="btn btn-success btn-lg px-5" />
+            </div>
+
+        </form>
     </div>
+</div>
 
-    <div class="mb-3">
-        <label asp-for="Content" class="form-label"></label>
-        <textarea asp-for="Content" class="form-control" rows="4"></textarea>
-        <span asp-validation-for="Content" class="text-danger"></span>
-    </div>
-
-    <div class="row">
-        <div class="col-md-4">
-            <label asp-for="CourseId" class="form-label"></label>
-            <select asp-for="CourseId" asp-items="ViewBag.Courses" class="form-select">
-                <option value="">-- Select Course --</option>
-            </select>
-        </div>
-
-        <div class="col-md-4">
-            <label asp-for="LessonId" class="form-label"></label>
-            <select asp-for="LessonId" asp-items="ViewBag.Lessons" class="form-select">
-                <option value="">-- Select Lesson --</option>
-            </select>
-        </div>
-
-        <div class="col-md-4">
-            <label asp-for="ExamId" class="form-label"></label>
-            <select asp-for="ExamId" asp-items="ViewBag.Exams" class="form-select">
-                <option value="">-- Select Exam --</option>
-            </select>
-        </div>
-    </div>
-
-    <div class="form-check mt-3">
-        <input asp-for="IsResolved" class="form-check-input" />
-        <label asp-for="IsResolved" class="form-check-label"></label>
-    </div>
-
-    <div class="text-center mt-4">
-        <button type="submit" class="btn btn-primary px-4">Save Changes</button>
-        <a asp-action="Index" class="btn btn-secondary px-4 ms-2">Cancel</a>
-    </div>
-</form>
+<div class="mt-4 text-center">
+    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+</div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
