@@ -1,25 +1,27 @@
 using Core.Interfaces;
-using Core.Interfaces;
 using Core.Interfaces.Courses;
 using Core.Interfaces.Exams;
 using Core.Interfaces.Reviews;
 using Core.Interfaces.Subscriptions;
+using Core.Models.Users;
 using Infrastructure.Data;
+using Infrastructure.Data.Seed;
 using Infrastructure.Repositories.Courses;
 using Infrastructure.Repositories.Exams;
 using Infrastructure.Repositories.Implementation;
 using Infrastructure.Repositories.Reviews;
 using Infrastructure.Repositories.Subscriptions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 using Skillup_Academy.AppSettingsImages;
+using Skillup_Academy.Helper;
 using Skillup_Academy.Mappings;
 
 namespace Skillup_Academy
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -31,12 +33,26 @@ namespace Skillup_Academy
             builder.Services.AddScoped<IExamAttemptRepository, ExamAttemptRepository>();
             builder.Services.AddScoped<ISubscriptionRepository,SubscriptionRepository>();
             builder.Services.AddScoped<ISubscriptionPlanRepository,SubscriptionPlanRepository>();
+
             builder.Services.AddDbContext<AppDbContext>(Options =>
             { Options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
             });
-            builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
+              
+			builder.Services.AddIdentity<User, Role>(options =>
+			{
+				options.Password.RequireNonAlphanumeric = false;
+				options.Password.RequireUppercase = false;
+			})
+            .AddEntityFrameworkStores<AppDbContext>()
+            .AddDefaultTokenProviders();
+
+			builder.Services.AddScoped<DbInitializer>();
+
+
+			builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<DeleteImage>();
             builder.Services.AddScoped<SaveImage>();
+            builder.Services.AddScoped<FileService>();
 
             builder.Services.AddAutoMapper(config =>
             { config.AddProfile<MappingProfile>(); });
@@ -57,7 +73,15 @@ namespace Skillup_Academy
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            app.Run();
+			using (var scope = app.Services.CreateScope())
+			{
+				var services = scope.ServiceProvider;
+				var adminSeeder = services.GetRequiredService<DbInitializer>();
+				await adminSeeder.SeedAdminAsync();
+			}
+
+
+			app.Run();
         }
     }
 }

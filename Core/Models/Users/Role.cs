@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 
-namespace Core.Enums
+namespace Core.Models.Users
 {
-	public enum UserType
+	public class Role : IdentityRole<Guid>
 	{
-		Student,    // طالب
-		Instructor,    // مدرس
-		Admin       // مشرف
 	}
 }
