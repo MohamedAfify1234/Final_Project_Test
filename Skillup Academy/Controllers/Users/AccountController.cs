@@ -47,7 +47,8 @@ namespace Skillup_Academy.Controllers.Users
 					bool found = await _userManager.CheckPasswordAsync(result, account.Password);
 					if (found)
 					{
-						await _signInManager.SignInAsync(result, account.RememberMe); 
+						await _signInManager.SignInAsync(result, account.RememberMe);
+						result.LastLoginDate = DateTime.Now; 
 						if (User.IsInRole("Admin"))
 						{
 						//	return RedirectToAction("AdminDashboard", "Admin");

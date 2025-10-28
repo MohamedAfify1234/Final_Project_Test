@@ -1,0 +1,408 @@
+﻿@using Skillup_Academy.ViewModels.SearchViewModels
+@model SearchResultsViewModel
+
+    <style>
+        /* ---------------------------------
+                   Professional Search Results CSS (Matching ORIGINAL Design)
+                   --------------------------------- */
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2c3e50;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --border-color: #dee2e6;
+            --success-color: #00A88F; /* لون إضافي للأسعار/الأزرار */
+        }
+          
+
+        /* 1. Header (Matched Original Gradient) */
+        .search-header-pro {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 3rem 0;
+            margin-bottom: 2rem;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        /* 2. Unified Search Bar (Matched Original Hero Bar Style) */
+        .search-box-unified {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+            /* Input Styles (Matches Hero Section Input) */
+            .search-box-unified .form-control {
+                border-top-right-radius: 0 !important;
+                border-bottom-right-radius: 0 !important;
+                border-top-left-radius: 30px !important;
+                border-bottom-left-radius: 30px !important;
+                padding: 12px 18px;
+                border: 1px solid var(--border-color);
+            }
+
+            /* Button Styles (Matches Hero Section Button) */
+            .search-box-unified .btn-search {
+                border-top-left-radius: 0 !important;
+                border-bottom-left-radius: 0 !important;
+                border-top-right-radius: 30px !important;
+                border-bottom-right-radius: 30px !important;
+                padding: 12px 25px;
+                background-color: var(--primary-color);
+                color: white;
+                border: none;
+            }
+
+        /* 3. Filter Sidebar (Sticky & Accordion) */
+        .filter-sidebar-enhanced {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        @@media (min-width: 992px) {
+            .sticky-sidebar
+
+        {
+            position: sticky;
+            top: 1.5rem; /* يثبت الشريط الجانبي أثناء التمرير */
+        }
+
+        }
+
+        .filter-title-btn {
+            font-weight: 600;
+            color: var(--dark-color) !important;
+            padding: 0.5rem 0;
+            transition: color 0.2s;
+            /* للتأكد من أن زر الأكورديون يأخذ شكل نظيف */
+            background-color: white !important;
+            border: none !important;
+        }
+
+        .filter-options label {
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            padding: 0.3rem 0;
+            font-size: 0.9rem;
+        }
+
+        /* 4. Course Card Styling (Clean and Modern) */
+        .course-card-pro {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin-bottom: 1.5rem;
+            height: 100%;
+        }
+
+            .course-card-pro:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            }
+
+        .course-image {
+            height: 180px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .course-price {
+            font-weight: 700;
+            color: var(--success-color); /* لون الأزرار الخضراء */
+            font-size: 1.3rem;
+        }
+
+        .course-old-price {
+            color: var(--gray-color);
+            text-decoration: line-through;
+            font-size: 0.9rem;
+        }
+
+        .btn-enroll {
+            background-color: var(--primary-color);
+            color: white;
+            border-radius: 8px; /* شكل الأزرار المعتاد */
+            padding: 0.6rem 1rem;
+        }
+    </style>
+ 
+    <section class="search-header-pro">
+        <div class="container">
+            <h2 class="text-center mb-4 text-white fw-light">Search Results for Courses</h2>
+            <form asp-action="SearchResults" asp-controller="Home" method="get">
+
+                <div class="search-box-unified d-flex justify-content-center">
+                    <div class="input-group">
+
+                             <input type="text" class="form-control" name="query"
+                                   placeholder="Search for a course, topic, or instructor..."
+                                   value="@Model.Query">
+                            <button class="btn fw-semibold btn-search" type="submit">
+                                <i class="fas fa-search me-1"></i> Search
+                            </button>
+                    </div>
+                </div>     
+            </form> 
+        </div>
+    </section>
+
+    @* --- 2. Main Content Layout (Sidebar & Grid) --- *@
+    <div class="container">
+        <div class="row">
+
+            @* --- الشريط الجانبي للتصفية (3 أعمدة) --- *@
+
+        <div class="col-lg-3">
+            <div class="filter-sidebar-enhanced sticky-sidebar">
+                <form id="filterFormEnhanced" asp-action="SearchResults" asp-controller="Home" method="get">
+
+                    <input type="hidden" name="query" value="@Model.Query" />
+                    <input type="hidden" name="page" value="1" />
+
+                    <div class="d-flex justify-content-between align-items-center pb-3 mb-3 border-bottom">
+                        <h5 class="mb-0 fw-bold text-dark">Filter Results</h5>
+                        <a href="@Url.Action("SearchResults", "Home", new { query = Model.Query })" class="text-decoration-none small text-danger">
+                            Clear All
+                        </a>
+                    </div>
+
+                    <div class="accordion accordion-flush" id="filterAccordion">
+
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button p-0 py-3 filter-title-btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseCategory" aria-expanded="true" aria-controls="collapseCategory">
+                                    Category
+                                </button>
+                            </h2>
+                            <div id="collapseCategory" class="accordion-collapse collapse show" data-bs-parent="#filterAccordion">
+                                <div class="accordion-body p-0 pb-3">
+                                    <ul class="list-unstyled filter-options small">
+                                        @foreach (var item in Model.Categories)
+                                        {
+                                            bool isChecked = Model.SelectedCategoryIds != null && Model.SelectedCategoryIds.Contains(item.Id);
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           class="form-check-input filter-checkbox"
+                                                           name="categoryIds"
+                                                           value="@item.Id"
+                                                           @(isChecked ? "checked" : "")>
+                                                    <span>@item.Name (@Model.Courses.Where(c => c.CategoryId == item.Id).Count())</span>
+                                                </label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <hr class="text-muted my-1">
+                        </div>
+
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button p-0 py-3 filter-title-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseLevel" aria-expanded="false" aria-controls="collapseLevel">
+                                    SubCategories
+                                </button>
+                            </h2>
+                            <div id="collapseLevel" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                                <div class="accordion-body p-0 pb-3">
+                                    <ul class="list-unstyled filter-options small">
+                                        @foreach (var item in Model.SubCategories)
+                                        {
+                                            bool isChecked = Model.SelectedCategoryIds != null && Model.SelectedCategoryIds.Contains(item.Id);
+                                            <li>
+                                                <label>
+                                                    <input type="checkbox"
+                                                           class="form-check-input filter-checkbox"
+                                                           name="categoryIds"
+                                                           value="@item.Id"
+                                                           @(isChecked ? "checked" : "")>
+                                                    <span>@item.Name (@Model.Courses.Where(c => c.SubCategoryId == item.Id).Count())</span>
+                                                </label>
+                                            </li>
+                                        }
+                                    </ul>
+                                </div>
+                            </div>
+                            <hr class="text-muted my-1">
+                        </div>
+
+                        <div class="accordion-item border-0">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button p-0 py-3 filter-title-btn collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrice" aria-expanded="false" aria-controls="collapsePrice">
+                                    Price
+                                </button>
+                            </h2>
+                            <div id="collapsePrice" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                                <div class="accordion-body p-0 pb-3">
+                                    <ul class="list-unstyled filter-options small">
+                                        <li><label><input type="checkbox" name="isfree" class="form-check-input" value="@Model.IsFree"> <span>Free</span></label></li>
+                                     </ul>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+            </div>
+        </div>
+        <script>
+            // لو اتغير أي اختيار يتبعت الفورم تلقائي
+            document.querySelectorAll('#filterFormEnhanced .filter-checkbox').forEach(input => {
+                input.addEventListener('change', () => {
+                    document.getElementById('filterFormEnhanced').submit();
+                });
+            });
+        </script>
+
+            @* --- نتائج البحث (9 أعمدة) --- *@
+            <div class="col-lg-9">
+
+                @* Info Bar and Sorting *@
+                <div class="d-flex justify-content-between align-items-center search-results-info pb-3 mb-4 border-bottom">
+                    <p class="mb-0 fw-semibold text-dark">Showing @Model.TotalResults results for "<span class="text-primary">@Model.Query</span>"</p>
+                    <div class="dropdown">
+                        <a class="text-muted text-decoration-none dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Sort by: <span class="fw-bold text-dark">Relevance</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item" href="#">Highest Rated</a></li>
+                            <li><a class="dropdown-item" href="#">Newest</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    @* --- Card Example 1: Paid/Discounted --- *@
+                    <div class="col-md-6 col-lg-4">
+                        <div class="course-card-pro">
+                            <a href="#" class="text-decoration-none text-dark">
+                            <div class="course-image" style="background-image: url('https://www.google.com/url?sa=i&url=https%3A%2F%2Fwww.k12digest.com%2Fimg-academy-forging-futures-at-the-pinnacle-of-sports-education%2F&psig=AOvVaw10aNylaEeTexSUN3VEvkbA&ust=1761736470560000&source=images&cd=vfe&opi=89978449&ved=0CBIQjRxqFwoTCIi7lfXhxpADFQAAAAAdAAAAABAE');"></div>
+                                <div class="p-4">
+                                    <div class="course-category">Art & Design</div>
+                                    <h3 class="course-title fw-bold">Graphic Design Masterclass: Learn GREAT Design</h3>
+                                    <div class="text-muted small mb-2"><i class="fas fa-user-alt me-1"></i> By Ahmed Hassan</div>
+
+                                    <div class="d-flex justify-content-between align-items-center small text-muted mb-3 pt-2 border-top">
+                                        <span><i class="fas fa-star text-warning me-1"></i> 4.7</span>
+                                        <span><i class="far fa-clock me-1"></i> 8.5h</span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="course-price">$84.99</div>
+                                        <div class="course-old-price">$129.99</div>
+                                    </div>
+                                    <button class="btn btn-primary btn-enroll w-100 mt-3">Enroll Now</button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    @* --- Card Example 2: Free --- *@
+                    <div class="col-md-6 col-lg-4">
+                        <div class="course-card-pro">
+                            <a href="#" class="text-decoration-none text-dark">
+                                <div class="course-image" style="background-image: url('https://via.placeholder.com/300x180/8338ec/ffffff');"></div>
+                                <div class="p-4">
+                                    <div class="course-category">Information Technology</div>
+                                    <h3 class="course-title fw-bold">Introduction to Web Development (FREE)</h3>
+                                    <div class="text-muted small mb-2"><i class="fas fa-user-alt me-1"></i> By Sara Mohamed</div>
+
+                                    <div class="d-flex justify-content-between align-items-center small text-muted mb-3 pt-2 border-top">
+                                        <span><i class="fas fa-star text-warning me-1"></i> 4.8</span>
+                                        <span><i class="far fa-clock me-1"></i> 12h</span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="course-price text-success">FREE</div>
+                                        <div class="text-muted small">Full Access</div>
+                                    </div>
+                                    <button class="btn btn-success btn-enroll w-100 mt-3" style="background-color: var(--success-color);">Start Learning</button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    @* --- Card Example 3: Bestseller --- *@
+                    <div class="col-md-6 col-lg-4">
+                        <div class="course-card-pro">
+                            <a href="#" class="text-decoration-none text-dark">
+                                <div class="course-image" style="background-image: url('https://via.placeholder.com/300x180/ff006e/ffffff');"></div>
+                                <div class="p-4">
+                                    <div class="course-category">Business</div>
+                                    <h3 class="course-title fw-bold">Mastering SEO & Content Strategy</h3>
+                                    <div class="text-muted small mb-2"><i class="fas fa-user-alt me-1"></i> By Nour Ahmed</div>
+
+                                    <div class="d-flex justify-content-between align-items-center small text-muted mb-3 pt-2 border-top">
+                                        <span class="text-success fw-bold"><i class="fas fa-award me-1"></i> Bestseller</span>
+                                        <span><i class="far fa-clock me-1"></i> 10.5h</span>
+                                    </div>
+
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="course-price">$59.99</div>
+                                    </div>
+                                    <button class="btn btn-primary btn-enroll w-100 mt-3">Enroll Now</button>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    @foreach (var item in Model.Courses)
+                    { 
+                         <div class="col-md-6 col-lg-4 mt-3">
+                            <div class="course-card-pro">
+                                <a href="#" class="text-decoration-none text-dark">
+                                    <img class="course-image" src="/img/@item.ThumbnailUrl"></img>
+                                    <div class="p-4"> 
+
+                                        <div class="course-category"> @(item.SubCategory?.Name ?? "No Category")</div>
+                                        <h3 class="course-title fw-bold">@item.Title</h3>
+                                    <div class="text-muted small mb-2">
+                                        <i class="fas fa-user-alt me-1"></i> By @(item.Teacher?.FullName ?? "No Teacher")
+                                    </div>
+
+                                        <div class="d-flex justify-content-between align-items-center small text-muted mb-3 pt-2 border-top">
+                                            <span><i class="fas fa-star text-warning me-1"></i> @item.AverageRating</span>
+                                            <span><i class="far fa-clock me-1"></i> @item.TotalDuration m</span>
+                                        </div>
+                                         
+                                        <button class="btn btn-primary btn-enroll w-100 mt-3">Enroll Now</button>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    }
+
+
+                </div>
+
+                @* Pagination *@
+                <nav aria-label="Page navigation" class="mt-5">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item disabled"><a class="page-link" href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">2</a></li>
+                        <li class="page-item"><a class="page-link" href="#">3</a></li>
+                        <li class="page-item"><a class="page-link" href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </div> 
+
+
+
+
+
+
+
+
+
+
+  

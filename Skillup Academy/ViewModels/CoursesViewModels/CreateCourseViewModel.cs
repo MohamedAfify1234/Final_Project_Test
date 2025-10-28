@@ -14,10 +14,8 @@ namespace Skillup_Academy.ViewModels.CoursesViewModels
 		public string Title { get; set; }                   
 		public string Description { get; set; }            
 		public string ShortDescription { get; set; }        
-		public string ThumbnailUrl { get; set; }
-        [Required]
-
-        public string PreviewVideoUrl { get; set; }         
+		public IFormFile ThumbnailUrl { get; set; }
+        public IFormFile PreviewVideo { get; set; }         
 
 		public bool IsFree { get; set; } = false;           
 
@@ -30,6 +28,8 @@ namespace Skillup_Academy.ViewModels.CoursesViewModels
 		public int TotalLessons { get; set; } = 0;         // عدد الدروس
 		public int TotalDuration { get; set; } = 0;       // المدة الإجمالية (دقائق)
 
-		 
+		public Guid? SubCategoryId { get; set; }           // التصنيف الفرعي
+		public Guid? CategoryId { get; set; }               // التصنيف الرئيسي
+
 	}
 }

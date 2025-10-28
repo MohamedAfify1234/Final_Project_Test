@@ -1,24 +1,35 @@
 ﻿using AutoMapper;
+using Core.Interfaces;
 using Core.Models.Courses;
-using Core.Enums;
-using Skillup_Academy.ViewModels.CoursesViewModels;
+using Core.Models.Users;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Core.Interfaces;
-using Core.Interfaces;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using Skillup_Academy.AppSettingsImages;
+using Skillup_Academy.ViewModels.CoursesViewModels;
 
 namespace Educational_Platform.Controllers.Courses
 {
     public class CourseController : Controller
     {
         private readonly IRepository<Course> _repository;
-        private readonly IMapper _mapper;
+		private readonly IRepository<SubCategory> _repoSubCategory;
+		private readonly IRepository<CourseCategory> _repoCategory;
+		private readonly IMapper _mapper;
+		private readonly SaveImage _saveImage;
+		private readonly UserManager<User> _userManager;
 
-        public CourseController(IRepository<Course> repository, IMapper mapper)
+		public CourseController(IRepository<Course> repository,IRepository<SubCategory> repoSubCategory,
+            IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage,UserManager<User> UserManager)
         {
             _repository = repository;
-            _mapper = mapper;
-        }
+			_repoSubCategory = repoSubCategory;
+			_repoCategory = repoCategory;
+			_mapper = mapper;
+			_saveImage = saveImage;
+			_userManager = UserManager;
+		}
         // /Course/ShowAll
         public async Task<IActionResult> ShowAll()
         {
@@ -26,13 +37,22 @@ namespace Educational_Platform.Controllers.Courses
             return View(allCourse);
         }
 
-
-
-        [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> AllCaurseIsPublished()
         {
-            return View();
+            var allCourse = await _repository.Query().Where(c => c.IsPublished).ToListAsync();
+            return View(allCourse);
         }
+         
+		[HttpGet]
+        public async Task<IActionResult> Create()
+        {
+			ViewBag.SubCategory= new SelectList(await _repoSubCategory.GetAllAsync(), "Id", "Name");
+            ViewBag.Category= new SelectList(await _repoCategory.GetAllAsync(), "Id", "Name");
+			   
+			return View();
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> Create(CreateCourseViewModel VM)
         {
@@ -42,14 +62,25 @@ namespace Educational_Platform.Controllers.Courses
 
                 course.CreatedDate = DateTime.Now;
                 course.UpdatedDate = DateTime.Now;
+                course.PreviewVideoUrl =await _saveImage.SaveImgAsync(VM.PreviewVideo);
+                course.ThumbnailUrl = await _saveImage.SaveImgAsync(VM.ThumbnailUrl);
                 if (course.IsPublished == true)
                     course.PublishedDate = DateTime.Now;
+
+				var userIdString = _userManager.GetUserId(User); 
+				Guid teacherId;
+				if (!Guid.TryParse(userIdString, out teacherId))
+				{
+					teacherId = Guid.NewGuid();
+				} 
+				course.TeacherId = teacherId;
 
                 await _repository.AddAsync(course);
                 await _repository.SaveChangesAsync();
                 return RedirectToAction("ShowAll");
             }
-            return View(VM);
+             
+			return View(VM);
         }
 
 
@@ -64,7 +95,10 @@ namespace Educational_Platform.Controllers.Courses
                 return NotFound();
             }
 
-            var courseVM = _mapper.Map<EditCourseViewModel>(course);
+			ViewBag.SubCategory = new SelectList(await _repoSubCategory.GetAllAsync(), "Id", "Name");
+			ViewBag.Category = new SelectList(await _repoCategory.GetAllAsync(), "Id", "Name");
+
+			var courseVM = _mapper.Map<EditCourseViewModel>(course);
             return View(courseVM);
 
         }
@@ -81,8 +115,13 @@ namespace Educational_Platform.Controllers.Courses
                 oldCourse.Title = newCourse.Title;
                 oldCourse.Description = newCourse.Description;
                 oldCourse.ShortDescription = newCourse.ShortDescription;
-                oldCourse.ThumbnailUrl = newCourse.ThumbnailUrl;
-                oldCourse.PreviewVideoUrl = newCourse.PreviewVideoUrl;
+                 
+				if (newCourse.ThumbnailUrl != null) 
+                    oldCourse.ThumbnailUrl = await _saveImage.SaveImgAsync(newCourse.ThumbnailUrlFile);
+				 
+				if (newCourse.PreviewVideoUrl != null) 
+                    oldCourse.PreviewVideoUrl = await _saveImage.SaveImgAsync(newCourse.PreviewVideoFile);
+				 
                 oldCourse.IsFree = newCourse.IsFree;
                 oldCourse.TotalLessons = newCourse.TotalLessons;
                 oldCourse.TotalDuration = newCourse.TotalDuration;
@@ -106,7 +145,12 @@ namespace Educational_Platform.Controllers.Courses
         [HttpGet]
         public async Task<IActionResult> Details(Guid id)
         {
-            var course = await _repository.GetByIdAsync(id);
+            var course = await _repository.Query()
+                .Include(c=>c.Category)
+                .Include(s=>s.SubCategory)
+                .Include(t=>t.Teacher)
+                .FirstAsync(i=>i.Id==id);
+
             if (course == null)
             {
                 return NotFound();
