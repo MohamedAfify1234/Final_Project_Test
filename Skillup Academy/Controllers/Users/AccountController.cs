@@ -57,7 +57,7 @@ namespace Skillup_Academy.Controllers.Users
 						}
 						if (User.IsInRole("Instructor"))
 						{
-							return RedirectToAction("InstructorDashboard", "Instructor");
+							return RedirectToAction("Dashboard", "Teacher");
 						}
 						return RedirectToAction(nameof(Index), "Home");
 					}

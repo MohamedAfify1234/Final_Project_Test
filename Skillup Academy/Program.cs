@@ -3,6 +3,7 @@ using Core.Interfaces.Courses;
 using Core.Interfaces.Exams;
 using Core.Interfaces.Reviews;
 using Core.Interfaces.Subscriptions;
+using Core.Interfaces.Users;
 using Core.Models.Users;
 using Infrastructure.Data;
 using Infrastructure.Data.Seed;
@@ -11,6 +12,7 @@ using Infrastructure.Repositories.Exams;
 using Infrastructure.Repositories.Implementation;
 using Infrastructure.Repositories.Reviews;
 using Infrastructure.Repositories.Subscriptions;
+using Infrastructure.Repositories.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
@@ -33,6 +35,7 @@ namespace Skillup_Academy
             builder.Services.AddScoped<IExamAttemptRepository, ExamAttemptRepository>();
             builder.Services.AddScoped<ISubscriptionRepository,SubscriptionRepository>();
             builder.Services.AddScoped<ISubscriptionPlanRepository,SubscriptionPlanRepository>();
+            builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
 
             builder.Services.AddDbContext<AppDbContext>(Options =>
             { Options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));

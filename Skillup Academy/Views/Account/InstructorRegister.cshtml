@@ -572,7 +572,8 @@
                 <span class="field-validation-error" data-valmsg-for="ClientFile" data-valmsg-replace="true"></span>
             </div>
 
-            <form class="register-form" method="post" action="/Account/InstructorRegister" enctype="multipart/form-data">
+            @* <form class="register-form" method="post" action="/Account/InstructorRegister" enctype="multipart/form-data"> *@
+            <form class="register-form" asp-action="InstructorRegister" asp-controller="Account" method="post" enctype="multipart/form-data">
                 @Html.AntiForgeryToken()
 
                 <!-- Personal Information -->

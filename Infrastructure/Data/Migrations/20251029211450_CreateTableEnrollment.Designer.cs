@@ -4,6 +4,7 @@ using Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251029211450_CreateTableEnrollment")]
+    partial class CreateTableEnrollment
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +64,7 @@ namespace Infrastructure.Data.Migrations
                     b.Property<Guid?>("SubCategoryId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("TeacherId")
+                    b.Property<Guid?>("TeacherId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ThumbnailUrl")
@@ -92,7 +95,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("Core.Models.Courses.CourseCategory", b =>
@@ -118,7 +121,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseCategories", (string)null);
+                    b.ToTable("CourseCategories");
                 });
 
             modelBuilder.Entity("Core.Models.Courses.SubCategory", b =>
@@ -145,7 +148,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategories", (string)null);
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Core.Models.Enrollments.Enrollment", b =>
@@ -181,7 +184,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Enrollments", (string)null);
+                    b.ToTable("Enrollment");
                 });
 
             modelBuilder.Entity("Core.Models.Exams.Exam", b =>
@@ -229,7 +232,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("Core.Models.Exams.ExamAttempt", b =>
@@ -271,7 +274,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("ExamAttempts", (string)null);
+                    b.ToTable("ExamAttempts");
                 });
 
             modelBuilder.Entity("Core.Models.Learning.Answer", b =>
@@ -305,7 +308,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("Core.Models.Learning.Question", b =>
@@ -350,7 +353,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Core.Models.Lessons.Lesson", b =>
@@ -399,7 +402,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("Core.Models.Reviews.CourseReview", b =>
@@ -439,7 +442,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CourseReviews", (string)null);
+                    b.ToTable("CourseReviews");
                 });
 
             modelBuilder.Entity("Core.Models.Subscriptions.Subscription", b =>
@@ -473,7 +476,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions", (string)null);
+                    b.ToTable("Subscriptions");
                 });
 
             modelBuilder.Entity("Core.Models.Subscriptions.SubscriptionPlan", b =>
@@ -515,7 +518,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SubscriptionPlans", (string)null);
+                    b.ToTable("SubscriptionPlans");
                 });
 
             modelBuilder.Entity("Core.Models.Users.Role", b =>
@@ -819,8 +822,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasOne("Core.Models.Users.Teacher", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Category");
 

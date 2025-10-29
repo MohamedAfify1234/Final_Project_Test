@@ -1,0 +1,276 @@
+﻿@using Skillup_Academy.ViewModels.TeacherDashboard
+@model TeacherDashboardVM
+
+@{
+    ViewData["Title"] = "Teacher Dashboard";
+    Layout = "/Views/Shared/_TeacherLayout.cshtml";
+}
+
+<!-- Hero Section -->
+<div class="hero-section">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h1 class="display-5 fw-bold">Welcome back, @Model.TeacherName!</h1>
+                <p class="lead">Manage your courses, track student progress, and grow your teaching impact.</p>
+                <div class="mt-4">
+                    <a asp-action="Create" asp-controller="Course" class="btn btn-light btn-lg me-3">Create New Course</a>
+                    <a href="#" class="btn btn-outline-light btn-lg">View Analytics</a>
+                </div>
+            </div>
+            <div class="col-md-4 text-center">
+                <div class="bg-white rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 120px; height: 120px;">
+                    <i class="fas fa-chalkboard-teacher fa-3x" style="color: #667eea;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics Section -->
+<div class="container mt-5">
+    <div class="row g-4 mb-5">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-book fa-lg"></i>
+                </div>
+                <h4>@Model.TotalCourses</h4>
+                <p class="text-muted mb-0">Total Courses</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-users fa-lg"></i>
+                </div>
+                <h4>@Model.TotalStudents</h4>
+                <p class="text-muted mb-0">Total Students</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-star fa-lg"></i>
+                </div>
+                <h4>4.8</h4>
+                <p class="text-muted mb-0">Average Rating</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-chart-line fa-lg"></i>
+                </div>
+                <h4>85%</h4>
+                <p class="text-muted mb-0">Completion Rate</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center">
+                <h3>Quick Actions</h3>
+                <div>
+                    <aasp-action ="Create" asp-controller="Course" class="btn btn-primary me-2">
+                        <i class="fas fa-plus me-2"></i>New Course
+                    </a>
+                    <a href="#" class="btn btn-outline-primary">
+                        <i class="fas fa-upload me-2"></i>Upload Content
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses Section -->
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3>My Courses</h3>
+                <a asp-action="ShowAll" asp-controller="Course" class="btn btn-outline-secondary">View All</a>
+            </div>
+        </div>
+
+        @if (Model.Courses != null && Model.Courses.Any())
+        {
+            foreach (var course in Model.Courses)
+            {
+                <div class="col-md-4 mb-4">
+                    <div class="course-card h-100">
+                        <div class="course-img position-relative">
+                            <i class="fas fa-book-open fa-3x"></i>
+                            <div class="position-absolute top-0 end-0 m-2">
+                                <span class="badge @(course.IsPublished ? "bg-success" : "bg-warning")">
+                                    @(course.IsPublished ? "Published" : "Draft")
+                                </span>
+                            </div>
+                        </div>
+                        <div class="p-3 d-flex flex-column h-100">
+                            <h5>@course.Title</h5>
+                            <p class="text-muted flex-grow-1">@course.Description</p>
+                            <div class="mt-auto">
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <small class="text-muted">
+                                        <i class="fas fa-calendar me-1"></i>
+                                        @course.CreatedDate.ToString("MMM dd, yyyy")
+                                    </small>
+                                    <small class="text-muted">
+                                        <i class="fas fa-list-alt me-1"></i>
+                                        @course.TotalLessons Lessons
+                                    </small>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-primary">
+                                        <i class="fas fa-users me-1"></i>
+                                        @course.TotalStudents Students
+                                    </span>
+                                    <div class="course-actions">
+                                        <a href="#" class="btn btn-sm btn-primary">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-secondary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-sm btn-outline-info">
+                                            <i class="fas fa-chart-bar"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12">
+                <div class="text-center py-5">
+                    <i class="fas fa-book fa-4x text-muted mb-3"></i>
+                    <h4 class="text-muted">No Courses Yet</h4>
+                    <p class="text-muted">Start by creating your first course to share your knowledge.</p>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Create Your First Course
+                    </a>
+                </div>
+            </div>
+        }
+    </div>
+
+    <!-- Recent Activity Section -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="stat-card">
+                <h4 class="mb-4">Recent Activity</h4>
+                <div class="list-group list-group-flush">
+                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div>
+                            <i class="fas fa-user-plus text-success me-2"></i>
+                            <span>5 new students enrolled in "Web Development"</span>
+                        </div>
+                        <small class="text-muted">2 hours ago</small>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div>
+                            <i class="fas fa-comment text-primary me-2"></i>
+                            <span>New comment on "Machine Learning Basics"</span>
+                        </div>
+                        <small class="text-muted">5 hours ago</small>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div>
+                            <i class="fas fa-star text-warning me-2"></i>
+                            <span>Your course received a 5-star rating</span>
+                        </div>
+                        <small class="text-muted">1 day ago</small>
+                    </div>
+                    <div class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                        <div>
+                            <i class="fas fa-graduation-cap text-info me-2"></i>
+                            <span>3 students completed "UX/UI Design" course</span>
+                        </div>
+                        <small class="text-muted">2 days ago</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .course-img {
+            height: 160px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .stat-card {
+            border: none;
+            border-radius: 15px;
+            transition: all 0.3s ease;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+        }
+
+        .stat-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            background: rgba(13, 110, 253, 0.1);
+            color: #0d6efd;
+        }
+
+        .course-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+
+            .course-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
+            }
+
+        .hero-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 0 0 15px 15px;
+            color: white;
+            padding: 3rem 2rem;
+            margin-bottom: 2rem;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add any dashboard-specific JavaScript here
+            console.log('Dashboard loaded successfully');
+
+            // Example: Add click handlers for course cards
+            document.querySelectorAll('.course-card').forEach(card => {
+                card.addEventListener('click', function(e) {
+                    if (!e.target.closest('.course-actions')) {
+                        const courseId = this.dataset.courseId;
+                        // Navigate to course details
+                        console.log('Navigating to course:', courseId);
+                    }
+                });
+            });
+        });
+    </script>
+}

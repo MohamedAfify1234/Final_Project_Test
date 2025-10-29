@@ -67,13 +67,14 @@ namespace Educational_Platform.Controllers.Courses
                 if (course.IsPublished == true)
                     course.PublishedDate = DateTime.Now;
 
-				var userIdString = _userManager.GetUserId(User); 
-				Guid teacherId;
-				if (!Guid.TryParse(userIdString, out teacherId))
-				{
-					teacherId = Guid.NewGuid();
-				} 
-				course.TeacherId = teacherId;
+				var userIdString = _userManager.GetUserId(User);
+                Guid teacherId;
+                if (!Guid.TryParse(userIdString, out teacherId))
+                {
+                    teacherId = Guid.NewGuid();
+                }
+                course.TeacherId = teacherId;
+
 
                 await _repository.AddAsync(course);
                 await _repository.SaveChangesAsync();

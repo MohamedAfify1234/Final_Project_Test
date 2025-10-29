@@ -66,7 +66,7 @@
             <ul class="nav-links" id="navLinks">
                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="me-4"><a asp-action="ShowAll" asp-controller="Course">Courses</a></li>
-                <li class="me-4"><a href="#">Instructors</a></li>
+                <li class="me-4"><a asp-action="Dashboard" asp-controller="Teacher">Instructors</a></li>
                 <li class="me-4"><a href="#">Categories</a></li>
                 <li class="me-4"><a href="#">About</a></li>
 
@@ -110,6 +110,7 @@
 			<div style="background-color:aliceblue ">
 				@RenderBody()
 			</div>
+        
 		</main>
           
     <footer>

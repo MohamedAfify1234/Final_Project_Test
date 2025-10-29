@@ -1,4 +1,5 @@
 ﻿using Core.Models.Courses;
+using Core.Models.Enrollments;
 using Core.Models.Exams;
 using Core.Models.Learning;
 using Core.Models.Lessons;
@@ -11,29 +12,29 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Data
 {
-    public class AppDbContext : IdentityDbContext<User,Role, Guid>
-	{
+    public class AppDbContext : IdentityDbContext<User, Role, Guid>
+    {
         public AppDbContext()
         {
-            
+
         }
-        public AppDbContext(DbContextOptions<AppDbContext> options): base(options)
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
         {
         }
 
-		//protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-		//{
-		//    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=EducationalPlatform;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
-		//} 
+        //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        //{
+        //    optionsBuilder.UseSqlServer("Data Source=.;Initial Catalog=EducationalPlatform;Integrated Security=True;Encrypt=False;Trust Server Certificate=True");
+        //} 
 
-		protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
-			base.OnModelCreating(modelBuilder);
+            base.OnModelCreating(modelBuilder);
 
-			// Apply all configurations automatically
+            // Apply all configurations automatically
 
-			modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+            modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
         }
 
         // DbSets
@@ -50,9 +51,6 @@ namespace Infrastructure.Data
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
         public DbSet<CourseReview> CourseReviews { get; set; }
-
-         
-
-
-    }
+        public DbSet<Enrollment> Enrollments {  get; set; }
+        }
 }

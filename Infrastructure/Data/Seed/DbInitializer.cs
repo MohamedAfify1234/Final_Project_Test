@@ -34,7 +34,9 @@ namespace Infrastructure.Data.Seed
 			}
 
  			var adminEmail = "admin@gmail.com";
+ 			// var teacherEmail = "teacher@gmail.com";
 			var adminUser = await _userManager.FindByEmailAsync(adminEmail);
+			// var teacherUser = await _userManager.FindByEmailAsync(teacherEmail);
 
 			if (adminUser == null)
 			{
@@ -60,7 +62,31 @@ namespace Infrastructure.Data.Seed
 					throw new Exception("❌ Failed to create the default administrator account");
 				}
 			}
-		}
+            //if (teacherUser == null)
+            //{
+            //    var teacher = new User
+            //    {
+            //        UserName = "ali",
+            //        Email = teacherEmail,
+            //        FullName = "Main Teacher",
+            //        EmailConfirmed = true,
+            //        IsActive = true,
+            //        UserType = UserType.Instructor,
+            //        ProfilePicture = "avatar.png"
+            //    };
+
+            //    var result = await _userManager.CreateAsync(teacher, "Teacher@123");
+
+            //    if (result.Succeeded)
+            //    {
+            //        await _userManager.AddToRoleAsync(teacher, UserType.Instructor.ToString());
+            //    }
+            //    else
+            //    {
+            //        throw new Exception("❌ Failed to create the default administrator account");
+            //    }
+            //}
+        }
 	}
 
 }

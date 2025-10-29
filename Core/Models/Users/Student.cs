@@ -1,4 +1,5 @@
-﻿using Core.Models.Exams;
+﻿using Core.Models.Enrollments;
+using Core.Models.Exams;
 
 namespace Core.Models.Users
 {
@@ -12,6 +13,7 @@ namespace Core.Models.Users
 
 		// العلاقات الخاصة
 		public ICollection<ExamAttempt> ExamAttempt { get; set; }       // الامتحانات
-	
-	}
+		public ICollection<Enrollment> Enrollments { get; set; }       // التسجيلات
+
+    }
 }
