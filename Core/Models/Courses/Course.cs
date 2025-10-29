@@ -3,6 +3,7 @@ using Core.Models.Reviews;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Core.Models.Lessons;
+using Core.Models.Enrollments;
 
 
 namespace Core.Models.Courses
@@ -46,6 +47,7 @@ namespace Core.Models.Courses
         public Guid? SubCategoryId { get; set; }           // التصنيف الفرعي
         public SubCategory? SubCategory { get; set; }       // التصنيف الفرعي
 
+        public ICollection<Enrollment> Enrollments { get; set; }       // التسجيلات
         public ICollection<Lesson> Lessons { get; set; } // دروس الكورس
         public ICollection<CourseReview> CourseReviews { get; set; } // التقييمات
         public ICollection<SubscriptionPlan> Subscribes { get; set; }      // الاشتراكات
