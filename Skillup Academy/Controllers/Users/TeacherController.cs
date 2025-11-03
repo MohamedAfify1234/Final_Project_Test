@@ -2,7 +2,10 @@
 using Core.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Skillup_Academy.AppSettingsImages;
+using Skillup_Academy.Helper;
 using Skillup_Academy.ViewModels.TeacherDashboard;
+using Skillup_Academy.ViewModels.UsersViewModels;
 using System.Security.Claims;
 
 namespace Skillup_Academy.Controllers.Users
@@ -11,10 +14,15 @@ namespace Skillup_Academy.Controllers.Users
     {
         private readonly ITeacherRepository _teacherRepository;
         private readonly UserManager<User> _userManager;
-        public TeacherController(ITeacherRepository teacherRepository, UserManager<User> userManager)
+        //------- for Admin Dashboard
+        private readonly SaveImage _saveImage;
+        private readonly FileService _fileService;
+        public TeacherController(ITeacherRepository teacherRepository, UserManager<User> userManager, SaveImage saveImage, FileService fileService)
         {
             _teacherRepository = teacherRepository;
             _userManager = userManager;
+            _saveImage = saveImage;
+            _fileService = fileService;
         }
 
         public async Task<IActionResult> Dashboard()
@@ -82,6 +90,184 @@ namespace Skillup_Academy.Controllers.Users
             }).ToList();
             return View(viewModel);
         }
-       
+
+
+        //////////////////////////////////////////////////////////// For Admin Dashboard////////////////////////////////////////////
+        public async Task<IActionResult> Index()
+        {
+            List<Teacher> Teachers = await _teacherRepository.GetAll();
+            return View("Index", Teachers);
+        }
+
+        [HttpGet]
+        public IActionResult Create()
+        {
+            var viewModel = new TeacherViewModel
+            {
+                IsActive = true
+            };
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(TeacherViewModel model)
+        {
+            var file = _fileService.GetDefaultAvatar();
+
+            if (ModelState.IsValid)
+            {
+                var teacher = new Teacher
+                {
+                    UserName = model.UserName,
+                    Email = model.Email,
+                    FullName = model.FullName,
+                    RegistrationDate = DateTime.Now,
+                    LastLoginDate = DateTime.Now,
+                    PhoneNumber = model.PhoneNumber,
+                    IsActive = model.IsActive,
+                    ProfilePicture = model.ClientFile != null
+                                     ? await _saveImage.SaveImgAsync(model.ClientFile)
+                                     : await _saveImage.SaveImgAsync(file)
+                };
+
+                var result = await _teacherRepository.CreateTeacherAsync(teacher, model.Password);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+
+            return View(model);
+        }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return NotFound();
+            if (!Guid.TryParse(id, out var teacherGuid))
+            {
+                return BadRequest("Invalid teacher ID format.");
+            }
+            var teacherEntity = await _teacherRepository.GetTeacherAsync(id);
+            var courses = await _teacherRepository.GetTeacherCoursesAsync(teacherGuid);
+
+            if (teacherEntity == null) return NotFound();
+
+            var viewModel = new TeacherViewModel
+            {
+                Id = teacherEntity.Id.ToString(),
+                UserName = teacherEntity.UserName,
+                Email = teacherEntity.Email,
+                FullName = teacherEntity.FullName,
+                PhoneNumber = teacherEntity.PhoneNumber,
+                RegistrationDate = teacherEntity.RegistrationDate,
+                LastLoginDate = teacherEntity.LastLoginDate,
+                IsActive = teacherEntity.IsActive,
+                TotalCourses = courses.Count
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return NotFound();
+
+            var teacherToEdit = await _teacherRepository.GetTeacherAsync(id);
+
+            if (teacherToEdit == null) return NotFound();
+
+            var viewModel = new TeacherViewModel
+            {
+                Id = teacherToEdit.Id.ToString(),
+                Email = teacherToEdit.Email,
+                UserName = teacherToEdit.UserName,
+                FullName = teacherToEdit.FullName,
+                IsActive = teacherToEdit.IsActive,
+                RegistrationDate = teacherToEdit.RegistrationDate,
+                LastLoginDate = teacherToEdit.LastLoginDate,
+                PhoneNumber = teacherToEdit.PhoneNumber,
+                TotalCourses = teacherToEdit.TotalCourses
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(string id, Teacher model)
+        {
+            var teacherToUpdate = await _teacherRepository.GetTeacherAsync(id);
+            if (teacherToUpdate == null) return NotFound();
+
+            teacherToUpdate.Email = model.Email;
+            teacherToUpdate.UserName = model.UserName;
+            teacherToUpdate.FullName = model.FullName;
+            teacherToUpdate.IsActive = model.IsActive;
+            teacherToUpdate.RegistrationDate = model.RegistrationDate;
+            teacherToUpdate.LastLoginDate = model.LastLoginDate;
+            teacherToUpdate.PhoneNumber = model.PhoneNumber;
+            teacherToUpdate.TotalCourses = model.TotalCourses;
+
+            var result = await _teacherRepository.UpdateTeacherAsync(teacherToUpdate);
+
+            if (result.Succeeded)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            return View(model);
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return NotFound();
+
+            var teacherEntity = await _teacherRepository.GetTeacherAsync(id);
+
+            if (teacherEntity == null) return NotFound();
+
+            var viewModel = new TeacherViewModel
+            {
+                Id = teacherEntity.Id.ToString(),
+                UserName = teacherEntity.UserName,
+                Email = teacherEntity.Email,
+                FullName = teacherEntity.FullName,
+                PhoneNumber = teacherEntity.PhoneNumber,
+                RegistrationDate = teacherEntity.RegistrationDate,
+                LastLoginDate = teacherEntity.LastLoginDate,
+                IsActive = teacherEntity.IsActive,
+                TotalCourses = teacherEntity.TotalCourses
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            var userToDelete = await _teacherRepository.GetTeacherAsync(id);
+
+            if (userToDelete != null)
+            {
+                var result = await _teacherRepository.DeleteTeacherAsync(userToDelete);
+
+                if (result.Succeeded)
+                {
+                    return RedirectToAction(nameof(Index));
+                }
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+
     }
 }

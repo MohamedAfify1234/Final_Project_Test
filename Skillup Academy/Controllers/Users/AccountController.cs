@@ -51,9 +51,7 @@ namespace Skillup_Academy.Controllers.Users
 						result.LastLoginDate = DateTime.Now; 
 						if (User.IsInRole("Admin"))
 						{
-						//	return RedirectToAction("AdminDashboard", "Admin");
-							return RedirectToAction(nameof(Index), "Home");
-
+							return RedirectToAction("Dashboard", "Admin");
 						}
 						if (User.IsInRole("Instructor"))
 						{

@@ -92,7 +92,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("Core.Models.Courses.CourseCategory", b =>
@@ -118,7 +118,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseCategories", (string)null);
+                    b.ToTable("CourseCategories");
                 });
 
             modelBuilder.Entity("Core.Models.Courses.SubCategory", b =>
@@ -145,7 +145,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategories", (string)null);
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Core.Models.Enrollments.Enrollment", b =>
@@ -181,43 +181,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Enrollments", (string)null);
-                });
-
-            modelBuilder.Entity("Core.Models.Enrollments.Enrollment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("CompletedAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid?>("CourseId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("EnrolledAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("GETDATE()");
-
-                    b.Property<int>("Progress")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("StudentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("Enrollment");
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("Core.Models.Exams.Exam", b =>
@@ -265,7 +229,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("Core.Models.Exams.ExamAttempt", b =>
@@ -307,7 +271,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("ExamAttempts", (string)null);
+                    b.ToTable("ExamAttempts");
                 });
 
             modelBuilder.Entity("Core.Models.Learning.Answer", b =>
@@ -341,7 +305,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("Core.Models.Learning.Question", b =>
@@ -386,7 +350,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Core.Models.Lessons.Lesson", b =>
@@ -435,7 +399,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("Core.Models.Reviews.CourseReview", b =>
@@ -475,7 +439,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CourseReviews", (string)null);
+                    b.ToTable("CourseReviews");
                 });
 
             modelBuilder.Entity("Core.Models.Subscriptions.Subscription", b =>
@@ -509,7 +473,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions", (string)null);
+                    b.ToTable("Subscriptions");
                 });
 
             modelBuilder.Entity("Core.Models.Subscriptions.SubscriptionPlan", b =>
@@ -551,7 +515,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SubscriptionPlans", (string)null);
+                    b.ToTable("SubscriptionPlans");
                 });
 
             modelBuilder.Entity("Core.Models.Users.Role", b =>

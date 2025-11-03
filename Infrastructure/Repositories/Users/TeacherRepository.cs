@@ -84,9 +84,45 @@ namespace Infrastructure.Repositories.Users
                     TotalStudents = c.TotalStudents
                 }).ToList()
             };
+        }
+         // for Admin Dashboard
+        public async Task<IdentityResult> CreateTeacherAsync(Teacher teacher, string password)
+        {
+            var result = await _userManager.CreateAsync(teacher, password);
 
+            if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(teacher, "Instructor");
+            }
+
+            return result;
         }
 
+        public async Task<IdentityResult> DeleteTeacherAsync(Teacher teacher)
+        {
+            return await _userManager.DeleteAsync(teacher);
+        }
+
+        public async Task<List<Teacher>> GetAll()
+        {
+            return await _context.Set<Teacher>().ToListAsync();
+        }
+
+        //public async Task<Teacher> GetTeacherByIdAsync(string id)
+        //{
+        //    var user = await _userManager.FindByIdAsync(id);
+
+        //    return user as Teacher;
+        //}
+
+        public async Task<IdentityResult> UpdateTeacherAsync(Teacher teacher)
+        {
+            return await _userManager.UpdateAsync(teacher);
+        }
+        public async Task<int> GetTotalTeacherCountAsync()
+        {
+            return await _context.Teachers.CountAsync();
+        }
 
     }
 }

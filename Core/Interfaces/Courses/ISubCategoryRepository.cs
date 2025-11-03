@@ -16,5 +16,7 @@ namespace Core.Interfaces.Courses
 
         public void Update(SubCategory SubCategory);
         public void Save();
+        Task<int> GetTotalSubCategoryCountAsync();
+
     }
 }

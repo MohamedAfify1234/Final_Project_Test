@@ -1,6 +1,7 @@
 ﻿using Core.Interfaces.Courses;
 using Core.Models.Courses;
 using Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,6 +41,10 @@ namespace Infrastructure.Repositories.Courses
         public void Save()
         {
             Context.SaveChanges();
+        }
+        public async Task<int> GetTotalSubCategoryCountAsync()
+        {
+            return await Context.SubCategories.CountAsync();
         }
     }
 }
