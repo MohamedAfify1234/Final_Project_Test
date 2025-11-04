@@ -27,9 +27,6 @@ namespace Infrastructure.Repositories.Users
         {
            return await _userManager.Users.OfType<Teacher>()
                 .FirstOrDefaultAsync(t => t.Id.ToString() == teacherId);
-            //return await _context.Users
-            //    .OfType<Teacher>()
-            //    .FirstOrDefaultAsync(t => t.Id.ToString() == teacherId);
         }
 
         public async Task<List<CourseDashboardDTO>> GetTeacherCoursesAsync(Guid teacherId)
@@ -44,9 +41,13 @@ namespace Infrastructure.Repositories.Users
                     Title = c.Title,
                     Description = c.Description,
                     IsPublished = c.IsPublished,
+                    IsFree = c.IsFree,
+                    AverageRating = c.AverageRating,
+                    TotalDuration = c.TotalDuration,
                     CreatedDate = c.CreatedDate,
                     TotalLessons = c.Lessons.Count,
                     TotalStudents = c.Enrollments.Count
+
                 })
                 .ToListAsync();
         }
@@ -62,7 +63,7 @@ namespace Infrastructure.Repositories.Users
 
         public async Task<TeacherDashboardDTO> GetTeacherDashboardAsync(Guid teacherId)
         {
-            var teacher = await _userManager.FindByIdAsync(teacherId.ToString());
+           var teacher = await _userManager.FindByIdAsync(teacherId.ToString());
             if (teacher == null) return null;
 
             var courses = await GetTeacherCoursesAsync(teacherId);
@@ -85,7 +86,92 @@ namespace Infrastructure.Repositories.Users
                 }).ToList()
             };
         }
-         // for Admin Dashboard
+
+
+        public async Task<TeacherInfoDTO> GetTeacherInfoAsync(Guid teacherId)
+        {
+            var user = await _userManager.FindByIdAsync(teacherId.ToString());
+            if (user == null)
+                return null;
+            var teacher = await _userManager.Users.OfType<Teacher>()
+                                        .FirstOrDefaultAsync(t => t.Id == teacherId);
+            return new TeacherInfoDTO
+            {
+                FullName = user.FullName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                ProfilePicture = user.ProfilePicture,
+                Bio = teacher?.Bio,
+                Qualifications = teacher?.Qualifications,
+                Expertise = teacher?.Expertise
+            };
+        }
+
+        public async Task<IdentityResult> UpdateTeacherInfoAsync(Teacher teacher, Guid teacherId)
+        {
+            var User = await _userManager.FindByIdAsync(teacherId.ToString());
+            if(User == null)
+                return (IdentityResult.Failed(new IdentityError { Description = "Teacher not found." }));
+            // لليوزر  تحديث البيانات
+            User.FullName = teacher.FullName;
+            User.Email = teacher.Email;
+            User.PhoneNumber = teacher.PhoneNumber;
+            User.ProfilePicture = teacher.ProfilePicture;
+            var result = await _userManager.UpdateAsync(User);
+            
+            if(!result.Succeeded)
+                return (IdentityResult.Failed(new IdentityError { Description = "Update failed." }));
+
+            // الاضافيه تحديث البيانات
+            var teacherToUpdate = await _context.Users
+                                        .OfType<Teacher>()
+                                        .FirstOrDefaultAsync(t => t.Id == teacherId);
+            if (teacherToUpdate == null)
+                return (IdentityResult.Failed(new IdentityError { Description = "Teacher not found in context." }));
+            teacherToUpdate.Bio = teacher.Bio;
+            teacherToUpdate.Qualifications = teacher.Qualifications;
+            teacherToUpdate.Expertise = teacher.Expertise;
+            _context.Teachers.Update(teacherToUpdate);
+            await _context.SaveChangesAsync();
+
+            return (IdentityResult.Success);
+        }
+
+
+
+        //Task<IdentityResult> ITeacherRepository.UpdateTeacherInfoAsync(Teacher teacher, Guid teacherId)
+        //{
+        //    if (!Guid.TryParse(teacherId.ToString(), out Guid teacherGuid))
+        //        return false;
+
+        //    var teacher = await _context.Teachers.FindAsync(teacherGuid);
+        //    if (teacher == null)
+        //        return false;
+
+        //    // تحديث البيانات
+        //    teacher.FullName = teacherInfo.FullName;
+        //    teacher.Email = teacherInfo.Email;
+        //    teacher.PhoneNumber = teacherInfo.PhoneNumber;
+        //    teacher.Bio = teacherInfo.Bio;
+        //    teacher.Qualifications = teacherInfo.Qualifications;
+        //    teacher.Expertise = teacherInfo.Expertise;
+        //    teacher.ProfilePicture = teacherInfo.ProfilePicture;
+
+        //    _context.Teachers.Update(teacher);
+        //    return await _context.SaveChangesAsync() > 0;
+        //}
+
+
+
+
+
+
+
+
+
+
+
+        // for Admin Dashboard
         public async Task<IdentityResult> CreateTeacherAsync(Teacher teacher, string password)
         {
             var result = await _userManager.CreateAsync(teacher, password);
@@ -97,6 +183,7 @@ namespace Infrastructure.Repositories.Users
 
             return result;
         }
+
 
         public async Task<IdentityResult> DeleteTeacherAsync(Teacher teacher)
         {
@@ -124,5 +211,6 @@ namespace Infrastructure.Repositories.Users
             return await _context.Teachers.CountAsync();
         }
 
+       
     }
 }

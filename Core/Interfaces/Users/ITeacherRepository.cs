@@ -16,6 +16,8 @@ namespace Core.Interfaces.Users
         Task<List<CourseDashboardDTO>> GetTeacherCoursesAsync(Guid teacherId);
         Task<int> GetTotalStudentsAsync(Guid teacherId);
         Task<TeacherDashboardDTO> GetTeacherDashboardAsync(Guid teacherId);
+        Task<TeacherInfoDTO> GetTeacherInfoAsync(Guid teacherId);
+        Task<IdentityResult> UpdateTeacherInfoAsync(Teacher teacher,Guid teacherId);
 
         // Mohamd Haysam /for AdminDashboard
         //Task<Teacher> GetTeacherByIdAsync(string id);

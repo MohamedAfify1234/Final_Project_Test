@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces.Users;
 using Core.Models.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Skillup_Academy.AppSettingsImages;
@@ -10,21 +11,26 @@ using System.Security.Claims;
 
 namespace Skillup_Academy.Controllers.Users
 {
+    [Authorize]
+    [Route("Teacher/[action]")]
     public class TeacherController : Controller
     {
         private readonly ITeacherRepository _teacherRepository;
         private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
         //------- for Admin Dashboard
         private readonly SaveImage _saveImage;
         private readonly FileService _fileService;
-        public TeacherController(ITeacherRepository teacherRepository, UserManager<User> userManager, SaveImage saveImage, FileService fileService)
+        public TeacherController(ITeacherRepository teacherRepository, UserManager<User> userManager, SaveImage saveImage, FileService fileService, SignInManager<User> signInManager)
         {
             _teacherRepository = teacherRepository;
             _userManager = userManager;
             _saveImage = saveImage;
             _fileService = fileService;
+            _signInManager = signInManager;
         }
-
+        
+        [HttpGet]
         public async Task<IActionResult> Dashboard()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -66,7 +72,7 @@ namespace Skillup_Academy.Controllers.Users
             };
             return View(viewModel);
         }
-
+        [HttpGet]
         public async Task<IActionResult> MyCourses()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
@@ -90,6 +96,88 @@ namespace Skillup_Academy.Controllers.Users
             }).ToList();
             return View(viewModel);
         }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction(nameof(Index), "Home");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Setting()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            var teacher = await _userManager.FindByIdAsync(userId);
+            if (teacher == null)
+                return NotFound("Teacher not found.");
+
+            if (!Guid.TryParse(teacher.Id.ToString(), out var teacherGuid))
+                return BadRequest("Invalid teacher ID format.");
+            var teacherInfo = await _teacherRepository.GetTeacherInfoAsync(teacherGuid);
+            if (teacherInfo == null)
+                return NotFound("Teacher info not available.");
+            var viewModel = new TeacherInfoVM
+            {
+                FullName = teacherInfo.FullName,
+                Email = teacherInfo.Email,
+                PhoneNumber = teacherInfo.PhoneNumber,
+                Bio = teacherInfo.Bio,
+                Qualifications = teacherInfo.Qualifications,
+                Expertise = teacherInfo.Expertise,
+                ProfilePicture = teacherInfo.ProfilePicture
+            };
+            return View(viewModel);
+
+        }
+        [HttpPost]
+        //public async Task<IActionResult> Setting(Teacher model, IFormFile ProfilePictureFile)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+        //            if (userId == null)
+        //                return Unauthorized();
+
+        //            var teacher = await _userManager.FindByIdAsync(userId);
+        //            if (teacher == null)
+        //                return NotFound("Teacher not found.");
+
+        //            // حفظ الصورة إذا تم رفعها
+        //            if (ProfilePictureFile != null && ProfilePictureFile.Length > 0)
+        //            {
+        //                model.ProfilePicture = await _saveImage.SaveImgAsync(ProfilePictureFile);
+        //            }
+
+        //            // تحديث بيانات المعلم
+        //            var result = await _teacherRepository.UpdateTeacherAsync(model, teacher.Id);
+
+        //            if (result)
+        //            {
+        //                TempData["SuccessMessage"] = "Settings updated successfully!";
+        //                return RedirectToAction("Settings");
+        //            }
+        //            else
+        //            {
+        //                ModelState.AddModelError("", "Failed to update settings.");
+        //            }
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            ModelState.AddModelError("", $"An error occurred: {ex.Message}");
+        //        }
+        //    }
+
+        //    return View(model);
+        //}
+
+
+
 
 
         //////////////////////////////////////////////////////////// For Admin Dashboard////////////////////////////////////////////
