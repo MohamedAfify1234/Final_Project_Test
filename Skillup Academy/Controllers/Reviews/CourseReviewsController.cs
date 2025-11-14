@@ -1,5 +1,7 @@
-﻿using Core.Interfaces.Courses;
+﻿using Core.Interfaces;
+using Core.Interfaces.Courses;
 using Core.Interfaces.Reviews;
+using Core.Interfaces.Users;
 using Core.Models.Courses;
 using Core.Models.Reviews;
 using Core.Models.Users;
@@ -18,24 +20,23 @@ namespace Skillup_Academy.Controllers.Reviews
 {
     public class CourseReviewsController : Controller
     {
-        //AppDbContext Context = new AppDbContext();
         AppDbContext Context;
-        //CourseReviewBL CourseReviewBL = new CourseReviewBL();
-        ICourseReviewRepository CourseReviewRepository;
+        private readonly ICourseReviewRepository CourseReviewRepository;
+        private readonly IStudentRepository _studentRepository;
+        private readonly IRepository<Course> _repository;
         //Courses soon
         //User Soon
-        public CourseReviewsController(ICourseReviewRepository _CourseReviewRepository, AppDbContext _Context)
+        public CourseReviewsController(ICourseReviewRepository _CourseReviewRepository, AppDbContext _Context,
+                                    IStudentRepository studentRepository, IRepository<Course> repository)
         {
             Context = _Context;
             CourseReviewRepository = _CourseReviewRepository;
-            // User soon
-            // Courses soon
+            _studentRepository = studentRepository;
+            _repository = repository;
         }
         // GET: CourseReviews/index
         public IActionResult Index()
         {
-            //var appDbContext = _context.CourseReviews.Include(c => c.Course).Include(c => c.User);
-            //return View(await appDbContext.ToListAsync());
             List<CourseReview> CourseReviews = CourseReviewRepository.GetAll();
             return View("Index", CourseReviews);
         }
@@ -43,11 +44,11 @@ namespace Skillup_Academy.Controllers.Reviews
         
 
         // GET: CourseReviews/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
             CourseReviewViewModel CRVM = new CourseReviewViewModel();
-            CRVM.Courses = new SelectList(Context.Courses.ToList(), "Id", "Title");
-            CRVM.Users = new SelectList(Context.Set<User>().ToList(), "Id", "FullName");
+            CRVM.Courses = new SelectList(await _repository.GetAllAsync(), "Id", "Title");
+            CRVM.Users = new SelectList(await _studentRepository.GetAll(), "Id", "FullName");
             return View("Create", CRVM);
         }
 

@@ -42,5 +42,9 @@ namespace Infrastructure.Repositories.Courses
         {
             Context.SaveChanges();
         }
+        public async Task<int> GetTotalSubCategoryCountAsync()
+        {
+            return await Context.SubCategories.CountAsync();
+        }
     }
 }

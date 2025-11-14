@@ -13,7 +13,6 @@ namespace Infrastructure.Repositories.Reviews
 {
     public class CourseReviewRepository : ICourseReviewRepository
     {
-        //AppDbContext Context = new AppDbContext();
         AppDbContext Context;
         public CourseReviewRepository(AppDbContext _Context)
         {

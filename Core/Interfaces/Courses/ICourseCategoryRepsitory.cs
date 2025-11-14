@@ -16,5 +16,7 @@ namespace Core.Interfaces.Courses
 
         public void Update(CourseCategory TaskItem);
         public void Save();
+        Task<int> GetTotalCategoryCountAsync();
+
     }
 }

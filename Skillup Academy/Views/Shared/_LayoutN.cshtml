@@ -68,10 +68,39 @@
             <span></span>
         </div>
 
+<<<<<<< HEAD
         <ul class="nav-links" id="navLinks"> 
             <li class="me-4"><a asp-action="AllCourseInHeader" asp-controller="Course">Courses</a></li>
             <li class="me-4"><a asp-action="GetAllInstructors" asp-controller="Account">Instructors</a></li>
             <li class="mobile-auth">
+=======
+            <ul class="nav-links" id="navLinks">
+                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
+                <li class="me-4"><a asp-action="ShowAll" asp-controller="Course">Courses</a></li>
+                <li class="me-4"><a asp-action="Dashboard" asp-controller="Teacher">Instructors</a></li>
+                <li class="me-4"><a asp-action="Index" asp-controller="CourseCategories">Categories</a></li>
+                <li class="me-4"><a href="#">About</a></li>
+
+                <li class="mobile-auth">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <a class="btn btn-profile" asp-action="Profile" asp-controller="Account">
+                            <i class="fas fa-user-circle"></i> Profile
+                        </a>
+                        <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="background-color:red;color:white;">
+                            Logout
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-login" asp-action="Login" asp-controller="Account">Login</a>
+                        <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account">Register</a>
+                    }
+                </li>
+            </ul>
+
+            <div class="auth-buttons">
+>>>>>>> f3e7ba769b1b935c8128c75a3f8b8569ee2ad9ab
                 @if (User.Identity.IsAuthenticated)
                 {
                         <a class="btn btn-profile" href="#" style="

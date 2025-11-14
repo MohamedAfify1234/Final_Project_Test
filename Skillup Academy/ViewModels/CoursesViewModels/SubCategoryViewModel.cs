@@ -14,7 +14,7 @@ namespace Skillup_Academy.ViewModels.CoursesViewModels
         [RegularExpression(@"^[a-zA-Z\s]+$", ErrorMessage = "Contain Only Letters and Spaces")]
         public string Name { get; set; }
         [MaxLength(100, ErrorMessage = "Less than 20")]
-        [MinLength(20, ErrorMessage = "more than 3")]
+        [MinLength(20, ErrorMessage = "more than 20")]
         [Required(ErrorMessage = "Required Feild")]
 
         public string Description { get; set; }

@@ -214,44 +214,45 @@
 
                     <ul class="nav flex-column mt-4">
                         <li class="nav-item">
-                            <a class="nav-link active" asp-action="Dashboard" asp-controller="Teacher" data-tab="dashboard">
+                            <a class="nav-link active" href="/Teacher/Dashboard" data-tab="dashboard">
                                 <i class="fas fa-tachometer-alt"></i>
                                 Dashboard
                             </a>
                         </li>
+
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-tab="courses">
+                            <a class="nav-link" href="/Teacher/MyCourses" data-tab="courses">
                                 <i class="fas fa-book"></i>
                                 My Courses
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-tab="students">
+                            <a class="nav-link" href="/Teacher/Students" data-tab="students">
                                 <i class="fas fa-users"></i>
                                 Students
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-tab="analytics">
+                            <a class="nav-link" href="/Teacher/Analytics" data-tab="analytics">
                                 <i class="fas fa-chart-bar"></i>
                                 Analytics
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-tab="messages">
+                            <a class="nav-link" href="/Teacher/Messages" data-tab="messages">
                                 <i class="fas fa-envelope"></i>
                                 Messages
                                 <span class="badge bg-primary rounded-pill">3</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#" data-tab="settings">
+                            <a class="nav-link" href="/Teacher/Setting" data-tab="settings">
                                 <i class="fas fa-cog"></i>
                                 Settings
                             </a>
                         </li>
                         <li class="nav-item mt-4">
-                            <a class="nav-link text-warning" href="#">
+                            <a class="nav-link text-warning" href="/Account/Logout">
                                 <i class="fas fa-sign-out-alt"></i>
                                 Logout
                             </a>
@@ -287,20 +288,31 @@
 
             navLinks.forEach(link => {
                 link.addEventListener('click', function(e) {
-                    e.preventDefault();
-
                     // Remove active class from all links
                     navLinks.forEach(l => l.classList.remove('active'));
 
                     // Add active class to clicked link
                     this.classList.add('active');
 
-                    // Here you would typically load the content for the selected tab
-                    const tabName = this.getAttribute('data-tab');
-                    console.log('Switching to tab:', tabName);
+                    // Get the URL from href attribute
+                    const url = this.getAttribute('href');
 
-                    // For a real implementation, you would load content via AJAX or show/hide sections
+                    // Navigate to the page
+                    if (url && url !== '#') {
+                        window.location.href = url;
+                    }
                 });
+            });
+
+            // Set active link based on current page
+            const currentPath = window.location.pathname;
+            navLinks.forEach(link => {
+                const linkUrl = link.getAttribute('href');
+                if (linkUrl && currentPath.includes(linkUrl.split('/').pop())) {
+                    link.classList.add('active');
+                } else {
+                    link.classList.remove('active');
+                }
             });
 
             // Mobile sidebar toggle

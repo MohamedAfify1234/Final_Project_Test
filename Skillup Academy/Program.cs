@@ -36,6 +36,7 @@ namespace Skillup_Academy
             builder.Services.AddScoped<ISubscriptionRepository,SubscriptionRepository>();
             builder.Services.AddScoped<ISubscriptionPlanRepository,SubscriptionPlanRepository>();
             builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
+            builder.Services.AddScoped<IStudentRepository, StudentRepository>();
 
             builder.Services.AddDbContext<AppDbContext>(Options =>
             { Options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
@@ -77,6 +78,7 @@ namespace Skillup_Academy
 			app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
+
 
 			using (var scope = app.Services.CreateScope())
 			{

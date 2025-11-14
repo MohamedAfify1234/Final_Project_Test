@@ -28,7 +28,9 @@ namespace Core.Interfaces
 		IQueryable<T> Query();
 
 		Task<int> SaveChangesAsync();
-	}
+        Task<int> GetTotalCourseCountAsync();
+
+    }
 
 
 }

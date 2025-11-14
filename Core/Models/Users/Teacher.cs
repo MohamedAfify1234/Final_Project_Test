@@ -9,8 +9,9 @@ namespace Core.Models.Users
 {
 	public class Teacher : User
 	{
-		// بيانات خاصة بالمدرس
-		public string Bio { get; set; }                    // السيرة الذاتية
+        //public Guid Id { get; set; }
+        // بيانات خاصة بالمدرس
+        public string Bio { get; set; }                    // السيرة الذاتية
 		public string Qualifications { get; set; }         // المؤهلات العلمية
 		public string Expertise { get; set; }              // التخصص
 		public bool IsApproved { get; set; } = false;      // موافقة الأدمن

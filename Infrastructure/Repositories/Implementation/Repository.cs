@@ -72,6 +72,9 @@ namespace Infrastructure.Repositories.Implementation
 			return await _context.SaveChangesAsync();
 		}
 
-
-	}
+        public async Task<int> GetTotalCourseCountAsync()
+        {
+            return await _context.Students.CountAsync();
+        }
+    }
 }
