@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Core.Interfaces;
+using Core.Interfaces;
 using Core.Interfaces.Courses;
 using Core.Interfaces.Reviews;
 using Core.Interfaces.Subscriptions;
@@ -14,15 +15,17 @@ using Infrastructure.Repositories.Courses;
 using Infrastructure.Repositories.Reviews;
 using Infrastructure.Repositories.Subscriptions;
 using Infrastructure.Repositories.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Skillup_Academy.ViewModels.AdminDashboard;
 using Skillup_Academy.ViewModels.UsersViewModels;
-using Core.Interfaces;
 
 namespace Skillup_Academy.Controllers.Admin
 {
+    [Authorize(Roles = "Admin")]
+    [Route("Admin/[action]")]
     public class AdminController : Controller
     {
         private readonly IStudentRepository _studentRepository;

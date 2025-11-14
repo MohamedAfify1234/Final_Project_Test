@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Infrastructure.Data;
-using Core.Models.Courses;
-using Core.Models.Lessons;
+﻿using AutoMapper;
 using Core.Enums;
 using Core.Interfaces;
-using Skillup_Academy.ViewModels.LessonsViewModels;
+using Core.Models.Courses;
+using Core.Models.Lessons;
+using Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Skillup_Academy.AppSettingsImages;
+using Skillup_Academy.ViewModels.LessonsViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Skillup_Academy.Controllers.Lessons
 {
@@ -20,13 +21,15 @@ namespace Skillup_Academy.Controllers.Lessons
         private readonly IRepository<Lesson> _repoLesson;
         private readonly IRepository<Course> _repoCourses;
 		private readonly IMapper _mapper;
+        private readonly SaveImage _saveImage;
 
- 		
-        public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses )
+
+        public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses, SaveImage saveImage)
         {
 			_repoLesson = repository;
 			_mapper = mapper;
 			_repoCourses = repoCourses;
+            _saveImage = saveImage;
  		}
         // /Lessons/index
         [HttpGet]
@@ -74,6 +77,9 @@ namespace Skillup_Academy.Controllers.Lessons
             { 
                 var lessonEntity = _mapper.Map<Lesson>(lesson);
                  lessonEntity.Order=lesson.OrderInCourse;
+
+                lessonEntity.VideoUrl = await _saveImage.SaveImgAsync(lesson.VideoUrl);
+                lessonEntity.AttachmentUrl = await _saveImage.SaveImgAsync(lesson.AttachmentUrl);
 
                 await _repoLesson.AddAsync(lessonEntity);
 
