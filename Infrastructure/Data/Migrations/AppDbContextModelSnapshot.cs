@@ -181,7 +181,11 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
+<<<<<<< HEAD
+                    b.ToTable("Enrollments", (string)null);
+=======
                     b.ToTable("Enrollments");
+>>>>>>> f3e7ba769b1b935c8128c75a3f8b8569ee2ad9ab
                 });
 
             modelBuilder.Entity("Core.Models.Exams.Exam", b =>

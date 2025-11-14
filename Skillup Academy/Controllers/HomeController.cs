@@ -1,30 +1,143 @@
 using System.Diagnostics;
+using System.Threading.Tasks;
+using Core.Interfaces;
 using Core.Models.Courses;
 using Infrastructure.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.Models;
+using Skillup_Academy.ViewModels.HomeViewModels;
 using Skillup_Academy.ViewModels.SearchViewModels;
-
 namespace Skillup_Academy.Controllers
 { 
 	public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
 		private readonly AppDbContext _context;
+		private readonly IRepository<CourseCategory> _repCourCategory;
 
-		public HomeController(ILogger<HomeController> logger,AppDbContext Context)
+		public HomeController(ILogger<HomeController> logger,AppDbContext Context,IRepository<CourseCategory> RepCourCategory)
         {
             _logger = logger;
 			_context = Context;
+			_repCourCategory = RepCourCategory;
 		}
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+			HomeViewModel homeViewModel = new HomeViewModel();
+			{
+				homeViewModel.ListCategory = await _repCourCategory.Query()
+					.Where(s=>s.SubCategories.Count!=0)
+					.Select(e => new CourseCategoryInHomeViewModel { Image = e.Icon, Name = e.Name , Id =e.Id })
+					.ToListAsync();
+
+				homeViewModel.NewlyAdded = await _context.Courses
+					.Where(c => c.IsPublished)
+					.Include(c => c.Teacher)
+					.Include(c => c.Category)
+					.OrderByDescending(c => c.CreatedDate)
+					.Take(6)
+					.Select(c => new CourseNewlyInHomeViewModel
+					{
+						Id = c.Id,
+						Title = c.Title,
+						ShortDescription = c.ShortDescription,
+						TotalDuration = c.TotalDuration,
+						Image = c.ThumbnailUrl,
+						IsFree = c.IsFree,
+ 						TeacherName = c.Teacher != null ? c.Teacher.FullName : "Unknown",
+						CategoryName = c.Category != null ? c.Category.Name : "Unknown",
+						AverageRating = c.AverageRating,
+ 					})
+					.ToListAsync();
+
+				homeViewModel.MostPopular = await _context.Courses
+					.Where(c => c.IsPublished)
+					.Include(c => c.Teacher)
+					.Include(c=>c.Category)
+					.OrderByDescending(c => c.TotalEnrollments)
+					.Take(6)
+					.Select(c => new CourseNewlyInHomeViewModel
+					{
+						Id = c.Id,
+						Title = c.Title,
+						ShortDescription = c.ShortDescription,
+						TotalDuration = c.TotalDuration,
+						Image = c.ThumbnailUrl,
+						IsFree = c.IsFree,
+						TeacherName = c.Teacher != null ? c.Teacher.FullName : "Unknown",
+						CategoryName = c.Category != null ? c.Category.Name : "Unknown",
+						AverageRating = c.AverageRating,
+					})
+					.ToListAsync();
+			};
+
+			return View(homeViewModel);
         }
- 
- 		[HttpGet]
+
+
+		[HttpGet]
+		public async Task<IActionResult> ViewAllCourseNewlyAdded(int page = 1)
+		{
+			int pageSize = 9;
+
+			var NewlyAdded = await _context.Courses
+				.Where(c => c.IsPublished)
+				.Include(c => c.Teacher)
+				.Include(c => c.Category)
+				.OrderByDescending(c => c.CreatedDate)
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.Select(c => new CourseNewlyInHomeViewModel
+				{
+					Id = c.Id,
+					Title = c.Title,
+					ShortDescription = c.ShortDescription,
+					TotalDuration = c.TotalDuration,
+					Image = c.ThumbnailUrl,
+					IsFree = c.IsFree,
+					TeacherName = c.Teacher != null ? c.Teacher.FullName : "Unknown",
+					CategoryName = c.Category != null ? c.Category.Name : "Unknown",
+					AverageRating = c.AverageRating,
+				})
+				.ToListAsync();
+			ViewBag.Page = page;
+			return View(NewlyAdded);
+		}
+
+
+		[HttpGet]
+		public async Task<IActionResult> ViewAllCourseMostPopular(int page = 1)
+		{
+			int pageSize = 9;
+
+			var MostPopular = await _context.Courses
+				.Where(c => c.IsPublished)
+				.Include(c => c.Teacher)
+				.Include(c => c.Category)
+				.OrderByDescending(c => c.TotalEnrollments)
+				.Skip((page-1) * pageSize)
+				.Take(pageSize)
+				.Select(c => new CourseNewlyInHomeViewModel
+				{
+					Id = c.Id,
+					Title = c.Title,
+					ShortDescription = c.ShortDescription,
+					TotalDuration = c.TotalDuration,
+					Image = c.ThumbnailUrl,
+					IsFree = c.IsFree,
+					TeacherName = c.Teacher != null ? c.Teacher.FullName : "Unknown",
+					CategoryName = c.Category != null ? c.Category.Name : "Unknown",
+					AverageRating = c.AverageRating,
+				})
+				.ToListAsync();
+			ViewBag.Page = page;
+			return View(MostPopular);
+		} 
+
+		[HttpGet]
 		public async Task<IActionResult> SearchResults( string? query, List<Guid>? categoryIds, bool isfree, int page = 1)
 		{
 			int pageSize = 9;  

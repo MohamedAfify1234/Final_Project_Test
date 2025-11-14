@@ -13,8 +13,8 @@
 		public string ThumbnailUrl { get; set; }
 		public string PreviewVideoUrl { get; set; }
 		
-		public IFormFile ThumbnailUrlFile { get; set; }
-		public IFormFile PreviewVideoFile { get; set; }
+		public IFormFile? ThumbnailUrlFile { get; set; }
+		public IFormFile? PreviewVideoFile { get; set; }
 
 		// الإحصائيات	
 		public int TotalLessons { get; set; }            // عدد الدروس

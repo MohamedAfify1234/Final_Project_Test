@@ -20,7 +20,7 @@ namespace Infrastructure.Repositories.Courses
         }
         public List<SubCategory> GetAll()
         {
-            return Context.SubCategories.ToList();
+            return Context.SubCategories.Include(c=>c.Category).ToList();
         }
         public void Add(SubCategory CourseCategory)
         {

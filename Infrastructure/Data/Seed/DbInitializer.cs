@@ -56,6 +56,7 @@ namespace Infrastructure.Data.Seed
 				if (result.Succeeded)
 				{
 					await _userManager.AddToRoleAsync(admin, UserType.Admin.ToString());
+					await _userManager.AddToRoleAsync(admin, UserType.Instructor.ToString());
 				}
 				else
 				{

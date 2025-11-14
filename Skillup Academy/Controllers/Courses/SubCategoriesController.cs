@@ -1,38 +1,51 @@
-﻿using Core.Interfaces.Courses;
+﻿using Core.Interfaces;
+using Core.Interfaces.Courses;
 using Core.Models.Courses;
-using Infrastructure.Data;
-using Infrastructure.Services.Courses;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.ViewModels.CoursesViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Skillup_Academy.Controllers.Courses
 {
-    public class SubCategoriesController : Controller
+	[Authorize(Roles = "Admin")]
+	public class SubCategoriesController : Controller
     {
 
         ICourseCategoryRepsitory CourseCategoryRepsitory;
         ISubCategoryRepository SubCategoryRepsitory;
-        public SubCategoriesController(ICourseCategoryRepsitory _CourseCategoryRepsitory, ISubCategoryRepository _SubCategoryRepsitory)
+		private readonly IRepository<SubCategory> _reposSubCategory;
+
+		public SubCategoriesController(ICourseCategoryRepsitory _CourseCategoryRepsitory,
+            ISubCategoryRepository _SubCategoryRepsitory,IRepository<SubCategory> reposSubCategory)
         {
             CourseCategoryRepsitory = _CourseCategoryRepsitory;
             SubCategoryRepsitory = _SubCategoryRepsitory;
-        }
-        // GET: SubCategories
+			_reposSubCategory = reposSubCategory;
+		}
+ 
         public IActionResult Index()
         {
-            //return View(await _context.CourseCategories.ToListAsync());
             List<SubCategory> SubCategories = SubCategoryRepsitory.GetAll();
-            return View("Index", SubCategories);
+            return View(SubCategories);
         }
 
-        // GET: /SubCategories/Create
-        public IActionResult Create()
+		[AllowAnonymous]
+		[HttpGet]
+		public IActionResult GetByIdWithCourse(Guid Id)
+		{
+			var listSubCategory = _reposSubCategory.Query()
+				.Include(s => s.Courses)
+                .Include(s => s.Category)
+                .Include(s => s.Courses)
+                .ThenInclude(t => t.Teacher)
+				.FirstOrDefault(i => i.Id == Id);
+
+			return View(listSubCategory);
+		}
+
+		public IActionResult Create()
         {
             SubCategoryViewModel SCVM = new SubCategoryViewModel();
             SCVM.Categories = new SelectList(CourseCategoryRepsitory.GetAll(), "Id", "Name");
@@ -48,8 +61,7 @@ namespace Skillup_Academy.Controllers.Courses
                 SubCategory SubCategory = new SubCategory();
                 SubCategory.Name = SCVM.Name;
                 SubCategory.Description = SCVM.Description;
-                SubCategory.IsActive = SCVM.IsActive;
-                SubCategory.Id = Guid.NewGuid();
+                SubCategory.IsActive = SCVM.IsActive; 
                 SubCategory.CategoryId = SCVM.CategoryId;
                 SubCategoryRepsitory.Add(SubCategory);
                 SubCategoryRepsitory.Save();

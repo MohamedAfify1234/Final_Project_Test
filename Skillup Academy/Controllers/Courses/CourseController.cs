@@ -2,16 +2,19 @@
 using Core.Interfaces;
 using Core.Models.Courses;
 using Core.Models.Users;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.ViewModels.CoursesViewModels;
+using Skillup_Academy.ViewModels.SearchViewModels;
 
 namespace Educational_Platform.Controllers.Courses
 {
-    public class CourseController : Controller
+	[Authorize(Roles = "Admin,Instructor")]
+	public class CourseController : Controller
     {
         private readonly IRepository<Course> _repository;
 		private readonly IRepository<SubCategory> _repoSubCategory;
@@ -19,9 +22,11 @@ namespace Educational_Platform.Controllers.Courses
 		private readonly IMapper _mapper;
 		private readonly SaveImage _saveImage;
 		private readonly UserManager<User> _userManager;
+		private readonly DeleteImage _deleteImage;
 
 		public CourseController(IRepository<Course> repository,IRepository<SubCategory> repoSubCategory,
-            IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage,UserManager<User> UserManager)
+            IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage,
+            UserManager<User> UserManager,DeleteImage deleteImage)
         {
             _repository = repository;
 			_repoSubCategory = repoSubCategory;
@@ -29,20 +34,79 @@ namespace Educational_Platform.Controllers.Courses
 			_mapper = mapper;
 			_saveImage = saveImage;
 			_userManager = UserManager;
+			_deleteImage = deleteImage;
 		}
-        // /Course/ShowAll
-        public async Task<IActionResult> ShowAll()
+
+        [AllowAnonymous]
+		[HttpGet]
+		public async Task<IActionResult> AllCourseInHeader( List<Guid>? categoryIds, List<Guid>? subcategoryIds, bool isfree, int page = 1)
+		{
+			int pageSize = 9;
+
+			var results = _repository.Query()
+			   .Include(c => c.Teacher)
+			   .Include(c => c.SubCategory)
+			   .Where(c => c.IsPublished)
+			   .AsQueryable();
+             
+			if (categoryIds != null && categoryIds.Any()||categoryIds != null && categoryIds.Any())
+			{
+				results = results.Where(c =>
+				   subcategoryIds.Contains(c.SubCategoryId ?? Guid.Empty) ||
+				   categoryIds.Contains(c.CategoryId ?? Guid.Empty) || c.IsFree == isfree
+			   );
+			}
+
+			int totalResults = await results.CountAsync();
+
+			var pagedCourses = await results
+			   .OrderByDescending(c => c.CreatedDate)  
+			   .Skip((page - 1) * pageSize)
+			   .Take(pageSize)
+			   .ToListAsync();
+
+			var viewModel = new SearchResultsViewModel
+			{
+				Courses = pagedCourses,
+				TotalResults = totalResults,
+				CurrentPage = page,
+				PageSize = pageSize,
+				SelectedCategoryIds = categoryIds,
+				IsFree = isfree,
+				Categories = await _repoCategory.GetAllAsync(),
+				SubCategories = await _repoSubCategory.GetAllAsync()
+			};
+
+			return View(viewModel);
+		}
+
+ 		[HttpGet]
+		public async Task<IActionResult> ShowAll()
         {
             var allCourse = await _repository.GetAllAsync();
             return View(allCourse);
         }
 
-        public async Task<IActionResult> AllCaurseIsPublished()
-        {
-            var allCourse = await _repository.Query().Where(c => c.IsPublished).ToListAsync();
-            return View(allCourse);
-        }
-         
+		[AllowAnonymous]
+		public async Task<IActionResult> AllCaurseIsPublished(int page = 1)
+		{
+			int pageSize = 9;  
+
+			var allCourse = await _repository.Query()
+				.Where(c => c.IsPublished)
+				.OrderBy(c => c.Title)  
+				.Skip((page - 1) * pageSize)
+				.Take(pageSize)
+				.ToListAsync(); 
+			 
+			int totalCourses = await _repository.Query().Where(c => c.IsPublished).CountAsync();
+			ViewBag.CurrentPage = page;
+			ViewBag.TotalPages = (int)Math.Ceiling(totalCourses / (double)pageSize);
+
+			return View(allCourse);
+		}
+
+
 		[HttpGet]
         public async Task<IActionResult> Create()
         {
@@ -68,6 +132,7 @@ namespace Educational_Platform.Controllers.Courses
                     course.PublishedDate = DateTime.Now;
 
 				var userIdString = _userManager.GetUserId(User);
+
                 Guid teacherId;
                 if (!Guid.TryParse(userIdString, out teacherId))
                 {
@@ -117,10 +182,10 @@ namespace Educational_Platform.Controllers.Courses
                 oldCourse.Description = newCourse.Description;
                 oldCourse.ShortDescription = newCourse.ShortDescription;
                  
-				if (newCourse.ThumbnailUrl != null) 
+				if (newCourse.ThumbnailUrlFile != null) 
                     oldCourse.ThumbnailUrl = await _saveImage.SaveImgAsync(newCourse.ThumbnailUrlFile);
 				 
-				if (newCourse.PreviewVideoUrl != null) 
+				if (newCourse.PreviewVideoFile != null) 
                     oldCourse.PreviewVideoUrl = await _saveImage.SaveImgAsync(newCourse.PreviewVideoFile);
 				 
                 oldCourse.IsFree = newCourse.IsFree;
@@ -139,28 +204,33 @@ namespace Educational_Platform.Controllers.Courses
                 await _repository.SaveChangesAsync();
                 return RedirectToAction("ShowAll");
             }
-            return View(newCourse);
+
+			ViewBag.SubCategory = new SelectList(await _repoSubCategory.GetAllAsync(), "Id", "Name");
+			ViewBag.Category = new SelectList(await _repoCategory.GetAllAsync(), "Id", "Name");
+			return View(newCourse);
         }
 
-
-        [HttpGet]
-        public async Task<IActionResult> Details(Guid id)
-        {
-            var course = await _repository.Query()
-                .Include(c=>c.Category)
-                .Include(s=>s.SubCategory)
+        [AllowAnonymous]
+		[HttpGet]
+		public async Task<IActionResult> Details(Guid id)
+		{
+			var course = await _repository.Query()
+				.Include(c => c.Category)
                 .Include(t=>t.Teacher)
-                .FirstAsync(i=>i.Id==id);
+ 				.Include(s => s.SubCategory)
+ 				.FirstOrDefaultAsync(i => i.Id == id);
 
-            if (course == null)
-            {
-                return NotFound();
-            }
-            return View(course);
-        }
+ 			if (course == null)
+			{
+				return NotFound();  
+			}
+
+			return View(course);
+		}
 
 
-        [HttpGet]
+
+		[HttpGet]
         public IActionResult Delete(Guid id)
         {
             var course = _repository.GetByIdAsync(id).Result;
@@ -181,7 +251,9 @@ namespace Educational_Platform.Controllers.Courses
             }
             _repository.Delete(course);
             await _repository.SaveChangesAsync();
-            return RedirectToAction("ShowAll");
+            _deleteImage.DeleteImg(course.ThumbnailUrl);
+            _deleteImage.DeleteImg(course.PreviewVideoUrl); 
+			return RedirectToAction("ShowAll");
         }
 
 

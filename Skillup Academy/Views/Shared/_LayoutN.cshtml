@@ -48,21 +48,32 @@
 
     </style>
 </head>
-<body>
-    <header>
-        <nav class="navbar">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-graduation-cap"></i>
-                </div>
-                <div class="logo-text">Bedaya</div>
-            </div>
-            <div class="menu-toggle" id="menuToggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
+<body><header>
+    <nav class="navbar">
+            <div class="logo" style="display: flex; align-items: center;">
+                <a asp-controller="Home" asp-action="Index" style="display: flex; align-items: center; text-decoration: none;">
 
+                    <div class="logo-icon" style="font-size: 1.8rem; margin-inline-end: 8px;">
+
+                        <i class="fas fa-graduation-cap"></i>
+
+                    </div>
+                    <div class="logo-text" style="font-size: 1.6rem; font-weight: bold;">Bedaya</div>
+                </a>
+
+            </div>
+        <div class="menu-toggle" id="menuToggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+
+<<<<<<< HEAD
+        <ul class="nav-links" id="navLinks"> 
+            <li class="me-4"><a asp-action="AllCourseInHeader" asp-controller="Course">Courses</a></li>
+            <li class="me-4"><a asp-action="GetAllInstructors" asp-controller="Account">Instructors</a></li>
+            <li class="mobile-auth">
+=======
             <ul class="nav-links" id="navLinks">
                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="me-4"><a asp-action="ShowAll" asp-controller="Course">Courses</a></li>
@@ -89,23 +100,143 @@
             </ul>
 
             <div class="auth-buttons">
+>>>>>>> f3e7ba769b1b935c8128c75a3f8b8569ee2ad9ab
                 @if (User.Identity.IsAuthenticated)
                 {
-                     <a class="btn btn-profile" asp-action="Profile" asp-controller="Account">
-                            <i class="fas fa-user-circle"></i> Profile
-                        </a>
-                    <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="background-color:red;color:white;">
-                         Logout
+                        <a class="btn btn-profile" href="#" style="
+                display: flex;
+                align-items: center;
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                margin-inline-end: 10px;
+                text-decoration: none;
+                /* تصميم زر بحدود لملف شخصي */
+                background-color: #f0f8ff;
+                color: #007bff;
+                border: 1px solid #007bff;
+                font-weight: 500;
+            ">
+                        <i class="fas fa-user-circle"></i> Profile
                     </a>
-                 }
+                        <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="
+                /* تصميم زر الإجراء الهام (Logout) */
+                background-color: #dc3545;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                text-decoration: none;
+                border: 1px solid #dc3545;
+                font-weight: 500;
+            ">
+                        Logout
+                    </a>
+                }
                 else
                 {
-                    <a class="btn btn-login" asp-action="Login" asp-controller="Account">Login</a>
-                    <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account">Register</a>
+                        <a class="btn btn-login" asp-action="Login" asp-controller="Account" style="
+                /* تصميم الزر الأساسي (Login) */
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                margin-inline-end: 10px;
+                text-decoration: none;
+                background-color: #007bff;
+                color: white;
+                border: 1px solid #007bff;
+                font-weight: 600;
+            ">Login</a>
+                        <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
+                /* تصميم زر التسجيل بحدود (Outline) */
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                text-decoration: none;
+                background-color: transparent;
+                color: #007bff;
+                border: 1px solid #007bff;
+                font-weight: 600;
+            ">Register</a>
                 }
+            </li>
+        </ul>
+        
+        <form asp-action="SearchResults" asp-controller="Home" method="get" style="flex-grow: 1; max-width: 450px;">
+            <div class="search-bar d-flex justify-content-center ">
+                <input type="text" name="query"
+                       class="form-control shadow-sm"
+                       placeholder="Search for a course, topic, or instructor..."
+                       style="max-width: 350px; border-top-left-radius: 30px; border-bottom-left-radius: 30px; padding: 8px 15px; border: 1px solid #ced4da; font-size: 0.9rem;">
+                <button type="submit" class="btn btn-primary fw-semibold"
+                        style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; padding: 8px 20px; font-size: 0.9rem;">
+                    <i class="fas fa-search me-1"></i> Search
+                </button>
             </div>
-        </nav>
-    </header>
+        </form>
+        
+        <div class="auth-buttons">
+            @if (User.Identity.IsAuthenticated)
+            {
+                    <a class="btn btn-profile" href="#" style="
+                display: flex;
+                align-items: center;
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                margin-inline-end: 10px;
+                text-decoration: none;
+                /* تصميم زر بحدود لملف شخصي */
+                background-color: #f0f8ff;
+                color: #007bff;
+                border: 1px solid #007bff;
+                font-weight: 500;
+            ">
+                        <i class="fas fa-user-circle"></i> Profile
+                    </a>
+                    <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="
+                /* تصميم زر الإجراء الهام (Logout) */
+                background-color: #dc3545;
+                color: white;
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                text-decoration: none;
+                border: 1px solid #dc3545;
+                font-weight: 500;
+            ">
+                     Logout
+                </a>
+             }
+            else
+            {
+                    <a class="btn btn-login" asp-action="Login" asp-controller="Account" style="
+                /* تصميم الزر الأساسي (Login) */
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                margin-inline-end: 10px;
+                text-decoration: none;
+                background-color: #007bff;
+                color: white;
+                border: 1px solid #007bff;
+                font-weight: 600;
+            ">Login</a>
+                    <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
+                /* تصميم زر التسجيل بحدود (Outline) */
+                padding: 8px 15px;
+                border-radius: 6px;
+                font-size: 0.95rem;
+                text-decoration: none;
+                background-color: transparent;
+                color: #007bff;
+                border: 1px solid #007bff;
+                font-weight: 600;
+            ">Register</a>
+            }
+        </div>
+    </nav>
+</header>
  		<main role="main" class="pb-3 my-1 mx-2">
 			<div style="background-color:aliceblue ">
 				@RenderBody()
@@ -160,140 +291,7 @@
     </footer>
 
 
-    <script>
-        // Course Data
-        const popularCourses = [
-            {
-                title: "English Language - Level One",
-                instructor: "Mustafa Abdelsabour",
-                duration: "4 hours and 54 minutes",
-                category: "Languages",
-                badge: "Popular"
-            },
-            {
-                title: "Learning German Level 1",
-                instructor: "Abdullah Farouk",
-                duration: "12 hours",
-                category: "Languages",
-                badge: "Popular"
-            },
-            {
-                title: "Marketeer A to Z",
-                instructor: "Islam Elsadek",
-                duration: "5 hours and 42 minutes",
-                category: "Marketing",
-                badge: "Popular"
-            },
-            {
-                title: "Photoshop Basics",
-                instructor: "Mohamed El Mufty",
-                duration: "5 hours and 21 minutes",
-                category: "Art and Design",
-                badge: "Popular"
-            },
-            {
-                title: "Sponsored Facebook Ads",
-                instructor: "Ibrahim Gamal",
-                duration: "5 hours and 19 minutes",
-                category: "Marketing",
-                badge: "Popular"
-            },
-            {
-                title: "Marketing Basics for Beginners",
-                instructor: "Islam Elsadek",
-                duration: "1 hour and 40 minutes",
-                category: "Marketing",
-                badge: "Popular"
-            }
-        ];
-
-        const newCourses = [
-            {
-                title: "Resume Writing In The AI Era",
-                instructor: "Muhammad elsalamony",
-                duration: "1 hour and 59 minutes",
-                category: "Business",
-                badge: "New"
-            },
-            {
-                title: "Learning Spanish A2 Revision",
-                instructor: "Ahmed Radwan",
-                duration: "3 hours and 14 minutes",
-                category: "Languages",
-                badge: "New"
-            },
-            {
-                title: "How To Be A Scrum Master",
-                instructor: "Nermeen Elzokm",
-                duration: "19 minutes",
-                category: "Information Technology",
-                badge: "New"
-            },
-            {
-                title: "Motion Graphics For Beginners",
-                instructor: "Ahmed Yehia",
-                duration: "3 hours and 54 minutes",
-                category: "Animation",
-                badge: "New"
-            },
-            {
-                title: "Learning Spanish A2",
-                instructor: "Ahmed Radwan",
-                duration: "12 hours and 43 minutes",
-                category: "Languages",
-                badge: "New"
-            },
-            {
-                title: "Learning French A2",
-                instructor: "Ahmed ElGazar",
-                duration: "16 hours and 30 minutes",
-                category: "Languages",
-                badge: "New"
-            }
-        ];
-
-        // Function to create course cards
-        function createCourseCard(course, isPopular = true) {
-            const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6', '#1abc9c'];
-            const randomColor = colors[Math.floor(Math.random() * colors.length)];
-
-            return `
-                <div class="course-card">
-                    <div class="course-img" style="background-color: ${randomColor};">
-                        <span class="course-badge">${course.badge}</span>
-                    </div>
-                    <div class="course-content">
-                        <span class="course-category">${course.category}</span>
-                        <h3 class="course-title">${course.title}</h3>
-                        <p class="course-instructor"><i class="fas fa-user"></i> ${course.instructor}</p>
-                        <div class="course-meta">
-                            <span><i class="far fa-clock"></i> ${course.duration}</span>
-                            <span><i class="far fa-star"></i> ${(Math.random() * 0.5 + 4.5).toFixed(1)}</span>
-                        </div>
-                    </div>
-                </div>
-            `;
-        }
-
-        // Function to render courses
-        function renderCourses() {
-            const popularCoursesContainer = document.getElementById('popularCourses');
-            const newCoursesContainer = document.getElementById('newCourses');
-
-            // Check if containers exist before attempting to use them
-            if (popularCoursesContainer) {
-                popularCourses.forEach(course => {
-                    popularCoursesContainer.innerHTML += createCourseCard(course, true);
-                });
-            }
-
-            if (newCoursesContainer) {
-                newCourses.forEach(course => {
-                    newCoursesContainer.innerHTML += createCourseCard(course, false);
-                });
-            }
-        }
-
+    <script>  
         // Activate mobile menu toggle
         document.getElementById('menuToggle').addEventListener('click', function() {
             document.getElementById('navLinks').classList.toggle('active');
@@ -304,6 +302,7 @@
             renderCourses();
         });
     </script>
+  
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

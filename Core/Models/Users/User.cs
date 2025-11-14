@@ -25,8 +25,7 @@ namespace Core.Models.Users
 		public ICollection<Question>? Questions { get; set; }         // الأسئلة
 		public ICollection<Answer>? Answers { get; set; }             // الإجابات
 		public ICollection<SubscriptionPlan>? Subscribes { get; set; }       // الاشتراكات\
-	
-
+	 
 	}
 
 }

@@ -24,5 +24,6 @@ namespace Core.Models.Users
 
 		// العلاقات الخاصة
 		public ICollection<Course> Courses { get; set; }   // الكورسات
+
 	}
 }
