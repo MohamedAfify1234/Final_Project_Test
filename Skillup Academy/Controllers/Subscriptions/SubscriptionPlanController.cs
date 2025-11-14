@@ -1,4 +1,6 @@
-﻿using Core.Interfaces.Subscriptions;
+﻿using System.Threading.Tasks;
+using Core.Interfaces;
+using Core.Interfaces.Subscriptions;
 using Core.Models.Exams;
 using Core.Models.Subscriptions;
 using Infrastructure.Repositories.Subscriptions;
@@ -12,12 +14,14 @@ namespace Skillup_Academy.Controllers.Subscriptions
 {
     public class SubscriptionPlanController : Controller
     {
-        //_subscriptionPlanRepository _subscriptionPlanRepository = new _subscriptionPlanRepository();
-        ISubscriptionPlanRepository _subscriptionPlanRepository;
-        public SubscriptionPlanController(ISubscriptionPlanRepository subscriptionPlanRepository)
+        public readonly ISubscriptionPlanRepository _subscriptionPlanRepository;
+		private readonly IRepository<Subscription> _repoSubscription;
+
+		public SubscriptionPlanController(ISubscriptionPlanRepository subscriptionPlanRepository,IRepository<Subscription> repoSubscription)
         {
             _subscriptionPlanRepository = subscriptionPlanRepository;
-        }
+			_repoSubscription = repoSubscription;
+		}
 
         // /SubscriptionPlan/ShowAll
         public IActionResult ShowAll()
@@ -31,16 +35,13 @@ namespace Skillup_Academy.Controllers.Subscriptions
             return View("ShowDetails", SubscriptionPlanDetails);
         }
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            SubscriptionPlanViewModel SPVM = new SubscriptionPlanViewModel();
-            SPVM.Users = new SelectList(_subscriptionPlanRepository.ShowAll(), "Id", "FullName");
-            SPVM.Courses = new SelectList(_subscriptionPlanRepository.ShowAll(), "Id", "Name");
-            SPVM.Subscriptions = new SelectList(_subscriptionPlanRepository.ShowAll(), "Id", "Name");
-            return View("Create", SPVM);
+            ViewBag.Subscriptions = new SelectList(await _repoSubscription.GetAllAsync(), "Id", "Name");
+            return View();
         }
 
-        public IActionResult SaveCreate(SubscriptionPlanViewModel subscriptionplan)
+        public async Task<IActionResult> SaveCreate(SubscriptionPlanViewModel subscriptionplan)
         {
             if (ModelState.IsValid)
             {
@@ -48,19 +49,16 @@ namespace Skillup_Academy.Controllers.Subscriptions
                 subscriptionPlan.StartDate = subscriptionplan.StartDate;
                 subscriptionPlan.EndDate = subscriptionplan.EndDate;
                 subscriptionPlan.PaidAmount = subscriptionplan.PaidAmount;
-                subscriptionPlan.TransactionId = subscriptionplan.TransactionId;
-                subscriptionPlan.IsActive = subscriptionplan.IsActive;
-                subscriptionPlan.UserId = subscriptionplan.UserId;
-                subscriptionPlan.CourseId = subscriptionplan.CourseId;
+                subscriptionPlan.TransactionId = subscriptionplan.TransactionId ?? " ";
+                subscriptionPlan.IsActive = subscriptionplan.IsActive; 
                 subscriptionPlan.SubscriptionId = subscriptionplan.SubscriptionId;
                 _subscriptionPlanRepository.SubscriptionPlanAdd(subscriptionPlan);
                 _subscriptionPlanRepository.Save();
                 return RedirectToAction("ShowAll");
             }
-            subscriptionplan.Users = new SelectList(_subscriptionPlanRepository.ShowAll(), "Id", "FullName");
-            subscriptionplan.Courses = new SelectList(_subscriptionPlanRepository.ShowAll(), "Id", "Name");
-            subscriptionplan.Subscriptions = new SelectList(_subscriptionPlanRepository.ShowAll(), "Id", "Name");
-            return View(nameof(Create), subscriptionplan);
+
+			ViewBag.Subscriptions = new SelectList(await _repoSubscription.GetAllAsync(), "Id", "Name");
+			return View(nameof(Create), subscriptionplan);
         }
 
         public IActionResult Edit(Guid id)
