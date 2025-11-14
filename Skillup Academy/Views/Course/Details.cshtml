@@ -37,15 +37,10 @@
                         <i class="fas fa-chalkboard-teacher me-1"></i> Instructor: @Model.Teacher.FullName
                     </span>
                 }
-            </div>
-
-            @* ------------------------------------------------------------------------------------------------------------------- *@
-            @* --- 1. Media & Preview Section (Image/Video Display) --- *@
-            @* ------------------------------------------------------------------------------------------------------------------- *@
+            </div>     
             <div class="row mb-5 g-4">
 
-                @* Thumbnail Display (Image Card) *@
-                <div class="col-md-6">
+                 <div class="col-md-6">
                     <div class="card shadow-lg border-0 h-100 rounded-3 overflow-hidden">
                         <div class="card-header bg-light">
                             <h6 class="mb-0 fw-bold text-primary"><i class="fas fa-image me-2"></i> Course Thumbnail</h6>
@@ -100,11 +95,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
-
-            @* ------------------------------------------------------------------------------------------------------------------- *@
-            @* --- 2. Metrics Panel (Prominent Stats) --- *@
-            @* ------------------------------------------------------------------------------------------------------------------- *@
+            </div> 
             <div class="card shadow-lg mb-5 border-0 rounded-3 overflow-hidden">
                 <div class="card-body bg-light">
                     <div class="row text-center">
@@ -131,13 +122,7 @@
                     </div>
                 </div>
             </div>
-
-
-            @* ------------------------------------------------------------------------------------------------------------------- *@
-            @* --- 3. Full Details (Description, Timestamps) --- *@
-            @* ------------------------------------------------------------------------------------------------------------------- *@
-
-            @* Course Description *@
+             
             <div class="card shadow-sm mb-4 border-0">
                 <div class="card-header bg-white">
                     <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-file-alt me-2 text-primary"></i> Full Description</h5>
@@ -172,10 +157,13 @@
 
             @* --- Action Buttons (Admin Focus) --- *@
             <div class="mt-5 text-center">
-                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary btn-lg me-3 px-5 shadow-sm">
-                    <i class="fas fa-edit me-2"></i> Edit Course
-                </a>
-                <a asp-action="Index" class="btn btn-outline-secondary btn-lg px-5">
+                @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
+                { 
+                    <a asp-action="Edit" asp-controller="Course" asp-route-id="@Model.Id" class="btn btn-primary btn-lg me-3 px-5 shadow-sm">
+                        <i class="fas fa-edit me-2"></i> Edit Course
+                    </a>
+                }
+                <a asp-action="Course" asp-action="AllCaurseIsPublished" class="btn btn-outline-secondary btn-lg px-5">
                     <i class="fas fa-list me-2"></i> Back to List
                 </a>
             </div>

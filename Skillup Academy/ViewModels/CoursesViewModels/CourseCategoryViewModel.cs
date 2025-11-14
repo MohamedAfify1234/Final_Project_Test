@@ -18,7 +18,7 @@ namespace Skillup_Academy.ViewModels.CoursesViewModels
         public string Description { get; set; }
         [Required(ErrorMessage = "Required Feild")]
 
-        public string Icon { get; set; }
+        public IFormFile Image { get; set; }
         [Required(ErrorMessage = "Required Feild")]
 
         public bool IsActive { get; set; } = true;         

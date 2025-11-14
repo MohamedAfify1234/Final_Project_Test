@@ -1,8 +1,10 @@
 ﻿using Core.Enums;
+using Core.Interfaces;
 using Core.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
 using Skillup_Academy.ViewModels.UsersViewModels;
@@ -15,13 +17,16 @@ namespace Skillup_Academy.Controllers.Users
 		private readonly SignInManager<User> _signInManager;
 		private readonly FileService _fileService;
 		private readonly SaveImage _saveImage;
+		private readonly IRepository<Teacher> _repoTeacher;
 
-		public AccountController(UserManager<User> UserManager, SignInManager<User> signInManager, FileService fileService, SaveImage saveImage)
+		public AccountController(UserManager<User> UserManager, SignInManager<User> signInManager
+			, FileService fileService, SaveImage saveImage , IRepository<Teacher> repoTeacher)
 		{
 			_userManager = UserManager;
 			_signInManager = signInManager;
 			_fileService = fileService;
 			_saveImage = saveImage;
+			_repoTeacher = repoTeacher;
 		}
 
 
@@ -51,9 +56,8 @@ namespace Skillup_Academy.Controllers.Users
 						result.LastLoginDate = DateTime.Now; 
 						if (User.IsInRole("Admin"))
 						{
-						//	return RedirectToAction("AdminDashboard", "Admin");
-							return RedirectToAction(nameof(Index), "Home");
-
+							//return RedirectToAction("AdminDashboard", "Admin"); 
+							return RedirectToAction("Index", "Home"); 
 						}
 						if (User.IsInRole("Instructor"))
 						{
@@ -117,7 +121,7 @@ namespace Skillup_Academy.Controllers.Users
 					if (roleResult.Succeeded)
 					{
 						await _signInManager.SignInAsync(user, AccountUser.RememberMe);
-						return RedirectToAction(nameof(Index), "Home");
+						return RedirectToAction("Dashboard", "Teacher");
 					}
 					else
 					{
@@ -198,8 +202,25 @@ namespace Skillup_Academy.Controllers.Users
 
 			return View(AccountUser);
 		}
-
 		 
+
+		[HttpGet]
+		public async Task<IActionResult> GetAllInstructors() 
+		{
+			var teachers = await _repoTeacher.GetAllAsync();
+
+			return View(teachers);
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetCoursesForInstructors(Guid Id) 
+		{
+			var Courses = await _repoTeacher.Query()
+				.Include(c=>c.Courses)
+				.FirstOrDefaultAsync(i=>i.Id==Id);
+
+			return View(Courses);
+		}
 
 
 	}

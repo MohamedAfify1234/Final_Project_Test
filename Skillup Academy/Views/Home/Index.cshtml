@@ -1,134 +1,233 @@
-﻿@{
+﻿@using Skillup_Academy.ViewModels.HomeViewModels
+@model HomeViewModel
+@{
     ViewData["Title"] = "Home Page";
 }
+
+<style>
+
+    .course-card {
+        width: 350px;
+        background-color: #ffffff;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: var(--card-shadow);
+        transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        cursor: pointer;
+        border: 1px solid #E5E7EB;
+        font-family: 'Poppins', sans-serif;
+    }
+
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--card-hover-shadow);
+        }
+
+    .course-img {
+        height: 180px;
+        position: relative;
+        overflow: hidden;
+    }
+
+        .course-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+    .course-card:hover .course-img img {
+        transform: scale(1.08);
+    }
+
+    .course-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background-color: var(--accent-green);
+        color: white;
+        padding: 5px 12px;
+        border-radius: 8px;
+        font-weight: 700;
+        font-size: 0.85rem;
+        text-transform: uppercase;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        z-index: 10;
+    }
+
+        .course-badge.paid {
+            background-color: var(--warning-yellow);
+        }
+
+    .course-content {
+        padding: 25px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .course-category {
+        font-size: 0.8rem;
+        font-weight: 700;
+        color: var(--primary-blue);
+        text-transform: uppercase;
+        margin-bottom: 5px;
+        letter-spacing: 0.5px;
+    }
+
+    .course-title {
+        font-size: 1.5rem;
+        font-weight: 800;
+        color: var(--dark-heading);
+        margin: 0 0 10px 0;
+        line-height: 1.3;
+    }
+
+    .course-instructor {
+        font-size: 0.95rem;
+        color: #6B7280;
+        margin: 0 0 20px 0;
+    }
+
+        .course-instructor i {
+            color: var(--primary-blue);
+            margin-inline-end: 8px;
+        }
+
+    .course-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #E5E7EB;
+        font-size: 0.9rem;
+        color: #4B5563;
+    }
+
+        .course-meta span {
+            display: flex;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .course-meta i {
+            margin-inline-end: 8px;
+            font-size: 1.1rem;
+        }
+
+        .course-meta .fa-clock {
+            color: var(--dark-heading);
+        }
+
+    .course-card a {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        text-decoration: none;
+        color: inherit;  
+    }
+        .course-meta .fa-star {
+            color: var(--warning-yellow);
+        }
+</style>
+
 <section class="hero">
     <div class="hero-content">
         <h2>Join Hundreds of Thousands of Creators Now</h2>
         <p>Hundreds of training courses "and more" with a single subscription that opens the doors to the future for you. Start your educational journey today.</p>
         <div class="hero-buttons">
             <button class="hero-btn btn-primary">Subscribe Now</button>
-            <button class="hero-btn btn-secondary">Browse Courses</button>
-        </div>
-        <form asp-action="SearchResults" asp-controller="Home" method="get">
-			<div class="search-bar d-flex justify-content-center mt-4">
-                <input type="text" name="query"
-					   class="form-control shadow-sm"
-					   placeholder="Search for a course, topic, or instructor..."
-					   style="max-width: 400px; border-top-left-radius: 30px; border-bottom-left-radius: 30px; padding: 12px 18px; border: 1px solid #ced4da;">
-				<button type="submit" class="btn btn-primary fw-semibold"
-						style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; padding: 12px 25px;">
-					<i class="fas fa-search me-1"></i> Search
-				</button>
-			</div>
-        </form>
-        
-
-    </div>
-</section>
-
-<section class="stats-section">
-    <div class="stats-grid">
-        <div class="stat-item">
-            <h3>442,803</h3>
-            <p>Arabic Learners</p>
-        </div>
-        <div class="stat-item">
-            <h3>400+</h3>
-            <p>Training Courses</p>
-        </div>
-        <div class="stat-item">
-            <h3>211,474</h3>
-            <p>Certificates Issued</p>
-        </div>
-        <div class="stat-item">
-            <h3>52,481,006</h3>
-            <p>Minutes Watched</p>
+            <a asp-controller="Course" asp-action="AllCaurseIsPublished" class="hero-btn btn-secondary" style="text-decoration: none;">
+                Browse Courses
+            </a>
         </div>
     </div>
 </section>
-
-<section class="features">
-    <div class="section-title">
-        <h2>Why Choose Bedaya Platform?</h2>
-        <p>We provide you with a unique learning experience that combines quality and flexibility</p>
+<section class="features py-5 bg-light" id="features-section">
+    <div class="section-title text-center mb-5">
+        <h2 class="display-4 fw-bold text-primary">Why Choose Bedaya Platform?</h2>
+        <p class="lead text-muted">We provide you with a unique learning experience that combines quality and flexibility.</p>
     </div>
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-icon">📚</div>
-            <h3>Thousands of Courses</h3>
-            <p>Diverse courses in various fields suitable for all levels</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">👨‍🏫</div>
-            <h3>Professional Instructors</h3>
-            <p>Learn from the best instructors and experts in their fields</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">⏱️</div>
-            <h3>Fully Flexible</h3>
-            <p>Study anytime, anywhere that suits you</p>
-        </div>
-        <div class="feature-card">
-            <div class="feature-icon">📜</div>
-            <h3>Accredited Certificates</h3>
-            <p>Get accredited certificates upon completion of courses</p>
+
+    <div class="features-grid container">
+        <div class="row text-center">
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
+                    <div class="feature-icon mb-3">
+                        <span style="font-size: 3rem;">📚</span>
+                    </div>
+                    <h3 class="fs-5 fw-bold text-dark">Thousands of Courses</h3>
+                    <p class="text-secondary">Diverse courses in various fields suitable for all levels.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
+                    <div class="feature-icon mb-3">
+                        <span style="font-size: 3rem;">👨‍🏫</span>
+                    </div>
+                    <h3 class="fs-5 fw-bold text-dark">Professional Instructors</h3>
+                    <p class="text-secondary">Learn from the best instructors and experts in their fields.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
+                    <div class="feature-icon mb-3">
+                        <span style="font-size: 3rem;">⏱️</span>
+                    </div>
+                    <h3 class="fs-5 fw-bold text-dark">Fully Flexible</h3>
+                    <p class="text-secondary">Study anytime, anywhere, at your own pace.</p>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 mb-4">
+                <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
+                    <div class="feature-icon mb-3">
+                        <span style="font-size: 3rem;">📜</span>
+                    </div>
+                    <h3 class="fs-5 fw-bold text-dark">Accredited Certificates</h3>
+                    <p class="text-secondary">Get recognized and accredited certificates upon course completion.</p>
+                </div>
+            </div>
+
         </div>
     </div>
 </section>
 
-<section class="categories">
-    <div class="section-title">
-        <h2>Categories</h2>
-        <p>Explore a wide range of educational fields</p>
-    </div>
-    <div class="categories-grid">
-        <div class="category-card">
-            <div class="category-icon">🎨</div>
-            <p>Art & Design</p>
+<section class="categories py-5 bg-light">
+    <div class="container"> 
+        <div class="section-title">
+            <h2>Categories</h2>
+            <p>Explore a wide range of educational fields</p>
         </div>
-        <div class="category-card">
-            <div class="category-icon">📈</div>
-            <p>Marketing</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">💻</div>
-            <p>Information Technology</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">💼</div>
-            <p>Business</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">🎥</div>
-            <p>Photography & Filmmaking</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">📝</div>
-            <p>Content Creation</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">🎬</div>
-            <p>Animation</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">🌐</div>
-            <p>Languages</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">👥</div>
-            <p>Human Resources</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">👗</div>
-            <p>Fashion & Handicrafts</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">💪</div>
-            <p>Nutrition & Fitness</p>
-        </div>
-        <div class="category-card">
-            <div class="category-icon">📚</div>
-            <p>All Categories</p>
+        <div class="categories-grid w-100" style="
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+        "> 
+        @foreach (var item in Model.ListCategory)
+        {
+                <a asp-controller="CourseCategories" asp-action="GetByIdWithSubCategory" asp-route-Id="@item.Id" class="category-card shadow-sm text-decoration-none text-center p-0 rounded-3 overflow-hidden"
+                   style="display: block; background-color: #ffffff; transition: transform 0.3s ease, box-shadow 0.3s ease;">
+
+                    <div class="category-image-wrapper" style="
+                        height: 120px;
+                        overflow: hidden;
+                        border-bottom: 3px solid #007bff;
+                      ">
+                        <img src="/img/@item.Image" alt="@item.Name"
+                             style="
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;  
+                                transition: transform 0.5s ease;
+                         " />
+                    </div>
+
+                    <p class="category-name fw-semibold py-3 m-0 text-dark">@item.Name</p>
+                </a>
+    } 
         </div>
     </div>
 </section>
@@ -138,20 +237,74 @@
         <div class="section-title">
             <h2>Most Popular</h2>
         </div>
-        <a href="#" class="view-all"> View All <i class="fas fa-arrow-right"></i></a>
+        <a asp-controller="Home" asp-action="ViewAllCourseMostPopular" class="view-all"> View All <i class="fas fa-arrow-right ms-2"></i></a>
     </div>
     <div class="courses-grid" id="popularCourses">
+        @foreach (var item in Model.MostPopular)
+        {
+            <div class="course-card">
+                <a asp-controller="Course" asp-action="Details" asp-route-id="@item.Id">
+
+                    <div class="course-img">
+                        <img src="/img/@item.Image" alt="Course Thumbnail">
+                        @if (item.IsFree)
+                        {
+                            <span class="course-badge">FREE</span>
+                        }
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">@item.CategoryName</span>
+                        <h3 class="course-title">@item.Title</h3>
+                        <p class="course-instructor"> @item.ShortDescription</p>
+                        <p class="course-instructor"><i class="fas fa-user"></i> @item.TeacherName</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> @item.TotalDuration m</span>
+                            <span><i class="far fa-star"></i> @item.AverageRating</span>
+                        </div>
+                    </div>
+
+                </a>
+
+            </div>
+        }
     </div>
 </section>
 
 <section class="courses">
     <div class="section-header">
-        <div class="section-title">
+        <div class="section-title ">
             <h2>Newly Added</h2>
         </div>
-        <a href="#" class="view-all"> View All <i class="fas fa-arrow-right"></i></a>
+        <a asp-controller="Home" asp-action="ViewAllCourseNewlyAdded" class="view-all"> View All <i class="fas fa-arrow-right ms-2"></i></a>
     </div>
     <div class="courses-grid" id="newCourses">
+        @foreach (var item in Model.MostPopular)
+        {
+            <div class="course-card">
+                <a asp-controller="Course" asp-action="Details" asp-route-id="@item.Id">
+
+                    <div class="course-img">
+                        <img src="/img/@item.Image" alt="Course Thumbnail">
+                        @if (item.IsFree)
+                        {
+                            <span class="course-badge">FREE</span>
+                        }
+                    </div>
+                    <div class="course-content">
+                        <span class="course-category">@item.CategoryName</span>
+                        <h3 class="course-title">@item.Title</h3>
+                        <p class="course-instructor"> @item.ShortDescription</p>
+                        <p class="course-instructor"><i class="fas fa-user"></i> @item.TeacherName</p>
+                        <div class="course-meta">
+                            <span><i class="far fa-clock"></i> @item.TotalDuration m</span>
+                            <span><i class="far fa-star"></i> @item.AverageRating</span>
+                        </div>
+                    </div>
+
+                </a>
+
+            </div>
+        }
     </div>
 </section>
 
@@ -181,13 +334,5 @@
     </div>
 </section>
 
-<section class="newsletter">
-    <div class="newsletter-content">
-        <h2>Subscribe to Our Newsletter</h2>
-        <p>Be the first to know about new courses and special offers</p>
-        <form class="newsletter-form">
-            <input type="email" placeholder="Enter your email address">
-            <button>Subscribe</button>
-        </form>
-    </div>
-</section>
+
+   
