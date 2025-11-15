@@ -122,16 +122,25 @@ namespace Skillup_Academy.Controllers.Lessons
             {
                 var oldLesson =  await _repoLesson.GetByIdAsync(id);
 
-				var lessonEntity = _mapper.Map<Lesson>(lesson);
-                lessonEntity.Id = id;
-                lessonEntity.Order = lesson.OrderInCourse;
+                oldLesson.Id = id;
+                oldLesson.Order = lesson.OrderInCourse;
 
-				var course = await _repoCourses.GetByIdAsync(lessonEntity.CourseId);
+                if (lesson.VideoUrlFile != null)
+                    oldLesson.VideoUrl = await _saveImage.SaveImgAsync(lesson.VideoUrlFile);
+
+                if (lesson.AttachmentUrlFile != null)
+                    oldLesson.AttachmentUrl = await _saveImage.SaveImgAsync(lesson.AttachmentUrlFile);
+                oldLesson.Title = lesson.Title;
+                oldLesson.Description = lesson.Description;
+                oldLesson.Content = lesson.Content;
+                oldLesson.IsFree = lesson.IsFree;
+   
+                var course = await _repoCourses.GetByIdAsync(oldLesson.CourseId);
 				course.TotalDuration -= oldLesson.Duration;
 
 				course.TotalDuration += lesson.Duration;
                   
-				_repoLesson.Update(lessonEntity);
+				_repoLesson.Update(oldLesson);
                 await _repoLesson.SaveChangesAsync();
                 
                 return RedirectToAction(nameof(Index), new { id = lesson.CourseId });
