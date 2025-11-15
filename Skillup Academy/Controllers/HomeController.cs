@@ -1,9 +1,7 @@
 using System.Diagnostics;
-using System.Threading.Tasks;
 using Core.Interfaces;
 using Core.Models.Courses;
 using Infrastructure.Data;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.Models;
@@ -138,44 +136,51 @@ namespace Skillup_Academy.Controllers
 		} 
 
 		[HttpGet]
-		public async Task<IActionResult> SearchResults( string? query, List<Guid>? categoryIds, bool isfree, int page = 1)
+		public async Task<IActionResult> SearchResults(string? query, List<Guid>? categoryIds, bool isFree=false , int page = 1)
 		{
-			int pageSize = 9;  
+			const int pageSize = 9;
+
+ 			page = Math.Max(1, page);
 
  			var results = _context.Courses
-				.Include(c => c.Teacher)  
-				.Include(c => c.SubCategory)  
-				.Where(c => c.IsPublished) 
+				.Include(c => c.Teacher)
+				.Include(c => c.SubCategory)
 				.AsQueryable();
+
+			results = results.Where(c => c.IsPublished);
 
  			if (!string.IsNullOrWhiteSpace(query))
 			{
- 				string normalizedQuery = query.ToLower();
-
+ 				var pattern = $"%{query.Replace("%", "[%]").Replace("_", "[_]")}%";
 				results = results.Where(c =>
-					c.Title.ToLower().Contains(normalizedQuery) ||
-					c.Description.ToLower().Contains(normalizedQuery) ||
-					(c.Teacher != null && c.Teacher.FullName.ToLower().Contains(normalizedQuery))
+					EF.Functions.Like(c.Title, pattern) ||
+					EF.Functions.Like(c.Description, pattern) ||
+					(c.Teacher != null && EF.Functions.Like(c.Teacher.FullName, pattern))
 				);
 			}
 
  			if (categoryIds != null && categoryIds.Any())
 			{
- 				results = results.Where(c =>
-					categoryIds.Contains(c.SubCategoryId ?? Guid.Empty) ||
-					categoryIds.Contains(c.CategoryId ?? Guid.Empty)|| c.IsFree==isfree
+				results = results.Where(c =>
+					(c.SubCategoryId.HasValue && categoryIds.Contains(c.SubCategoryId.Value)) ||
+					(c.CategoryId.HasValue && categoryIds.Contains(c.CategoryId.Value))
 				);
 			}
-			 
- 			int totalResults = await results.CountAsync();
 
- 			var pagedCourses = await results
-				.OrderByDescending(c => c.CreatedDate) // ????? ????
+ 			if (isFree)
+			{
+				results = results.Where(c => c.IsFree == isFree);
+			}
+
+ 			var totalResults = await results.CountAsync();
+
+			var pagedCourses = await results
+				.OrderByDescending(c => c.CreatedDate)   
 				.Skip((page - 1) * pageSize)
 				.Take(pageSize)
 				.ToListAsync();
 
- 			var viewModel = new SearchResultsViewModel
+			var viewModel = new SearchResultsViewModel
 			{
 				Courses = pagedCourses,
 				TotalResults = totalResults,
@@ -183,8 +188,8 @@ namespace Skillup_Academy.Controllers
 				PageSize = pageSize,
 				Query = query,
 				SelectedCategoryIds = categoryIds,
-				IsFree=isfree,
- 				Categories = await _context.CourseCategories.ToListAsync(),
+				IsFree = isFree,
+				Categories = await _context.CourseCategories.ToListAsync(),
 				SubCategories = await _context.SubCategories.ToListAsync()
 			};
 

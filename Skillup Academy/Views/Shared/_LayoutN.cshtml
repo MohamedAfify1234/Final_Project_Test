@@ -68,10 +68,11 @@
             <span></span>
         </div>
 
-        <ul class="nav-links" id="navLinks"> 
+         <ul class="nav-links" id="navLinks"> 
             <li class="me-4"><a asp-action="AllCourseInHeader" asp-controller="Course">Courses</a></li>
             <li class="me-4"><a asp-action="GetAllInstructors" asp-controller="Account">Instructors</a></li>
             <li class="mobile-auth">
+ 
             <ul class="nav-links" id="navLinks">
                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="me-4"><a asp-action="ShowAll" asp-controller="Course">Courses</a></li>
@@ -98,7 +99,7 @@
             </ul>
 
             <div class="auth-buttons">
-                @if (User.Identity.IsAuthenticated)
+                 @if (User.Identity.IsAuthenticated)
                 {
                         <a class="btn btn-profile" href="#" style="
                 display: flex;
@@ -145,8 +146,7 @@
                 font-weight: 600;
             ">Login</a>
                         <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
-                /* تصميم زر التسجيل بحدود (Outline) */
-                padding: 8px 15px;
+                 padding: 8px 15px;
                 border-radius: 6px;
                 font-size: 0.95rem;
                 text-decoration: none;
@@ -220,8 +220,7 @@
                 font-weight: 600;
             ">Login</a>
                     <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
-                /* تصميم زر التسجيل بحدود (Outline) */
-                padding: 8px 15px;
+                 padding: 8px 15px;
                 border-radius: 6px;
                 font-size: 0.95rem;
                 text-decoration: none;

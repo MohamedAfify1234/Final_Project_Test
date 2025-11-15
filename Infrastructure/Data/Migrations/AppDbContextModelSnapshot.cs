@@ -181,9 +181,9 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Enrollments", (string)null);
-
-                    b.ToTable("Enrollments");
+                     b.ToTable("Enrollments", (string)null);
+                     b.ToTable("Enrollments");
+ 
                 });
 
             modelBuilder.Entity("Core.Models.Exams.Exam", b =>
