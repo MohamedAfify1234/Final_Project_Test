@@ -213,11 +213,12 @@
                                 </div>
                             }
                         </div>
-
+                        @if (User.IsInRole("Student"))
+                        {
                          <div class="d-grid mb-3">
                             @if (Model.IsFree)
                             {
-                                <a class="btn btn-primary start-btn" asp-action="Start" asp-route-id="@Model.Id" role="button">
+                                <a class="btn btn-primary start-btn" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
                                     <i class="fas fa-play me-2"></i> Start Course
                                 </a>
                             }
@@ -228,7 +229,7 @@
                                 </a>
                             }
                         </div>
-
+                        }
                          <dl class="row details-compact small mb-0 text-muted"> 
  
                             <dt class="col-5">Created</dt>

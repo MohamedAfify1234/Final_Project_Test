@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Core.Models.Courses;
 using Core.Models.Lessons;
 using Infrastructure.Data;
+using Infrastructure.Services.Courses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,14 +23,15 @@ namespace Skillup_Academy.Controllers.Lessons
         private readonly IRepository<Course> _repoCourses;
 		private readonly IMapper _mapper;
         private readonly SaveImage _saveImage;
+        private readonly DeleteImage _deleteImage;
 
-
-        public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses, SaveImage saveImage)
+        public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses, SaveImage saveImage, DeleteImage deleteImage)
         {
 			_repoLesson = repository;
 			_mapper = mapper;
 			_repoCourses = repoCourses;
             _saveImage = saveImage;
+            _deleteImage = deleteImage;
  		}
         // /Lessons/index
         [HttpGet]
@@ -177,8 +179,10 @@ namespace Skillup_Academy.Controllers.Lessons
 				course.TotalDuration += lesson.Duration;
 
 			}
-			await _repoLesson.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
+            await _repoLesson.SaveChangesAsync();
+            _deleteImage.DeleteImg(lesson.VideoUrl);
+            _deleteImage.DeleteImg(lesson.AttachmentUrl);
+            return RedirectToAction(nameof(Index));
 		}
 
          
