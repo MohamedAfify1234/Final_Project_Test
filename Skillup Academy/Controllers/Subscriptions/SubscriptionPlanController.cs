@@ -1,13 +1,8 @@
-﻿using System.Threading.Tasks;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Core.Interfaces.Subscriptions;
-using Core.Models.Exams;
 using Core.Models.Subscriptions;
-using Infrastructure.Repositories.Subscriptions;
-using Infrastructure.Services.Subscriptions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Skillup_Academy.ViewModels.ExamsViewModels;
 using Skillup_Academy.ViewModels.SubscriptionsViewModels;
 
 namespace Skillup_Academy.Controllers.Subscriptions

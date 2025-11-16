@@ -113,9 +113,9 @@
 
                     <p class="plan-desc">
                         @(
-                                                string.IsNullOrEmpty(s.Description) ? "No description available." :
-                                                (s.Description.Length > 120 ? s.Description.Substring(0, 120) + "..." : s.Description)
-                                                )
+                            string.IsNullOrEmpty(s.Description) ? "No description available." :
+                            (s.Description.Length > 120 ? s.Description.Substring(0, 120) + "..." : s.Description)
+                          )
                     </p>
 
                         <div class="feature-item"><i class="fas fa-book"></i> Max Courses: <strong>@s.MaxCourses</strong></div>
@@ -123,7 +123,7 @@
                         <div class="feature-item"><i class="fas fa-tag"></i> Type: <strong>@s.Type</strong></div>
 
                         <div class="d-grid mt-4">
-                            <a asp-action="Subscribe" asp-route-id="@s.Id" class="btn btn-warning btn-subscribe">
+                            <a asp-controller="Payment" asp-action="Checkout" asp-route-planId="@s.Id" class="btn btn-warning btn-subscribe">
                                 <i class="fas fa-bolt"></i> Subscribe Now
                             </a>
                         </div>

@@ -221,13 +221,7 @@
                                 <a class="btn btn-primary start-btn" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
                                     <i class="fas fa-play me-2"></i> Start Course
                                 </a>
-                            }
-                            else
-                            {
-                                <a class="btn btn-warning start-btn" asp-action="Subscribe" asp-route-id="@Model.Id" role="button">
-                                    <i class="fas fa-bolt me-2"></i> Subscribe to Access
-                                </a>
-                            }
+                            } 
                         </div>
                         }
                          <dl class="row details-compact small mb-0 text-muted"> 
@@ -268,13 +262,7 @@
                 </div>
             </div>
 
-            <div class="mt-4 text-center">
-                @if (User.IsInRole("Admin") || User.IsInRole("Instructor"))
-                {
-                    <a asp-action="Edit" asp-controller="Course" asp-route-id="@Model.Id" class="btn btn-primary btn-lg me-3 px-5 shadow-sm">
-                        <i class="fas fa-edit me-2"></i> Edit Course
-                    </a>
-                }
+            <div class="mt-4 text-center"> 
                 <a asp-action="AllCaurseIsPublished" asp-controller="Course" class="btn btn-outline-secondary btn-lg px-5">
                     <i class="fas fa-list me-2"></i> Back to Courses
                 </a>
