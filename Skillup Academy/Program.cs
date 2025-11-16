@@ -13,6 +13,7 @@ using Infrastructure.Repositories.Implementation;
 using Infrastructure.Repositories.Reviews;
 using Infrastructure.Repositories.Subscriptions;
 using Infrastructure.Repositories.Users;
+using Infrastructure.Services.Payment;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
@@ -27,8 +28,10 @@ namespace Skillup_Academy
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            builder.Services.AddControllersWithViews();
+			builder.Services.AddHttpClient();
+
+			// Add services to the container.
+			builder.Services.AddControllersWithViews();
             builder.Services.AddScoped<ICourseCategoryRepsitory, CourseCategoryRepository>();
             builder.Services.AddScoped<ISubCategoryRepository, SubCategoryRepository>();
             builder.Services.AddScoped<ICourseReviewRepository, CourseReviewRepository>();
@@ -37,6 +40,7 @@ namespace Skillup_Academy
             builder.Services.AddScoped<ISubscriptionPlanRepository,SubscriptionPlanRepository>();
             builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
+            builder.Services.AddScoped<PaymentByPaymob>();
 
             builder.Services.AddDbContext<AppDbContext>(Options =>
             { Options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));
