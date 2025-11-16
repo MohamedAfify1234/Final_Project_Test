@@ -11,7 +11,8 @@ using System.Security.Claims;
 
 namespace Skillup_Academy.Controllers.Users
 {
-    [Authorize]
+    //[Authorize]
+    [Authorize(Roles = "Instructor,Admin")]
     [Route("Teacher/[action]")]
     public class TeacherController : Controller
     {
@@ -240,6 +241,7 @@ namespace Skillup_Academy.Controllers.Users
 
 
         //////////////////////////////////////////////////////////// For Admin Dashboard////////////////////////////////////////////
+        [HttpGet]
         public async Task<IActionResult> Index()
         {
             List<Teacher> Teachers = await _teacherRepository.GetAll();

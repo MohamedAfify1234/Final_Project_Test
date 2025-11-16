@@ -4,11 +4,11 @@
 <head>
 
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta httiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-
+    
     <title>SB Admin 2 - Admin Dashboard</title>
 
     <link href="~/vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
@@ -29,8 +29,8 @@
                 <div class="sidebar-brand-icon" style="display:none;">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
-                <div class="sidebar-brand-text mx-3" style="font-size: 1.25rem;">Bedaya Admin</div>
-            </a>
+                <div class="sidebar-brand-text mx-3" style="font-size: 1.25rem;">Admin Dashboard</div>
+            </a> 
 
             <hr class="sidebar-divider my-0">
 
@@ -91,7 +91,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Course Details:</h6>
                         <a class="collapse-item" asp-controller="Course" asp-action="ShowAll">Courses</a>
-                        <a class="collapse-item" asp-controller="Lessons" asp-action="Index">Lessons</a>
+                        @* <a class="collapse-item" asp-controller="Lessons" asp-action="Index">Lessons</a> *@
                         <a class="collapse-item" asp-controller="CourseReviews" asp-action="Index">Course Reviews</a>
                     </div>
                 </div>
@@ -100,15 +100,16 @@
             <hr class="sidebar-divider">
 
             <div class="sidebar-heading">
-                Exams & Finance
+                @* Exams & Finance *@
+                Finance
             </div>
 
-            <li class="nav-item">
+            @* <li class="nav-item">
                 <a class="nav-link" asp-controller="Exam" asp-action="Index">
                     <i class="fas fa-fw fa-book-open"></i>
                     <span>Exams</span>
                 </a>
-            </li>
+            </li> *@
 
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Subscription" asp-action="ShowAll">
@@ -124,7 +125,14 @@
             </li>
 
             <hr class="sidebar-divider d-none d-md-block">
-
+            @* 
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Admin" asp-action="Settings">
+                    <i class="fas fa-fw fa-cogs"></i>
+                    <span>Settings</span>
+                </a>
+            </li> *@
+            
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Account" asp-action="Logout">
                     <i class="fas fa-fw fa-sign-out-alt"></i>
@@ -142,9 +150,21 @@
 
             <div id="content">
 
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                @* <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"> *@
+                    <nav class="navbar navbar-expand bg-gradient-primary topbar mb-4 static-top shadow" style="height: 6rem;">
 
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
+                        <i class="fa fa-bars text-white"></i>
+                    </button>
+
+                    <div class="d-flex justify-content-center align-items-center w-100 h-100 text-center text-white">
+                        <div>
+                            <h2 class="h4 mb-1 font-weight-bold">
+                                Welcome Admin! You have full access to manage (Teachers, Students, and Categories).
+                            </h2>
+                        </div>
+                    </div>
+                    @* <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars"></i>
                     </button>
 
@@ -158,9 +178,9 @@
                                 </button>
                             </div>
                         </div>
-                    </form>
+                    </form> *@
 
-                    <ul class="navbar-nav ml-auto">
+                    @* <ul class="navbar-nav ml-auto">
 
                         <li class="nav-item dropdown no-arrow d-sm-none">
                             <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -273,12 +293,19 @@
                                 </a>
                                 <a class="dropdown-item text-center small text-gray-500" href="#">Read More Messages</a>
                             </div>
-                        </li>
-
+                        </li> *@
+                    <ul class="navbar-nav ml-auto">
                         <div class="topbar-divider d-none d-sm-block"></div>
-
-                        <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <li class="nav-item no-arrow">
+                            @* <a class="nav-link" asp-controller="Admin" asp-action="Settings">
+                                <span class="mr-2 d-none d-lg-inline text-white small">Douglas McGee</span>
+                                <img class="img-profile rounded-circle" src="~/img/undraw_profile.svg">
+                            </a> *@
+                            @await Component.InvokeAsync("AdminProfile")
+                        </li>
+                    </ul>
+                        @* <li class="nav-item dropdown no-arrow">
+                        <a class="nav-link dropdown-toggle"  id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="mr-2 d-none d-lg-inline text-gray-600 small">Douglas McGee</span>
                                 <img class="img-profile rounded-circle" src="~/img/undraw_profile.svg">
                             </a>
@@ -293,7 +320,7 @@
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i> Activity Log
                                 </a>
                             </div>
-                        </li>
+                        </li> *@
 
                     </ul>
 

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
+using Skillup_Academy.ViewModels.StudentsViewModels;
 using Skillup_Academy.ViewModels.UsersViewModels;
 using System.Collections.Generic;
 
@@ -20,6 +21,11 @@ namespace Skillup_Academy.Controllers.Users
             _studentRepository = studentRepository;
             _saveImage = saveImage;
             _fileService = fileService;
+        }
+        public async Task<IActionResult> DashBoard()
+        {
+            var viewmodel = new StudentDashboardViewModel();
+            return View("DashBoard", viewmodel);
         }
         public async Task<IActionResult> Index()
         {

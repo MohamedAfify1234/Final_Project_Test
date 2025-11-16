@@ -230,18 +230,28 @@ namespace Educational_Platform.Controllers.Courses
 		[HttpGet]
 		public async Task<IActionResult> Details(Guid id)
 		{
+			var user = await _userManager.GetUserAsync(User); 
+			if (user == null)
+                return RedirectToAction("Login","Account");
+
+			bool canView = user.CanViewPaidCourses;
+
 			var course = await _repository.Query()
 				.Include(c => c.Category)
-                .Include(t=>t.Teacher)
- 				.Include(s => s.SubCategory)
- 				.FirstOrDefaultAsync(i => i.Id == id);
+                .Include(l=>l.Lessons)
+				.Include(t => t.Teacher)
+				.Include(s => s.SubCategory)
+			    .FirstOrDefaultAsync(i => i.Id == id);
 
- 			if (course == null)
-			{
-				return NotFound();  
-			}
+			if (course == null)
+			  return NotFound();
+			 
 
-			return View(course);
+			if (course.IsFree || canView) 
+            {  
+			    return View(course);
+            }
+            return RedirectToAction("ShowAllPlanInHome", "Subscription");
 		}
 
 

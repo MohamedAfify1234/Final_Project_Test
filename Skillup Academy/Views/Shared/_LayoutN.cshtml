@@ -68,10 +68,11 @@
             <span></span>
         </div>
 
-        <ul class="nav-links" id="navLinks"> 
+         <ul class="nav-links" id="navLinks"> 
             <li class="me-4"><a asp-action="AllCourseInHeader" asp-controller="Course">Courses</a></li>
             <li class="me-4"><a asp-action="GetAllInstructors" asp-controller="Account">Instructors</a></li>
             <li class="mobile-auth">
+ 
             <ul class="nav-links" id="navLinks">
                 <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
                 <li class="me-4"><a asp-action="ShowAll" asp-controller="Course">Courses</a></li>
@@ -98,8 +99,7 @@
             </ul>
 
             <div class="auth-buttons">
->>>>>>> f3e7ba769b1b935c8128c75a3f8b8569ee2ad9ab
-                @if (User.Identity.IsAuthenticated)
+                 @if (User.Identity.IsAuthenticated)
                 {
                         <a class="btn btn-profile" href="#" style="
                 display: flex;
@@ -146,8 +146,7 @@
                 font-weight: 600;
             ">Login</a>
                         <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
-                /* تصميم زر التسجيل بحدود (Outline) */
-                padding: 8px 15px;
+                 padding: 8px 15px;
                 border-radius: 6px;
                 font-size: 0.95rem;
                 text-decoration: none;
@@ -159,6 +158,7 @@
                 }
             </li>
         </ul>
+      
         
         <form asp-action="SearchResults" asp-controller="Home" method="get" style="flex-grow: 1; max-width: 450px;">
             <div class="search-bar d-flex justify-content-center ">
@@ -221,8 +221,7 @@
                 font-weight: 600;
             ">Login</a>
                     <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
-                /* تصميم زر التسجيل بحدود (Outline) */
-                padding: 8px 15px;
+                 padding: 8px 15px;
                 border-radius: 6px;
                 font-size: 0.95rem;
                 text-decoration: none;
@@ -233,6 +232,51 @@
             ">Register</a>
             }
         </div>
+            @* Menu for student*@
+            @if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
+            {
+                <div class="dropdown ms-3 alert-dark ">
+                    <button class="btn text-white fw-semibold dropdown-toggle"
+                            style="background-color: #0d6efd;"
+                            type="button" data-bs-toggle="dropdown">
+                        Student Menu
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm"
+                        style="border-radius: 10px; min-width: 180px;">
+
+                        <li>
+                            <a class="dropdown-item fw-semibold"
+                               style="color: #0d6efd;"
+                               href="/Student/Dashboard">📊 Dashboard</a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item fw-semibold"
+                               style="color: #0d6efd;"
+                               href="/Student/MyCourse">📚 My Courses</a>
+                        </li>
+
+                        <li>
+                            <a class="dropdown-item fw-semibold"
+                               style="color: #0d6efd;"
+                               href="/Student/MySubscription">💳 My Subscription</a>
+                        </li>
+
+                        <li><hr class="dropdown-divider" /></li>
+
+                        <li>
+                            <a class="dropdown-item fw-bold"
+                               style="color: #dc3545;"
+                               href="/Account/Logout">🚪 Logout</a>
+                        </li>
+
+                    </ul>
+                </div>
+                <!-- Scripts -->
+                <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+            }
     </nav>
 </header>
  		<main role="main" class="pb-3 my-1 mx-2">

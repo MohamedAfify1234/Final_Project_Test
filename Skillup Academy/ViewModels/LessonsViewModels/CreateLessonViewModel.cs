@@ -9,9 +9,11 @@ namespace Skillup_Academy.ViewModels.LessonsViewModels
 		    public Guid Id { get; set; }                       // المعرف الفريد للدرس
             public string Title { get; set; }              
 			public string Description { get; set; }           
-			public string? Content { get; set; }               
-			public string? VideoUrl { get; set; }                
-			public string? AttachmentUrl { get; set; }          
+			public string? Content { get; set; }
+			//public string? VideoUrl { get; set; }                
+			//public string? AttachmentUrl { get; set; }          
+			public IFormFile? VideoUrl { get; set; }
+			public IFormFile? AttachmentUrl { get; set; }
 			public int Duration { get; set; }                  
  			public bool IsFree { get; set; } = false;          
  			public int OrderInCourse { get; set; }

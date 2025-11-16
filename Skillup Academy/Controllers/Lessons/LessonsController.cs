@@ -1,17 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
-using Infrastructure.Data;
-using Core.Models.Courses;
-using Core.Models.Lessons;
+﻿using AutoMapper;
 using Core.Enums;
 using Core.Interfaces;
-using Skillup_Academy.ViewModels.LessonsViewModels;
+using Core.Models.Courses;
+using Core.Models.Lessons;
+using Infrastructure.Data;
+using Infrastructure.Services.Courses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Skillup_Academy.AppSettingsImages;
+using Skillup_Academy.ViewModels.LessonsViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Skillup_Academy.Controllers.Lessons
 {
@@ -20,13 +22,16 @@ namespace Skillup_Academy.Controllers.Lessons
         private readonly IRepository<Lesson> _repoLesson;
         private readonly IRepository<Course> _repoCourses;
 		private readonly IMapper _mapper;
+        private readonly SaveImage _saveImage;
+        private readonly DeleteImage _deleteImage;
 
- 		
-        public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses )
+        public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses, SaveImage saveImage, DeleteImage deleteImage)
         {
 			_repoLesson = repository;
 			_mapper = mapper;
 			_repoCourses = repoCourses;
+            _saveImage = saveImage;
+            _deleteImage = deleteImage;
  		}
         // /Lessons/index
         [HttpGet]
@@ -75,6 +80,9 @@ namespace Skillup_Academy.Controllers.Lessons
                 var lessonEntity = _mapper.Map<Lesson>(lesson);
                  lessonEntity.Order=lesson.OrderInCourse;
 
+                lessonEntity.VideoUrl = await _saveImage.SaveImgAsync(lesson.VideoUrl);
+                lessonEntity.AttachmentUrl = await _saveImage.SaveImgAsync(lesson.AttachmentUrl);
+
                 await _repoLesson.AddAsync(lessonEntity);
 
                 var course = await _repoCourses.GetByIdAsync(lessonEntity.CourseId);
@@ -116,16 +124,25 @@ namespace Skillup_Academy.Controllers.Lessons
             {
                 var oldLesson =  await _repoLesson.GetByIdAsync(id);
 
-				var lessonEntity = _mapper.Map<Lesson>(lesson);
-                lessonEntity.Id = id;
-                lessonEntity.Order = lesson.OrderInCourse;
+                oldLesson.Id = id;
+                oldLesson.Order = lesson.OrderInCourse;
 
-				var course = await _repoCourses.GetByIdAsync(lessonEntity.CourseId);
+                if (lesson.VideoUrlFile != null)
+                    oldLesson.VideoUrl = await _saveImage.SaveImgAsync(lesson.VideoUrlFile);
+
+                if (lesson.AttachmentUrlFile != null)
+                    oldLesson.AttachmentUrl = await _saveImage.SaveImgAsync(lesson.AttachmentUrlFile);
+                oldLesson.Title = lesson.Title;
+                oldLesson.Description = lesson.Description;
+                oldLesson.Content = lesson.Content;
+                oldLesson.IsFree = lesson.IsFree;
+   
+                var course = await _repoCourses.GetByIdAsync(oldLesson.CourseId);
 				course.TotalDuration -= oldLesson.Duration;
 
 				course.TotalDuration += lesson.Duration;
                   
-				_repoLesson.Update(lessonEntity);
+				_repoLesson.Update(oldLesson);
                 await _repoLesson.SaveChangesAsync();
                 
                 return RedirectToAction(nameof(Index), new { id = lesson.CourseId });
@@ -162,8 +179,10 @@ namespace Skillup_Academy.Controllers.Lessons
 				course.TotalDuration += lesson.Duration;
 
 			}
-			await _repoLesson.SaveChangesAsync();
-			return RedirectToAction(nameof(Index));
+            await _repoLesson.SaveChangesAsync();
+            _deleteImage.DeleteImg(lesson.VideoUrl);
+            _deleteImage.DeleteImg(lesson.AttachmentUrl);
+            return RedirectToAction(nameof(Index));
 		}
 
          

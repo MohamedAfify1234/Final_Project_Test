@@ -135,10 +135,15 @@
         <h2>Join Hundreds of Thousands of Creators Now</h2>
         <p>Hundreds of training courses "and more" with a single subscription that opens the doors to the future for you. Start your educational journey today.</p>
         <div class="hero-buttons">
-            <button class="hero-btn btn-primary">Subscribe Now</button>
+
+            <a asp-controller="Subscription" asp-action="ShowAllPlanInHome" class="hero-btn btn-primary" style="text-decoration: none;">
+                Subscribe Now
+            </a>
+            
             <a asp-controller="Course" asp-action="AllCaurseIsPublished" class="hero-btn btn-secondary" style="text-decoration: none;">
                 Browse Courses
             </a>
+
         </div>
     </div>
 </section>
