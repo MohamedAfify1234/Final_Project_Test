@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Course Details: " + Model.Title;
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     var baseImageUrl = "/img/";
     var imageUrl = string.IsNullOrEmpty(Model.ThumbnailUrl) ? "/img/default-course.jpg" : baseImageUrl + Model.ThumbnailUrl;
 }

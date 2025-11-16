@@ -1,0 +1,355 @@
+﻿@using Skillup_Academy.ViewModels.TeacherDashboard
+@model StudentListViewModel
+
+@{
+    ViewData["Title"] = "Students Management";
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
+}
+
+<div class="container-fluid">
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-2 text-gray-800">Students Management</h1>
+            <p class="mb-4">Manage your students, track their progress and performance.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary">
+                <i class="fas fa-plus me-2"></i>Add Student
+            </button>
+            <button class="btn btn-outline-secondary">
+                <i class="fas fa-download me-2"></i>Export
+            </button>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row mb-4">
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-primary shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Total Students
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.TotalStudents</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-users fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-success shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
+                                Active Students
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.ActiveStudents</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-check fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-warning shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
+                                Inactive Students
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.InactiveStudents</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-clock fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-3 col-md-6 mb-4">
+            <div class="card border-left-info shadow h-100 py-2">
+                <div class="card-body">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
+                                Completed Students
+                            </div>
+                            <div class="h5 mb-0 font-weight-bold text-gray-800">@Model.CompletedStudents</div>
+                        </div>
+                        <div class="col-auto">
+                            <i class="fas fa-user-graduate fa-2x text-gray-300"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Courses Overview -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold text-primary">Your Courses</h6>
+                    <span class="badge bg-primary">@Model.TeacherCourses.Count Courses</span>
+                </div>
+                <div class="card-body">
+                    @if (Model.TeacherCourses.Any())
+                    {
+                        <div class="row">
+                            @foreach (var course in Model.TeacherCourses)
+                            {
+                                <div class="col-md-4 mb-3">
+                                    <div class="card h-100">
+                                        <div class="card-body">
+                                            <h6 class="card-title">@course.Title</h6>
+                                            <p class="card-text text-muted small">@course.Description</p>
+                                            <div class="d-flex justify-content-between text-sm">
+                                                <span class="text-primary">
+                                                    <i class="fas fa-book me-1"></i>@course.TotalLessons Lessons
+                                                </span>
+                                                <span class="text-success">
+                                                    <i class="fas fa-users me-1"></i>@course.TotalStudents Students
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer bg-transparent">
+                                            <small class="text-muted">
+                                                Created: @course.CreatedDate.ToString("MMM dd, yyyy")
+                                            </small>
+                                            <span class="badge @(course.IsPublished ? "bg-success" : "bg-warning") float-end">
+                                                @(course.IsPublished ? "Published" : "Draft")
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="text-center py-4">
+                            <i class="fas fa-book fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">No courses available yet.</p>
+                            <a href="#" class="btn btn-primary">
+                                <i class="fas fa-plus me-2"></i>Create Your First Course
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Students Table -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+            <h6 class="m-0 font-weight-bold text-primary">Students List</h6>
+            <div class="d-flex gap-2">
+                <input type="text" class="form-control form-control-sm" placeholder="Search students..." id="searchInput">
+                <select class="form-select form-select-sm" id="statusFilter">
+                    <option value="">All Status</option>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                    <option value="Completed">Completed</option>
+                </select>
+            </div>
+        </div>
+        <div class="card-body">
+            @if (Model.Students.Any())
+            {
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="studentsTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Student Name</th>
+                                <th>Email</th>
+                                <th>Courses Enrolled</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var student in Model.Students)
+                            {
+                                <tr>
+                                    <td>
+                                        <div class="d-flex align-items-center">
+                                            <div class="avatar-circle-sm bg-primary text-white me-3">
+                                                @student.FullName.Split(' ').Select(x => x[0]).Take(2).Aggregate("", (a, b) => a + b)
+                                            </div>
+                                            <div>@student.FullName</div>
+                                        </div>
+                                    </td>
+                                    <td>@student.Email</td>
+                                    <td>
+                                        <span class="badge bg-info">@student.CoursesCount Courses</span>
+                                    </td>
+                                    <td>
+                                        <span class="badge @GetStatusBadgeClass(student.Status.ToString())">@student.Status</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-group btn-group-sm">
+                                            <button class="btn btn-outline-primary" title="View Profile">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                            <button class="btn btn-outline-success" title="Send Message">
+                                                <i class="fas fa-envelope"></i>
+                                            </button>
+                                            <button class="btn btn-outline-info" title="View Progress">
+                                                <i class="fas fa-chart-line"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Pagination -->
+                @if (Model.TotalRecords > Model.PageSize)
+                {
+                    <div class="d-flex justify-content-between align-items-center mt-4">
+                        <div class="text-muted">
+                            Showing @((Model.PageNumber - 1) * Model.PageSize + 1) to @Math.Min(Model.PageNumber * Model.PageSize, Model.TotalRecords) of @Model.TotalRecords entries
+                        </div>
+                        <nav>
+                            <ul class="pagination mb-0">
+                                <li class="page-item @(Model.PageNumber == 1 ? "disabled" : "")">
+                                    <a class="page-link" href="@Url.Action("Students", new { page = Model.PageNumber - 1 })">Previous</a>
+                                </li>
+
+                                @for (int i = 1; i <= Math.Ceiling((double)Model.TotalRecords / Model.PageSize); i++)
+                                {
+                                    <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                                        <a class="page-link" href="@Url.Action("Students", new { page = i })">@i</a>
+                                    </li>
+                                }
+
+                                <li class="page-item @(Model.PageNumber >= Math.Ceiling((double)Model.TotalRecords / Model.PageSize) ? "disabled" : "")">
+                                    <a class="page-link" href="@Url.Action("Students", new { page = Model.PageNumber + 1 })">Next</a>
+                                </li>
+                            </ul>
+                        </nav>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="text-center py-5">
+                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                    <h5 class="text-muted">No Students Found</h5>
+                    <p class="text-muted">You don't have any students enrolled in your courses yet.</p>
+                    <a href="#" class="btn btn-primary">
+                        <i class="fas fa-plus me-2"></i>Create New Course
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        .avatar-circle-sm {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+
+        .card {
+            transition: transform 0.2s;
+        }
+
+            .card:hover {
+                transform: translateY(-2px);
+            }
+
+        .border-left-primary {
+            border-left: 4px solid #4e73df !important;
+        }
+
+        .border-left-success {
+            border-left: 4px solid #1cc88a !important;
+        }
+
+        .border-left-warning {
+            border-left: 4px solid #f6c23e !important;
+        }
+
+        .border-left-info {
+            border-left: 4px solid #36b9cc !important;
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        function getStatusBadgeClass(status) {
+            switch (status) {
+                case 'Active': return 'bg-success';
+                case 'Inactive': return 'bg-warning';
+                case 'Completed': return 'bg-info';
+                default: return 'bg-secondary';
+            }
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function (e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#studentsTable tbody tr');
+
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchTerm) ? '' : 'none';
+            });
+        });
+
+        // Status filter functionality
+        document.getElementById('statusFilter').addEventListener('change', function (e) {
+            const status = e.target.value;
+            const rows = document.querySelectorAll('#studentsTable tbody tr');
+
+            rows.forEach(row => {
+                const rowStatus = row.querySelector('.badge').textContent.trim();
+                if (!status || rowStatus === status) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+    </script>
+}
+
+@functions {
+    public string GetStatusBadgeClass(string status)
+    {
+        return status switch
+        {
+            "Active" => "bg-success",
+            "Inactive" => "bg-warning",
+            "Completed" => "bg-info",
+            _ => "bg-secondary"
+        };
+    }
+}

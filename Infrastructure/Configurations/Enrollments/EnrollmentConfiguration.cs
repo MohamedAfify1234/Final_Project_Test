@@ -1,4 +1,5 @@
 ﻿using Core.Models.Enrollments;
+using Core.Models.Users;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using System;
@@ -28,6 +29,8 @@ namespace Infrastructure.Configurations.Enrollments
                 .WithMany(c => c.Enrollments)
                 .HasForeignKey(e => e.CourseId)
                 .OnDelete(DeleteBehavior.Cascade);
+            builder.Property(e => e.Status)
+                .HasConversion<string>();
         }
     }
 }

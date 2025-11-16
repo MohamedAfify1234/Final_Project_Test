@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Edit Course: " + Model.Title;
+	Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     var baseMediaPath = "/img/";
     var currentThumbnailPath = string.IsNullOrEmpty(Model.ThumbnailUrl) ? "N/A" : baseMediaPath + Model.ThumbnailUrl;
     var currentVideoPath = string.IsNullOrEmpty(Model.PreviewVideoUrl) ? "N/A" : baseMediaPath + Model.PreviewVideoUrl;

@@ -1,9 +1,12 @@
-﻿using Core.DTOs;
+﻿using Core.DTOs.TeacherDashboardDTOs;
+using Core.DTOs.TeacherDashboardDTOs.StudentsDTO;
+using Core.Enums;
 using Core.Interfaces.Users;
 using Core.Models.Users;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,10 +26,10 @@ namespace Infrastructure.Repositories.Users
             _userManager = userManager;
         }
 
-        public  async Task<Teacher?> GetTeacherAsync(string teacherId)
+        public async Task<Teacher?> GetTeacherAsync(string teacherId)
         {
-           return await _userManager.Users.OfType<Teacher>()
-                .FirstOrDefaultAsync(t => t.Id.ToString() == teacherId);
+            return await _userManager.Users.OfType<Teacher>()
+                 .FirstOrDefaultAsync(t => t.Id.ToString() == teacherId);
         }
 
         public async Task<List<CourseDashboardDTO>> GetTeacherCoursesAsync(Guid teacherId)
@@ -63,7 +66,7 @@ namespace Infrastructure.Repositories.Users
 
         public async Task<TeacherDashboardDTO> GetTeacherDashboardAsync(Guid teacherId)
         {
-           var teacher = await _userManager.FindByIdAsync(teacherId.ToString());
+            var teacher = await _userManager.FindByIdAsync(teacherId.ToString());
             if (teacher == null) return null;
 
             var courses = await GetTeacherCoursesAsync(teacherId);
@@ -110,7 +113,7 @@ namespace Infrastructure.Repositories.Users
         public async Task<IdentityResult> UpdateTeacherInfoAsync(Teacher teacher, Guid teacherId)
         {
             var User = await _userManager.FindByIdAsync(teacherId.ToString());
-            if(User == null)
+            if (User == null)
                 return (IdentityResult.Failed(new IdentityError { Description = "Teacher not found." }));
             // لليوزر  تحديث البيانات
             User.FullName = teacher.FullName;
@@ -118,8 +121,8 @@ namespace Infrastructure.Repositories.Users
             User.PhoneNumber = teacher.PhoneNumber;
             User.ProfilePicture = teacher.ProfilePicture;
             var result = await _userManager.UpdateAsync(User);
-            
-            if(!result.Succeeded)
+
+            if (!result.Succeeded)
                 return (IdentityResult.Failed(new IdentityError { Description = "Update failed." }));
 
             // الاضافيه تحديث البيانات
@@ -137,33 +140,155 @@ namespace Infrastructure.Repositories.Users
             return (IdentityResult.Success);
         }
 
+        public async Task<StudentDetailsDTO> GetStudentDetailsAsync(Guid teacherId, Guid studentId)
+        {
+            //var user = await _userManager.FindByIdAsync(userId.ToString());
+           // if (student == null) return null;
+            var student = await _userManager.Users.OfType<Student>()
+                .FirstOrDefaultAsync(s => s.Id == studentId);
+            var Courses = await _context.Courses
+                .Where(c => c.TeacherId == teacherId)
+                .Include(c => c.Enrollments
+                .Where(s => s.StudentId == studentId))
+                .ToListAsync();
+            var EnrollmentDate = await _context.Enrollments
+                .Where(e => e.StudentId == studentId)
+                .Select(e => e.EnrolledAt)
+                .ToListAsync();
 
+            return new StudentDetailsDTO
+            {
+                StudentId = student.Id,
+                FullName = student.FullName,
+                Email = student.Email,
+                PhoneNumber = student.PhoneNumber,
+                ProfilePicture = student.ProfilePicture,
+                CoursesCount = Courses.Count(),
+                Courses = Courses.Select(c => new StudentCourseDTO
+                {
+                    CourseId = c.Id,
+                    CourseTitle = c.Title,
+                }).ToList()
+            };
+        }
+         public Task<int> TotalStudentOfCourse(Guid CourseId, Guid teacherId)
+        {
+            var count = _context.Enrollments
+                .Where(e => e.CourseId == CourseId && e.Course.TeacherId == teacherId)
+                .Select(e => e.StudentId)
+                .Distinct()
+                .Count();
+            return Task.FromResult(count);
+        }
 
-        //Task<IdentityResult> ITeacherRepository.UpdateTeacherInfoAsync(Teacher teacher, Guid teacherId)
+        public async Task<StudentListDTO> GetStudentsAsync(Guid teacherId, int pageNumber, int pageSize, string? searchQuery, Guid? courseId, string? status)
+        {
+            // 1. نجيب الطلاب المرتبطين بالكورسات بتاعة المدرس
+            var studentsQuery = _context.Users
+                .OfType<Student>() // Student كلاس بيرث من IdentityUser
+                .Where(s => s.Enrollments
+                .Any(sc => sc.Course.TeacherId == teacherId))
+                .AsQueryable();
+            // 2. تطبيق فلتر البحث بالكلمة المفتاحية
+            if (!string.IsNullOrEmpty(searchQuery))
+            {
+                studentsQuery = studentsQuery.Where(s =>
+                    s.FullName
+                    .Contains(searchQuery) ||
+                    s.Email
+                    .Contains(searchQuery));
+            }
+            // 3. فلتر بالكورس
+            if (courseId.HasValue)
+            {
+                studentsQuery = studentsQuery.Where(s =>
+                    s.Enrollments.Any(sc => sc.CourseId == courseId.Value));
+            }
+            // 4. فلتر بالحالة
+            StudentStatus? selectedStatusEnum = null;
+            if (!string.IsNullOrEmpty(status) && Enum.TryParse<StudentStatus>(status, out var statusEnum))
+            {
+                studentsQuery = studentsQuery.Where(s => s.StudentStatus == statusEnum);
+                selectedStatusEnum = statusEnum; // هنا بنخزن القيمة
+            }
+
+            // 5. إجمالي الطلاب قبل Paging
+            var totalRecords = await studentsQuery.CountAsync();
+            // 6. Paging وجلب البيانات
+            var students = await studentsQuery
+                .Skip((pageNumber - 1) * pageSize)
+                .Take(pageSize)
+                .Select(s => new StudentDTO
+                {
+                    StudentId = s.Id,
+                    FullName = s.FullName,
+                    Email = s.Email,
+                    CoursesCount = s.Enrollments.Count,
+                    CourseTitle = s.Enrollments.FirstOrDefault().Course.Title,
+                    Status = s.StudentStatus
+                })
+                .ToListAsync();
+            // 7. احصائيات الـDashboard
+            var totalStudents = await _context.Users.OfType<Student>()
+                .Where(s => s.Enrollments.Any(sc => sc.Course.TeacherId == teacherId))
+                .CountAsync();
+
+            var activeStudents = await _context.Users.OfType<Student>()
+                .Where(s => s.Enrollments.Any(sc => sc.Course.TeacherId == teacherId) && s.StudentStatus == StudentStatus.Active)
+                .CountAsync();
+
+            var inactiveStudents = await _context.Users.OfType<Student>()
+                .Where(s => s.Enrollments.Any(sc => sc.Course.TeacherId == teacherId) && s.StudentStatus == StudentStatus.Inactive)
+                .CountAsync();
+            var teacherCourses = await _context.Courses
+       .Where(c => c.TeacherId == teacherId)
+       .Select(c => new CourseDashboardDTO
+       {
+           CourseId = c.Id,
+           Title = c.Title
+       })
+       .ToListAsync();
+            return new StudentListDTO
+            {
+                Students = students,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                TotalRecords = totalRecords,
+                SearchQuery = searchQuery,
+                SelectedCourseId = courseId.HasValue ? (Guid?)courseId.Value : null,
+                SelectedStatus = selectedStatusEnum,
+                TotalStudents = totalStudents,
+                ActiveStudents = activeStudents,
+                InactiveStudents = inactiveStudents,
+                TeacherCourses = teacherCourses
+            };
+
+        }
+        public Task<int> GetActiveStudentsAsync(Guid teacherId)
+        {
+            var count = _context.Users
+                .OfType<Student>()
+                .Where(s => s.Enrollments.Any(e => e.Course.TeacherId == teacherId) && s.StudentStatus == StudentStatus.Active)
+                .Count();
+            return Task.FromResult(count);
+        }
+
+        public Task<int> GetCompleteStudentsAsync(Guid teacherId)
+        {
+            var count = _context.Users
+                .OfType<Student>()
+                .Where(s => s.Enrollments.Any(e => e.Course.TeacherId == teacherId) && s.StudentStatus == StudentStatus.Completed)
+                .Count();
+            return Task.FromResult(count);
+        }
+
+        //public async Task<StudentListDTO> GetStudentListAsync(Guid teacherId)
         //{
-        //    if (!Guid.TryParse(teacherId.ToString(), out Guid teacherGuid))
-        //        return false;
-
-        //    var teacher = await _context.Teachers.FindAsync(teacherGuid);
-        //    if (teacher == null)
-        //        return false;
-
-        //    // تحديث البيانات
-        //    teacher.FullName = teacherInfo.FullName;
-        //    teacher.Email = teacherInfo.Email;
-        //    teacher.PhoneNumber = teacherInfo.PhoneNumber;
-        //    teacher.Bio = teacherInfo.Bio;
-        //    teacher.Qualifications = teacherInfo.Qualifications;
-        //    teacher.Expertise = teacherInfo.Expertise;
-        //    teacher.ProfilePicture = teacherInfo.ProfilePicture;
-
-        //    _context.Teachers.Update(teacher);
-        //    return await _context.SaveChangesAsync() > 0;
+        //    var teacher  = await _userManager.Users
+        //        .OfType<Teacher>()
+        //        .FirstOrDefaultAsync(t => t.Id == teacherId);
+        //    var query = await _context.Courses.Include(c => c.Enrollments).Where(t => t.TeacherId == teacherId);
         //}
-
-
-
-
 
 
 
@@ -195,13 +320,6 @@ namespace Infrastructure.Repositories.Users
             return await _context.Set<Teacher>().ToListAsync();
         }
 
-        //public async Task<Teacher> GetTeacherByIdAsync(string id)
-        //{
-        //    var user = await _userManager.FindByIdAsync(id);
-
-        //    return user as Teacher;
-        //}
-
         public async Task<IdentityResult> UpdateTeacherAsync(Teacher teacher)
         {
             return await _userManager.UpdateAsync(teacher);
@@ -211,6 +329,6 @@ namespace Infrastructure.Repositories.Users
             return await _context.Teachers.CountAsync();
         }
 
-       
+        
     }
 }
