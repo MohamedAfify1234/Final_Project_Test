@@ -36,6 +36,7 @@ namespace Skillup_Academy.ViewModels.UsersViewModels
 		[Display(Name = "PhoneNumber")]
 		public string PhoneNumber { get; set; }
 
+
 		[Display(Name = "Profile Picture")]
 		public IFormFile? ClientFile { get; set; }
  

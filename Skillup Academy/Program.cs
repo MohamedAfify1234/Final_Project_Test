@@ -49,8 +49,10 @@ namespace Skillup_Academy
 			})
             .AddEntityFrameworkStores<AppDbContext>()
             .AddDefaultTokenProviders();
+            builder.Services.Configure<DataProtectionTokenProviderOptions>(opt =>
+                opt.TokenLifespan = TimeSpan.FromHours(2));
 
-			builder.Services.AddScoped<DbInitializer>();
+            builder.Services.AddScoped<DbInitializer>();
 
 
 			builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
