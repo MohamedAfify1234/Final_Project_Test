@@ -29,7 +29,7 @@ namespace Skillup_Academy.Controllers.Users
             if (user != null)
             {
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var resetLink = Url.Action("ResetPassword", "Account",
+                var resetLink = Url.Action("ResetPassword", "ForgetPassword",
                     new { token, email = user.Email }, Request.Scheme);
                 await _emailSender.SendEmailAsync(user.Email, "Reset your password", resetLink);
             }
