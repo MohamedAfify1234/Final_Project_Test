@@ -122,15 +122,6 @@ namespace Skillup_Academy.Controllers.Admin
             user.PhoneNumber = model.PhoneNumber;
             user.LastProfileUpdate = DateTime.Now;
 
-            //if (user.Email != model.Email)
-            //{
-            //    var setEmailResult = await _userManager.SetEmailAsync(user, model.Email);
-            //    if (!setEmailResult.Succeeded)
-            //    {
-            //        ModelState.AddModelError(string.Empty, "Failed to update email.");
-            //        return View(model);
-            //    }
-            //}
 
             if (model.ProfilePicture != null)
             {
@@ -142,7 +133,6 @@ namespace Skillup_Academy.Controllers.Admin
             if (updateResult.Succeeded)
             {
                 await _signInManager.RefreshSignInAsync(user); 
-                //TempData["SuccessMessage"] = "تم تحديث بيانات الأدمن بنجاح!";
                 return RedirectToAction(nameof(DashBoard));
             }
 

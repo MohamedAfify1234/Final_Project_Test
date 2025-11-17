@@ -17,14 +17,18 @@
 
     <link href="~/css/sb-admin-2.min.css" rel="stylesheet">
     <link href="~/css/StyleHomePage.css" rel="stylesheet">
+    <link href="~/css/custom-fixed.css" rel="stylesheet">
+
+
 </head>
 
 <body id="page-top">
 
     <div id="wrapper">
 
+        @* <ul class="navbar-nav bg-dark sidebar sidebar-dark accordion" id="accordionSidebar"> *@
+        @* <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"> *@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
-
             <a class="sidebar-brand d-flex align-items-center justify-content-center" asp-controller="Admin" asp-action="Dashboard">
                 <div class="sidebar-brand-icon" style="display:none;">
                     <i class="fas fa-laugh-wink"></i>
@@ -80,6 +84,12 @@
                     <span>SubCategories</span>
                 </a>
             </li>
+            @* <li class="nav-item">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-fw fa-sitemap"></i>
+                    <span>Home</span>
+                </a>
+            </li> *@
 
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseContent"
@@ -111,7 +121,7 @@
                 </a>
             </li> *@
 
-            <li class="nav-item">
+            @* <li class="nav-item">
                 <a class="nav-link" asp-controller="Subscription" asp-action="ShowAll">
                     <i class="fas fa-fw fa-hand-holding-usd"></i>
                     <span>Subscriptions</span>
@@ -122,16 +132,30 @@
                     <i class="fas fa-fw fa-hand-holding-usd"></i>
                     <span>SubscriptionPlans</span>
                 </a>
-            </li>
-
-            <hr class="sidebar-divider d-none d-md-block">
-            @* 
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Admin" asp-action="Settings">
-                    <i class="fas fa-fw fa-cogs"></i>
-                    <span>Settings</span>
-                </a>
             </li> *@
+            <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinance"
+                   aria-expanded="true" aria-controls="collapseFinance">
+                    <i class="fas fa-fw fa-hand-holding-usd"></i>
+                    <span>Billing</span>
+                </a>
+
+                <div id="collapseFinance" class="collapse" aria-labelledby="headingFinance" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Financial:</h6>
+
+                        <a class="collapse-item" asp-controller="Subscription" asp-action="ShowAll">
+                            Subscriptions
+                        </a>
+
+                        <a class="collapse-item" asp-controller="SubscriptionPlan" asp-action="ShowAll">
+                            Subscription Plans
+                        </a>
+                    </div>
+                </div>
+            </li>
+            <hr class="sidebar-divider d-none d-md-block">
+
             
             <li class="nav-item">
                 <a class="nav-link" asp-controller="Account" asp-action="Logout">
@@ -150,9 +174,8 @@
 
             <div id="content">
 
-                @* <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow"> *@
-                    <nav class="navbar navbar-expand bg-gradient-primary topbar mb-4 static-top shadow" style="height: 6rem;">
-
+                @* <nav class="navbar navbar-expand bg-dark topbar mb-4 static-top shadow" style="height: 6rem;"> *@
+                <nav class="navbar navbar-expand bg-gradient-primary topbar mb-4 static-top shadow" style="height: 6rem;">
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
                         <i class="fa fa-bars text-white"></i>
                     </button>
