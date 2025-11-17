@@ -14,7 +14,9 @@ using Infrastructure.Repositories.Reviews;
 using Infrastructure.Repositories.Subscriptions;
 using Infrastructure.Repositories.Users;
 using Infrastructure.Services.Payment;
+using Infrastructure.Services.ForgotPassword;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
@@ -41,6 +43,7 @@ namespace Skillup_Academy
             builder.Services.AddScoped<ITeacherRepository, TeacherRepository>();
             builder.Services.AddScoped<IStudentRepository, StudentRepository>();
             builder.Services.AddScoped<PaymentByPaymob>();
+            builder.Services.AddTransient<IEmailSender, EmailSender>();
 
             builder.Services.AddDbContext<AppDbContext>(Options =>
             { Options.UseSqlServer(builder.Configuration.GetConnectionString("cs"));

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Core.Enums;
 using Core.Models.Users;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
+//using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -46,7 +46,31 @@
 *::after {
   box-sizing: border-box;
 }
+.sidebar {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    height: 100vh;
+}
 
+/* Fix Topbar */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 224px;
+    right: 0;
+    z-index: 1030;
+}
+
+/* Push content down (because topbar is fixed) */
+#content {
+    margin-top: 6rem;
+}
+
+/* Push content right (because sidebar is fixed) */
+#content-wrapper {
+    margin-left: 224px;
+}
 html {
   font-family: sans-serif;
   line-height: 1.15;
