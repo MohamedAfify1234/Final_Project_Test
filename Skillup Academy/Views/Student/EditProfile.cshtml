@@ -1,0 +1,65 @@
+﻿@using Skillup_Academy.ViewModels.StudentsViewModels
+@model StudentEditProfileViewModel
+@{
+    ViewData["Title"] = "Edit Profile";
+    Layout = "_StudentLayout";
+}
+
+<div class="container mt-4">
+    <h2 class="mb-4 text-primary">Edit Profile</h2>
+
+    @* @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    } *@
+
+    <!-- 🔥 منطقة عرض الأخطاء -->
+    @if (!ViewData.ModelState.IsValid)
+    {
+        <div class="alert alert-danger">
+            <ul>
+                @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    <li>@error.ErrorMessage</li>
+                }
+            </ul>
+        </div>
+    }
+
+    <form asp-action="SaveEditProfile" method="post" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+
+        <div class="mb-3">
+            <label>Full Name</label>
+            <input asp-for="FullName" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>User Name</label>
+            <input asp-for="UserName" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Email</label>
+            <input asp-for="Email" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Phone Number</label>
+            <input asp-for="PhoneNumber" class="form-control" />
+        </div>
+
+        <div class="mb-3">
+            <label>Current Picture</label><br />
+            <img src="/img/Profile/@Model.CurrentProfilePicture" width="120" class="rounded" />
+        </div>
+
+        <div class="mb-3">
+            <label>Upload New Picture</label>
+            <input asp-for="NewProfilePicture" type="file" class="form-control" />
+        </div>
+
+        <button class="btn btn-primary w-100">Save</button>
+    </form>
+
+</div>
