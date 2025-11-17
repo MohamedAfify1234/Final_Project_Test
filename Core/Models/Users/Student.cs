@@ -1,4 +1,5 @@
-﻿using Core.Models.Enrollments;
+﻿using Core.Enums;
+using Core.Models.Enrollments;
 using Core.Models.Exams;
 
 namespace Core.Models.Users
@@ -9,6 +10,7 @@ namespace Core.Models.Users
 		// الإحصائيات
 		public int CompletedCourses { get; set; }          // عدد الكورسات المكتملة
 		public int TotalEnrollments { get; set; }          // إجمالي الاشتراكات
+		public StudentStatus StudentStatus { get; set; }
 
 
 		// العلاقات الخاصة

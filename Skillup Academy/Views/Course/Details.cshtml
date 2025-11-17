@@ -5,7 +5,7 @@
     var baseImageUrl = Url.Content("~/img/");
     var imageUrl = string.IsNullOrEmpty(Model.ThumbnailUrl) ? Url.Content("~/img/default-course.jpg") : Url.Content("~/img/" + Model.ThumbnailUrl);
     var previewUrl = Model.PreviewVideoUrl ?? "";
-
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     bool IsYouTube(string u) => !string.IsNullOrWhiteSpace(u) && (u.Contains("youtube.com") || u.Contains("youtu.be"));
     
     var youtubeEmbed = Model.PreviewVideoUrl;

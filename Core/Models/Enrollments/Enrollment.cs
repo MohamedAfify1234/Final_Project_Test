@@ -1,4 +1,5 @@
-﻿using Core.Models.Courses;
+﻿using Core.Enums;
+using Core.Models.Courses;
 using Core.Models.Users;
 using System;
 using System.Collections.Generic;
@@ -18,7 +19,7 @@ namespace Core.Models.Enrollments
         public Guid? StudentId { get; set; }
         public Guid? CourseId { get; set; }
         public DateTime EnrolledAt { get; set; } = DateTime.UtcNow;
-        public string Status { get; set; }   // active, completed, cancelled
+        public StudentStatus Status { get; set; }   // active, completed, cancelled
         public DateTime? CompletedAt { get; set; }
         public int Progress { get; set; } = 0;
         public virtual Student Student { get; set; }

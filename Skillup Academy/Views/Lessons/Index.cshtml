@@ -12,6 +12,7 @@
     var baseMediaPath = Url.Content("~/img/");
     var firstLesson = lessonsModel.FirstOrDefault();
     string playerVideoUrl = (firstLesson != null && !string.IsNullOrEmpty(firstLesson.VideoUrl)) ? baseMediaPath + firstLesson.VideoUrl : "";
+    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
 
 @if (isAdminOrInstructor)

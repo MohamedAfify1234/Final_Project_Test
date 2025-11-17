@@ -21,5 +21,9 @@ namespace Core.Interfaces.Users
         Task<IdentityResult> DeleteStudentAsync(Student student);
         Task<IdentityResult> CreateStudentAsync(Student student, string password);
         Task<int> GetTotalStudentCountAsync();
+
+        // Additional Methods Specific to Students can be added here
+
+
     }
 }

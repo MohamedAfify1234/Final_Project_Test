@@ -134,7 +134,64 @@ namespace Skillup_Academy.Controllers.Users
             return View(viewModel);
 
         }
-        [HttpPost]
+        [HttpGet]
+        public async Task<IActionResult> Students()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+            var teacher = await _userManager.FindByIdAsync(userId);
+            if (teacher == null)
+                return NotFound("Teacher not found.");
+            if (!Guid.TryParse(teacher.Id.ToString(), out var teacherGuid))
+                return BadRequest("Invalid teacher ID format.");
+            var totalStudents = await _teacherRepository.GetTotalStudentsAsync(teacherGuid);
+            //if (totalStudents == 0)
+            //    {
+            //    ViewBag.Message = "No students enrolled yet.";
+            //    return View(new List<StudentListViewModel>());
+            //    }
+             var activeStudents = await _teacherRepository.GetActiveStudentsAsync(teacherGuid);
+             var completeStudents = await _teacherRepository.GetCompleteStudentsAsync(teacherGuid);
+             var totalCourses = await _teacherRepository.GetTeacherCoursesAsync(teacherGuid);
+             var studentVM = new StudentListViewModel
+            {
+                TotalStudents = totalStudents,
+                ActiveStudents = activeStudents,
+                InactiveStudents = totalStudents - activeStudents,
+                CompletedStudents = completeStudents,
+                TeacherCourses = totalCourses.Select(c => new Core.DTOs.TeacherDashboardDTOs.CourseDashboardDTO
+                {
+                    CourseId = c.CourseId,
+                    Title = c.Title,
+                    Description = c.Description,
+                    IsPublished = c.IsPublished,
+                    CreatedDate = c.CreatedDate,
+                    TotalLessons = c.TotalLessons,
+                    TotalStudents = c.TotalStudents
+                }).ToList()
+            };
+            var studentsList = await _teacherRepository.GetStudentsAsync(teacherGuid, 1, 20, null, null, null);
+               studentVM.Students = studentsList.Students.Select(s => new StudentVM
+                {
+                  StudentId = s.StudentId,
+                  FullName = s.FullName,
+                  Email = s.Email,
+                  CoursesCount = s.CoursesCount,
+                 Status = s.Status
+                }).ToList();
+            studentVM.PageNumber = studentsList.PageNumber;
+            studentVM.PageSize = studentsList.PageSize;
+            studentVM.TotalRecords = studentsList.TotalRecords;
+            return View(studentVM);
+
+
+        }
+
+
+
+
+
         //public async Task<IActionResult> Setting(Teacher model, IFormFile ProfilePictureFile)
         //{
         //    if (ModelState.IsValid)
@@ -176,6 +233,8 @@ namespace Skillup_Academy.Controllers.Users
 
         //    return View(model);
         //}
+
+
 
 
 
