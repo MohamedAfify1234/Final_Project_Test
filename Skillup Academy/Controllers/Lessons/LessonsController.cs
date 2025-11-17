@@ -1,22 +1,22 @@
-﻿using AutoMapper;
+﻿using System.Threading.Tasks;
+using AutoMapper;
 using Core.Enums;
 using Core.Interfaces;
 using Core.Models.Courses;
+using Core.Models.Enrollments;
 using Core.Models.Lessons;
-using Infrastructure.Data;
-using Infrastructure.Services.Courses;
+using Core.Models.Users;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.ViewModels.LessonsViewModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Skillup_Academy.Controllers.Lessons
 {
+    [Authorize(Roles = "Admin,Instructor")]
     public class LessonsController : Controller
     {
         private readonly IRepository<Lesson> _repoLesson;
@@ -24,29 +24,71 @@ namespace Skillup_Academy.Controllers.Lessons
 		private readonly IMapper _mapper;
         private readonly SaveImage _saveImage;
         private readonly DeleteImage _deleteImage;
+		private readonly IRepository<Enrollment> _repoEnrollment;
+		private readonly UserManager<User> _userManager;
+		private readonly IRepository<Student> _repoStudent;
 
-        public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses, SaveImage saveImage, DeleteImage deleteImage)
+		public LessonsController(IRepository<Lesson> repository, IMapper mapper, IRepository<Course> repoCourses
+            , SaveImage saveImage, DeleteImage deleteImage,IRepository<Enrollment> repoEnrollment,
+            UserManager<User> userManager,IRepository<Student> repoStudent)
         {
 			_repoLesson = repository;
 			_mapper = mapper;
 			_repoCourses = repoCourses;
             _saveImage = saveImage;
             _deleteImage = deleteImage;
- 		}
-        // /Lessons/index
+			_repoEnrollment = repoEnrollment;
+			_userManager = userManager;
+			_repoStudent = repoStudent;
+		}
+
+        [AllowAnonymous]
         [HttpGet]
-        public IActionResult Index(Guid id)
+        public async Task<IActionResult> Index(Guid id)
         {
 			var lessons = _repoLesson.Query()
 				.Where(i => i.CourseId == id)
 				.OrderBy(i => i.OrderInCourse)
 				.ToList();
-			
-            ViewBag.courseId = id;
+
+			var userId = _userManager.GetUserId(User);
+
+            if (userId == null) 
+                return RedirectToAction("Index", "Home");
+
+			var founded = _repoEnrollment.Query() 
+                .Where(e => e.CourseId == id && e.StudentId == Guid.Parse(userId))
+                .FirstOrDefault();
+
+            if (founded==null)
+            {
+                Enrollment enrollment = new Enrollment 
+                { 
+                    CourseId = id,
+                    StudentId = Guid.Parse(userId),
+                    Status = StudentStatus.Active,
+                    EnrolledAt = DateTime.Now,
+                    CompletedAt=DateTime.Now
+			    };
+                await _repoEnrollment.AddAsync(enrollment);
+
+				if (!Guid.TryParse(userId, out var userGuid))
+				{
+ 					return RedirectToAction("Index", "Home");
+				}
+
+				var student = await _repoStudent.GetByIdAsync(userGuid);
+                student.TotalEnrollments += 1;
+
+				await _repoEnrollment.SaveChangesAsync();
+            }
+
+			ViewBag.courseId = id;
 			return View(lessons);
         }
 
-        [HttpGet]
+		[AllowAnonymous]
+		[HttpGet]
         public IActionResult Details(Guid id)
         { 
             var lesson = _repoLesson.Query().Include(c => c.Course).FirstOrDefault(i=>i.Id==id);
