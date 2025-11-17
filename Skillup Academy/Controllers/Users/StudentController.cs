@@ -2,12 +2,14 @@
 using Core.Models.Courses;
 using Core.Models.Users;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
 using Skillup_Academy.ViewModels.StudentsViewModels;
 using Skillup_Academy.ViewModels.UsersViewModels;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace Skillup_Academy.Controllers.Users
 {
@@ -16,17 +18,219 @@ namespace Skillup_Academy.Controllers.Users
         private readonly IStudentRepository _studentRepository;
         private readonly SaveImage _saveImage;
         private readonly FileService _fileService;
-        public StudentController(IStudentRepository studentRepository, SaveImage saveImage, FileService fileService)
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
+
+        public StudentController(IStudentRepository studentRepository, SaveImage saveImage, FileService fileService, UserManager<User> userManager,SignInManager<User> signInManager)
         {
             _studentRepository = studentRepository;
             _saveImage = saveImage;
             _fileService = fileService;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
+        //DashBoard for student
         public async Task<IActionResult> DashBoard()
         {
             var viewmodel = new StudentDashboardViewModel();
             return View("DashBoard", viewmodel);
         }
+        //Profile 
+        public async Task<IActionResult> Profile()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
+
+            // نجلب آخر نسخة من قاعدة البيانات
+            var user = await _userManager.FindByIdAsync(userId);
+
+            var student = user as Student;
+            if (student == null)
+                return BadRequest("Current user is not a student.");
+
+            // الصورة
+            var profileImage = string.IsNullOrEmpty(student.ProfilePicture)
+                                    ? Url.Content("/img/Profile/download.png")
+                                    : Url.Content("~/img/Profile/" + student.ProfilePicture);
+
+
+            var vm = new StudentProfileViewModel
+            {
+                Id = student.Id,
+                FullName = student.FullName,
+                UserName = student.UserName,
+                Email = student.Email,
+                PhoneNumber = student.PhoneNumber,
+                ProfilePicture = profileImage,
+
+                RegistrationDate = student.RegistrationDate,
+                LastLoginDate = student.LastLoginDate,
+                LastProfileUpdate = student.LastProfileUpdate,
+
+                IsActive = student.IsActive,
+                CanViewPaidCourses = student.CanViewPaidCourses,
+
+                CompletedCourses = student.CompletedCourses,
+                TotalEnrollments = student.TotalEnrollments
+            };
+
+            return View("Profile",vm);
+        }
+
+        //Edit 
+        public async Task<IActionResult> EditProfile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var student = user as Student;
+
+            if (student == null)
+                return BadRequest("Current user is not a student.");
+
+            var vm = new StudentEditProfileViewModel
+            {
+                Id = student.Id,
+                FullName = student.FullName,
+                UserName = student.UserName,
+                Email = student.Email,
+                PhoneNumber = student.PhoneNumber,
+                CurrentProfilePicture = student.ProfilePicture
+            };
+
+            return View(vm);
+        }
+
+        //SaveEdit
+        [HttpPost]
+        public async Task<IActionResult> SaveEditProfile(StudentEditProfileViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View("EditProfile", model);
+
+            var user = await _userManager.GetUserAsync(User);
+            var student = user as Student;
+
+            if (student == null)
+                return BadRequest("User is not a student.");
+
+            bool hasChanges = false;
+
+            // Full Name
+            if (student.FullName != model.FullName)
+            {
+                student.FullName = model.FullName;
+                hasChanges = true;
+            }
+
+            // Username
+            if (student.UserName != model.UserName)
+            {
+                var usernameResult = await _userManager.SetUserNameAsync(student, model.UserName);
+                if (!usernameResult.Succeeded)
+                {
+                    foreach (var error in usernameResult.Errors)
+                        ModelState.AddModelError("", error.Description);
+
+                    return View("EditProfile", model);
+                }
+                hasChanges = true;
+            }
+
+            // Email
+            if (student.Email != model.Email)
+            {
+                var emailResult = await _userManager.SetEmailAsync(student, model.Email);
+                if (!emailResult.Succeeded)
+                {
+                    foreach (var error in emailResult.Errors)
+                        ModelState.AddModelError("", error.Description);
+
+                    return View("EditProfile", model);
+                }
+                hasChanges = true;
+            }
+
+            // Phone Number
+            if (student.PhoneNumber != model.PhoneNumber)
+            {
+                student.PhoneNumber = model.PhoneNumber;
+                hasChanges = true;
+            }
+
+            // Profile Picture
+            if (model.NewProfilePicture != null)
+            {
+                var newFileName = $"{Guid.NewGuid()}{Path.GetExtension(model.NewProfilePicture.FileName)}";
+                var savePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Profile", newFileName);
+
+                using (var stream = new FileStream(savePath, FileMode.Create))
+                {
+                    await model.NewProfilePicture.CopyToAsync(stream);
+                }
+
+                // حذف الصورة القديمة لو موجودة
+                if (!string.IsNullOrEmpty(student.ProfilePicture))
+                {
+                    var oldPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/img/Profile", student.ProfilePicture);
+                    if (System.IO.File.Exists(oldPath))
+                        System.IO.File.Delete(oldPath);
+                }
+
+                student.ProfilePicture = newFileName;
+                hasChanges = true;
+            }
+
+            // Save Changes
+            if (hasChanges)
+            {
+                student.LastProfileUpdate = DateTime.Now;
+                await _userManager.UpdateAsync(student);
+            }
+
+            //TempData["Success"] = "Profile updated successfully!";
+            return RedirectToAction("Profile");
+        }
+
+        //password view
+        public IActionResult ChangePassword()
+        {
+            return View("ChangePassword");
+        }
+
+        //savechangepassword
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(StudentChangePasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
+
+            // تغيير الباسورد
+            var result = await _userManager.ChangePasswordAsync(user, model.CurrentPassword, model.NewPassword);
+
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                    ModelState.AddModelError("", error.Description);
+
+                return View(model);
+            }
+
+            // بعد التغيير لازم نعمل Refresh للسيشن عشان يفضل لوجين
+            await _signInManager.RefreshSignInAsync(user);
+
+            //TempData["Success"] = "Password updated successfully!";
+            return RedirectToAction("Profile");
+        }
+
+
+
+
+
+
         public async Task<IActionResult> Index()
         {
             List<Student> Students = await _studentRepository.GetAll();

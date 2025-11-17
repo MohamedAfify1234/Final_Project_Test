@@ -1,7 +1,10 @@
 ﻿using AutoMapper;
+using Core.DTOs.TeacherDashboardDTOs;
 using Core.Interfaces;
+using Core.Interfaces.Users;
 using Core.Models.Courses;
 using Core.Models.Users;
+using Infrastructure.Repositories.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -10,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.ViewModels.CoursesViewModels;
 using Skillup_Academy.ViewModels.SearchViewModels;
+using Skillup_Academy.ViewModels.TeacherDashboard;
 
 namespace Educational_Platform.Controllers.Courses
 {
@@ -17,7 +21,8 @@ namespace Educational_Platform.Controllers.Courses
 	public class CourseController : Controller
     {
         private readonly IRepository<Course> _repository;
-		private readonly IRepository<SubCategory> _repoSubCategory;
+        private readonly ITeacherRepository _repoTeacher;
+        private readonly IRepository<SubCategory> _repoSubCategory;
 		private readonly IRepository<CourseCategory> _repoCategory;
 		private readonly IMapper _mapper;
 		private readonly SaveImage _saveImage;
@@ -25,7 +30,7 @@ namespace Educational_Platform.Controllers.Courses
 		private readonly DeleteImage _deleteImage;
 
 		public CourseController(IRepository<Course> repository,IRepository<SubCategory> repoSubCategory,
-            IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage,
+            IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage, ITeacherRepository repoTeacher,
             UserManager<User> UserManager,DeleteImage deleteImage)
         {
             _repository = repository;
@@ -35,7 +40,8 @@ namespace Educational_Platform.Controllers.Courses
 			_saveImage = saveImage;
 			_userManager = UserManager;
 			_deleteImage = deleteImage;
-		}
+            _repoTeacher = repoTeacher;
+        }
 
         [AllowAnonymous]
 		[HttpGet]
@@ -83,7 +89,17 @@ namespace Educational_Platform.Controllers.Courses
  		[HttpGet]
 		public async Task<IActionResult> ShowAll()
         {
-            var allCourse = await _repository.GetAllAsync();
+            var currentUserId = _userManager.GetUserId(User);
+            var allCourse = await _repository.Query()
+                .ToListAsync();
+            if (User.IsInRole("Instructor"))
+            {
+                var teacher = await _repoTeacher.GetTeacherAsync(currentUserId);
+                if (teacher != null)
+                {
+                    allCourse = allCourse.Where(c => c.TeacherId == teacher.Id).ToList();
+                }
+            }
             return View(allCourse);
         }
 
