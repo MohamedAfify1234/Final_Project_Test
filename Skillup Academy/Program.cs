@@ -21,6 +21,7 @@ using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
 using Skillup_Academy.Mappings;
+using X.Paymob.CashIn;
 
 namespace Skillup_Academy
 {
@@ -31,6 +32,15 @@ namespace Skillup_Academy
             var builder = WebApplication.CreateBuilder(args);
 
 			builder.Services.AddHttpClient();
+            
+            ////////////////////////////////////////////////////////
+			var configuration = builder.Configuration;
+			builder.Services.AddPaymobCashIn(config => {
+				config.ApiKey = configuration["PaymobSettings:ApiKey"];
+				config.Hmac = configuration["PaymobSettings:Hmac"];
+			});
+            builder.Services.AddScoped<PaymentByPaymobCustom>();
+            ///////////////////////////////////////////////////////
 
 			// Add services to the container.
 			builder.Services.AddControllersWithViews();

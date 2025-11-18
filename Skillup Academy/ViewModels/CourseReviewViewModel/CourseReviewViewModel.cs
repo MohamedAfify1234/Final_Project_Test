@@ -34,9 +34,9 @@ namespace Skillup_Academy.ViewModels.CourseReviewViewModel
 
         // العلاقات	
         public Guid CourseId { get; set; }                 // الكورس
-        public SelectList Courses { get; set; }                 // الكورس
+        public SelectList? Courses { get; set; }                 // الكورس
 
         public Guid UserId { get; set; }                 // المستخدم
-        public SelectList Users { get; set; }                     // المستخدم
+        public SelectList? Users { get; set; }                     // المستخدم
     }
 }

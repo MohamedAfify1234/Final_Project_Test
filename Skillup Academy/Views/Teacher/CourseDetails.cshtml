@@ -5,9 +5,8 @@
     var baseImageUrl = Url.Content("~/img/");
     var imageUrl = string.IsNullOrEmpty(Model.ThumbnailUrl) ? Url.Content("~/img/default-course.jpg") : Url.Content("~/img/" + Model.ThumbnailUrl);
     var previewUrl = Model.PreviewVideoUrl ?? "";
-    // Layout = "~/Views/Shared/_TeacherLayout.cshtml";
     bool IsYouTube(string u) => !string.IsNullOrWhiteSpace(u) && (u.Contains("youtube.com") || u.Contains("youtu.be"));
-    
+
     var youtubeEmbed = Model.PreviewVideoUrl;
 }
 
@@ -97,16 +96,13 @@
 
     /* responsive */
     @@media (max-width: 991.98px) {
-        .media-panel .media-box
+        .media-panel .media-box {
+            height: 280px;
+        }
 
-    {
-        height: 280px;
-    }
-
-    .thumb-card .thumb-box {
-        height: 220px;
-    }
-
+        .thumb-card .thumb-box {
+            height: 220px;
+        }
     }
 </style>
 
@@ -134,16 +130,16 @@
                 }
             </div>
 
-             <div class="row g-4 media-panel align-items-start">
+            <div class="row g-4 media-panel align-items-start">
 
-                 <div class="col-lg-9">
+                <div class="col-lg-9">
                     <div class="card rounded-3 shadow-lg-soft mb-4 border-0 overflow-hidden">
                         <div class="card-body p-0">
                             <div class="media-box">
                                 @if (!string.IsNullOrEmpty(youtubeEmbed))
                                 {
                                     <video muted playsinline controls
-                                        style="width:100%;height:100%;object-fit:cover;background:#000;">
+                                           style="width:100%;height:100%;object-fit:cover;background:#000;">
                                         <source src="/img/@Model.PreviewVideoUrl" type="video/mp4" />
                                     </video>
 
@@ -168,7 +164,7 @@
                         </div>
                     </div>
 
-                     <div class="card shadow-lg mb-5 border-0 rounded-3 overflow-hidden stats-card">
+                    <div class="card shadow-lg mb-5 border-0 rounded-3 overflow-hidden stats-card">
                         <div class="card-body bg-light">
                             <div class="row text-center">
                                 <div class="col-md-3 border-end p-3">
@@ -196,7 +192,7 @@
                     </div>
                 </div>
 
-                 <div class="col-lg-3">
+                <div class="col-lg-3">
                     <div class="card thumb-card rounded-3 shadow-sm mb-3 border-0 p-3">
                         <div class="thumb-box mb-3">
                             @if (!string.IsNullOrEmpty(Model.ThumbnailUrl))
@@ -215,23 +211,17 @@
                         </div>
                         @if (User.IsInRole("Student"))
                         {
-                         <div class="d-grid mb-3">
-                            @if (Model.IsFree)
-                            {
-                                    <a class="btn btn-primary start-btn mb-3" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
-                                    <i class="fas fa-play me-2"></i> Start Course
-                                </a>
-                            }
-                            @if (ViewBag.IsEnrolled as bool? == true)
-                            {
-                                    <a class="btn btn-success start-btn" asp-action="Create" asp-controller="CourseReviews" asp-route-courseId="@Model.Id" role="button">
-                                    <i class="fas fa-star me-2"></i> Add Review
-                                </a>
-                            }
-                        </div>
+                            <div class="d-grid mb-3">
+                                @if (Model.IsFree)
+                                {
+                                    <a class="btn btn-primary start-btn" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
+                                        <i class="fas fa-play me-2"></i> Start Course
+                                    </a>
+                                }
+                            </div>
                         }
-                         <dl class="row details-compact small mb-0 text-muted"> 
- 
+                        <dl class="row details-compact small mb-0 text-muted">
+
                             <dt class="col-5">Created</dt>
                             <dd class="col-7">@Model.CreatedDate.ToShortDateString()</dd>
                         </dl>
@@ -255,7 +245,7 @@
                     <h5 class="mb-0 fw-bold text-dark"><i class="fas fa-history me-2 text-primary"></i> Timestamps & IDs</h5>
                 </div>
                 <div class="card-body bg-light">
-                    <dl class="row mb-0"> 
+                    <dl class="row mb-0">
                         <dt class="col-sm-3 text-muted">Created Date:</dt>
                         <dd class="col-sm-9">@Model.CreatedDate.ToShortDateString() (@Model.CreatedDate.ToShortTimeString())</dd>
 
@@ -268,8 +258,8 @@
                 </div>
             </div>
 
-            <div class="mt-4 text-center"> 
-                <a asp-action="AllCaurseIsPublished" asp-controller="Course" class="btn btn-outline-secondary btn-lg px-5">
+            <div class="mt-4 text-center">
+                <a asp-action="ShowAll" asp-controller="Course" class="btn btn-outline-secondary btn-lg px-5">
                     <i class="fas fa-list me-2"></i> Back to Courses
                 </a>
             </div>

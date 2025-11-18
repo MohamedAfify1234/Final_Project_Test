@@ -1,8 +1,11 @@
-﻿using Core.Interfaces.Users;
+﻿using Core.Interfaces;
+using Core.Interfaces.Users;
+using Core.Models.Courses;
 using Core.Models.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
 using Skillup_Academy.ViewModels.TeacherDashboard;
@@ -19,16 +22,19 @@ namespace Skillup_Academy.Controllers.Users
         private readonly ITeacherRepository _teacherRepository;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
+        private readonly IRepository<Course> _repository;
         //------- for Admin Dashboard
         private readonly SaveImage _saveImage;
         private readonly FileService _fileService;
-        public TeacherController(ITeacherRepository teacherRepository, UserManager<User> userManager, SaveImage saveImage, FileService fileService, SignInManager<User> signInManager)
+        public TeacherController(ITeacherRepository teacherRepository, UserManager<User> userManager, SaveImage saveImage
+                                , FileService fileService, SignInManager<User> signInManager, IRepository<Course> repository)
         {
             _teacherRepository = teacherRepository;
             _userManager = userManager;
             _saveImage = saveImage;
             _fileService = fileService;
             _signInManager = signInManager;
+            _repository = repository;
         }
         
         [HttpGet]
@@ -187,7 +193,32 @@ namespace Skillup_Academy.Controllers.Users
 
 
         }
+        [HttpGet]
+        public async Task<IActionResult> CourseDetails(Guid id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return RedirectToAction("Login", "Account");
 
+            bool canView = user.CanViewPaidCourses;
+
+            var course = await _repository.Query()
+                .Include(c => c.Category)
+                .Include(l => l.Lessons)
+                .Include(t => t.Teacher)
+                .Include(s => s.SubCategory)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (course == null)
+                return NotFound();
+
+
+            if (course.IsFree || canView)
+            {
+                return View(course);
+            }
+            return RedirectToAction("ShowAllPlanInHome", "Subscription");
+        }
 
 
 

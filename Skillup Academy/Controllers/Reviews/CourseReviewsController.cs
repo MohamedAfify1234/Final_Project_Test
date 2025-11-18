@@ -6,6 +6,7 @@ using Core.Models.Courses;
 using Core.Models.Reviews;
 using Core.Models.Users;
 using Infrastructure.Data;
+using Infrastructure.Services.Courses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -24,20 +25,19 @@ namespace Skillup_Academy.Controllers.Reviews
         private readonly ICourseReviewRepository CourseReviewRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly IRepository<Course> _repository;
-        //Courses soon
-        //User Soon
         public CourseReviewsController(ICourseReviewRepository _CourseReviewRepository, AppDbContext _Context,
-                                    IStudentRepository studentRepository, IRepository<Course> repository)
+                                    IStudentRepository studentRepository, IRepository<Course> repository, IStudentRepository repoStudent)
         {
-            Context = _Context;
+            //Context = _Context;
             CourseReviewRepository = _CourseReviewRepository;
             _studentRepository = studentRepository;
             _repository = repository;
         }
         // GET: CourseReviews/index
-        public IActionResult Index()
+        public IActionResult Index(Guid id)
         {
-            List<CourseReview> CourseReviews = CourseReviewRepository.GetAll();
+            List<CourseReview> CourseReviews = CourseReviewRepository.GetAll(id);
+            ViewBag.CourseId = id;
             return View("Index", CourseReviews);
         }
 
@@ -54,8 +54,9 @@ namespace Skillup_Academy.Controllers.Reviews
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
 
-        public IActionResult Create(CourseReviewViewModel CRVM)
+        public async Task<IActionResult> Create(CourseReviewViewModel CRVM)
         {
             if (ModelState.IsValid)
             {
@@ -71,15 +72,15 @@ namespace Skillup_Academy.Controllers.Reviews
                 CourseReview.UserId = CRVM.UserId;
                 CourseReviewRepository.Add(CourseReview);
                 CourseReviewRepository.Save();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = CRVM.CourseId });
             }
-            CRVM.Courses = new SelectList(Context.Courses.ToList(), "Id", "Title");
-            CRVM.Users = new SelectList(Context.Set<User>().ToList(), "Id", "FullName");
+            CRVM.Courses = new SelectList(await _repository.GetAllAsync(), "Id", "Title");
+            CRVM.Users = new SelectList(await _studentRepository.GetAll(), "Id", "FullName");
             return View("Create", CRVM);
         }
 
         // GET: CourseReviews/Edit/5
-        public IActionResult Edit(Guid id)
+        public async Task<IActionResult> Edit(Guid id)
         {
             CourseReview CourseReview = CourseReviewRepository.GetById(id);
             CourseReviewViewModel CRVM = new CourseReviewViewModel();
@@ -96,14 +97,15 @@ namespace Skillup_Academy.Controllers.Reviews
             {
                 return NotFound();
             }
-            CRVM.Courses = new SelectList(Context.Courses.ToList(), "Id", "Title");
-            CRVM.Users = new SelectList(Context.Set<User>().ToList(), "Id", "FullName");
+            CRVM.Courses = new SelectList(await _repository.GetAllAsync(), "Id", "Title");
+            CRVM.Users = new SelectList(await _studentRepository.GetAll(), "Id", "FullName");
             return View("Edit", CRVM);
         }
 
 
         [HttpPost]
-        public IActionResult Edit(Guid id, CourseReviewViewModel CRVM)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(Guid id, CourseReviewViewModel CRVM)
         {
             if (id != CRVM.Id)
             {
@@ -116,7 +118,7 @@ namespace Skillup_Academy.Controllers.Reviews
                     OldCourseReview.Rating = CRVM.Rating;
                     OldCourseReview.Comment = CRVM.Comment;
                     OldCourseReview.ReviewDate = CRVM.ReviewDate;
-                    OldCourseReview.Id = Guid.NewGuid();
+                    //OldCourseReview.Id = Guid.NewGuid();
                     OldCourseReview.ContentRating = CRVM.ContentRating;
                     OldCourseReview.TeachingRating = CRVM.TeachingRating;
                     OldCourseReview.IsApproved = CRVM.IsApproved;
@@ -125,10 +127,10 @@ namespace Skillup_Academy.Controllers.Reviews
                     CourseReviewRepository.Update(OldCourseReview);
                     CourseReviewRepository.Save();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = CRVM.CourseId });
             }
-            CRVM.Courses = new SelectList(Context.Courses.ToList(), "Id", "Title");
-            CRVM.Users = new SelectList(Context.Set<User>().ToList(), "Id", "FullName");
+            CRVM.Courses = new SelectList(await _repository.GetAllAsync(), "Id", "Title");
+            CRVM.Users = new SelectList(await _studentRepository.GetAll(), "Id", "FullName");
             return View("Edit", CRVM);
         }
 
@@ -152,6 +154,7 @@ namespace Skillup_Academy.Controllers.Reviews
 
         // POST: CourseReviews/Delete/5
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public IActionResult DeleteConfirmed(Guid id)
         {
             CourseReview CourseReview = CourseReviewRepository.GetById(id);
@@ -159,7 +162,7 @@ namespace Skillup_Academy.Controllers.Reviews
             {
                 CourseReviewRepository.Delete(CourseReview);
                 CourseReviewRepository.Save();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(Index), new { id = CourseReview.CourseId });
             }
             return NotFound();
         }

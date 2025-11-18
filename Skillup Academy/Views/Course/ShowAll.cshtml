@@ -2,8 +2,6 @@
 
 @{
     ViewData["Title"] = "Courses List";
-    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
-   
  }
 <div class="container">
 
@@ -65,13 +63,19 @@
 
                         @* Actions (Pushed to the bottom) *@
                         <div class="mt-auto pt-3 border-top">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a>
-                            @if (!User.IsInRole("Admin"))
+                            @* <a asp-controller="Course" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a> *@
+                            @if (User.IsInRole("Admin"))
+                            {
+                                    <a asp-controller="Admin" asp-action="CourseDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a>
+                            }
+                            @if (User.IsInRole("Instructor"))
                             {
                                 <a asp-action="Edit" asp-route-id="@item.Id" style="color:black" class="btn btn-secondary btn-sm me-1">Edit</a>
+                                    <a asp-controller="Teacher" asp-action="CourseDetails" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a>
                             }
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Delete</a>
                             <a asp-action="Index" asp-Controller="Lessons" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">Lessons</a>
+                            <a asp-action="Index" asp-Controller="CourseReviews" asp-route-id="@item.Id" class="btn btn-outline-info btn-sm">Reviews</a>
                         </div>
                     </div>
 

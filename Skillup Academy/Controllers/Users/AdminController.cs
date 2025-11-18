@@ -20,6 +20,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.ViewModels.AdminDashboard;
@@ -185,6 +186,33 @@ namespace Skillup_Academy.Controllers.Admin
             }
 
             return View(model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CourseDetails(Guid id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return RedirectToAction("Login", "Account");
+
+            bool canView = user.CanViewPaidCourses;
+
+            var course = await _repository.Query()
+                .Include(c => c.Category)
+                .Include(l => l.Lessons)
+                .Include(t => t.Teacher)
+                .Include(s => s.SubCategory)
+                .FirstOrDefaultAsync(i => i.Id == id);
+
+            if (course == null)
+                return NotFound();
+
+
+            if (course.IsFree || canView)
+            {
+                return View(course);
+            }
+            return RedirectToAction("ShowAllPlanInHome", "Subscription");
         }
     }
 }

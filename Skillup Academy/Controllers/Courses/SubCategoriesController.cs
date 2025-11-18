@@ -54,6 +54,8 @@ namespace Skillup_Academy.Controllers.Courses
 
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public IActionResult SaveCreate(SubCategoryViewModel SCVM)
         {
             if (ModelState.IsValid)
@@ -88,8 +90,9 @@ namespace Skillup_Academy.Controllers.Courses
             return View("Edit", SCVM);
         }
 
-        // POST: SubCategories/Edit/5
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         public IActionResult Edit(Guid id, SubCategoryViewModel SCVM)
         {
             if (id != SCVM.Id)
@@ -133,6 +136,8 @@ namespace Skillup_Academy.Controllers.Courses
 
         // POST: SubCategories/Delete/5
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+
         public IActionResult DeleteConfirmed(Guid id)
         {
             SubCategory SubCategory = SubCategoryRepsitory.GetById(id);
