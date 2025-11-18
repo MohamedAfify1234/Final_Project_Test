@@ -1,0 +1,14 @@
+﻿@model Guid
+@{
+    ViewData["Title"] = "Payment Failed";
+}
+
+<div class="container text-center mt-5">
+    <div class="alert alert-danger shadow p-5 rounded-3">
+        <h1 class="display-4 fw-bold">❌ Payment Failed</h1>
+        <p class="lead mt-3">Sorry, there was an issue processing your payment.</p>
+        <hr>
+        <p class="mb-0">Please check your card details or try again later.</p>
+        <a class="btn btn-danger mt-4"  asp-controller="Payment" asp-action="Checkout" asp-route-planId="@Model">Try Again</a>
+    </div>
+</div>

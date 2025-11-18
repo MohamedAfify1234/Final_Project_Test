@@ -3,6 +3,7 @@ using Core.DTOs.TeacherDashboardDTOs;
 using Core.Interfaces;
 using Core.Interfaces.Users;
 using Core.Models.Courses;
+using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Repositories.Users;
 using Microsoft.AspNetCore.Authorization;
@@ -22,27 +23,32 @@ namespace Educational_Platform.Controllers.Courses
     {
         private readonly IRepository<Course> _repository;
         private readonly ITeacherRepository _repoTeacher;
-        private readonly IRepository<SubCategory> _repoSubCategory;
+ 		private readonly IRepository<SubCategory> _repoSubCategory;
+		private readonly IRepository<SubscriptionPlan> _repoSubSubscriptionPlan;
 		private readonly IRepository<CourseCategory> _repoCategory;
+		private readonly IRepository<Student> _repoStudent;
 		private readonly IMapper _mapper;
 		private readonly SaveImage _saveImage;
 		private readonly UserManager<User> _userManager;
 		private readonly DeleteImage _deleteImage;
 
 		public CourseController(IRepository<Course> repository,IRepository<SubCategory> repoSubCategory,
-            IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage, ITeacherRepository repoTeacher,
-            UserManager<User> UserManager,DeleteImage deleteImage)
-        {
-            _repository = repository;
+ 
+            IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage,ITeacherRepository repoTeacher, IRepository<Student> repoStudent,
+			UserManager<User> UserManager,DeleteImage deleteImage, IRepository<SubscriptionPlan> repoSubSubscriptionPlan)
+ 		{
+			_repository = repository;
 			_repoSubCategory = repoSubCategory;
 			_repoCategory = repoCategory;
 			_mapper = mapper;
 			_saveImage = saveImage;
+			_repoStudent = repoStudent;
 			_userManager = UserManager;
 			_deleteImage = deleteImage;
             _repoTeacher = repoTeacher;
-        }
-
+			_repoSubSubscriptionPlan = repoSubSubscriptionPlan;
+		}
+ 
         [AllowAnonymous]
 		[HttpGet]
 		public async Task<IActionResult> AllCourseInHeader( List<Guid>? categoryIds, List<Guid>? subcategoryIds, bool isfree, int page = 1)
@@ -234,23 +240,44 @@ namespace Educational_Platform.Controllers.Courses
 			if (user == null)
                 return RedirectToAction("Login","Account");
 
-			bool canView = user.CanViewPaidCourses;
+			var student = await _repoStudent.GetByIdAsync(user.Id);
+ 			bool canView = user.CanViewPaidCourses;
 
-			var course = await _repository.Query()
-				.Include(c => c.Category)
-                .Include(l=>l.Lessons)
-				.Include(t => t.Teacher)
-				.Include(s => s.SubCategory)
-			    .FirstOrDefaultAsync(i => i.Id == id);
+            var subPlan = _repoSubSubscriptionPlan
+                .Query().Where(i=>i.UserId==user.Id).FirstOrDefault();
 
-			if (course == null)
-			  return NotFound();
+			if (subPlan != null) 
+			{
+				if (student.TotalEnrollments == subPlan.MaxCourses)
+				{
+					user.CanViewPaidCourses = false;	
+					await _userManager.UpdateAsync(user);
+					await _repository.SaveChangesAsync();
+					canView = false; 
+				} 
+			}
 			 
+			if (canView) 
+            {
 
-			if (course.IsFree || canView) 
-            {  
-			    return View(course);
-            }
+				var course = await _repository.Query()
+					.Include(c => c.Category)
+					.Include(l => l.Lessons)
+					.Include(t => t.Teacher)
+					.Include(s => s.SubCategory)
+					.FirstOrDefaultAsync(i => i.Id == id);
+
+				if (course == null)
+					return NotFound();
+
+
+				if (course.IsFree || canView)
+				{
+					return View(course);
+				}
+
+			}
+			 
             return RedirectToAction("ShowAllPlanInHome", "Subscription");
 		}
 

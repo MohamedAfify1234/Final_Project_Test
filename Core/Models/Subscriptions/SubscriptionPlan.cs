@@ -21,7 +21,7 @@ namespace Core.Models.Subscriptions
 		public DateTime StartDate { get; set; }            // تاريخ البدء
 		public DateTime EndDate { get; set; }              // تاريخ الانتهاء
 		public bool IsActive { get; set; } = true;         // نشط/منتهي
- 
+		public int MaxCourses { get; set; }                // أقصى عدد كورسات
 		// الدفع
 		public decimal PaidAmount { get; set; }            // المبلغ المدفوع
 		public string TransactionId { get; set; }          // رقم المعاملة
