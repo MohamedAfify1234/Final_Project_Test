@@ -76,9 +76,11 @@ namespace Skillup_Academy.Controllers.Lessons
 				{
  					return RedirectToAction("Index", "Home");
 				}
-
-				var student = await _repoStudent.GetByIdAsync(userGuid);
-                student.TotalEnrollments += 1;
+                if (User.IsInRole("Student")) 
+                { 
+					var student = await _repoStudent.GetByIdAsync(userGuid);
+					student.TotalEnrollments += 1;
+				} 
 
 				await _repoEnrollment.SaveChangesAsync();
             }
