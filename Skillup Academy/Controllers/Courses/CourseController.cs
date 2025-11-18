@@ -256,28 +256,21 @@ namespace Educational_Platform.Controllers.Courses
 					canView = false; 
 				} 
 			}
-			 
-			if (canView) 
-            {
+ 
+			var course = await _repository.Query()
+				.Include(c => c.Category)
+				.Include(l => l.Lessons)
+				.Include(t => t.Teacher)
+				.Include(s => s.SubCategory)
+				.FirstOrDefaultAsync(i => i.Id == id);
 
-				var course = await _repository.Query()
-					.Include(c => c.Category)
-					.Include(l => l.Lessons)
-					.Include(t => t.Teacher)
-					.Include(s => s.SubCategory)
-					.FirstOrDefaultAsync(i => i.Id == id);
-
-				if (course == null)
-					return NotFound();
-
-
-				if (course.IsFree || canView)
-				{
-					return View(course);
-				}
-
-			}
-			 
+			if (course == null)
+				return NotFound();
+             
+			if (course.IsFree || canView || User.IsInRole("Admin"))
+			{
+				return View(course);
+			} 
             return RedirectToAction("ShowAllPlanInHome", "Subscription");
 		}
 

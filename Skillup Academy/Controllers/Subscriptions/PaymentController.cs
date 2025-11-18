@@ -79,8 +79,7 @@ namespace Skillup_Academy.Controllers.Subscriptions
 
 		[AllowAnonymous]
 		[HttpPost]
-		[Route("payment/callback")]
-		public async Task<IActionResult> PaymobCallback([FromQuery] string hmac, [FromBody] CashInCallback callbackData)
+ 		public async Task<IActionResult> PaymobCallback([FromQuery] string hmac, [FromBody] CashInCallback callbackData)
 		{
 			if (callbackData.Type == CashInCallbackTypes.Transaction)
 			{
