@@ -18,10 +18,13 @@ namespace Infrastructure.Repositories.Reviews
         {
             Context  = _Context;
         }
-        public List<CourseReview> GetAll()
+        public List<CourseReview> GetAll(Guid id)
         {
-            return Context.CourseReviews.ToList();
-        }
+            return Context.CourseReviews.Include(r => r.User)
+                                        .Include(r => r.Course)
+                                        .Where(i => i.CourseId == id)
+                                        .ToList();
+}
         public void Add(CourseReview CourseReview)
         {
             Context.Add(CourseReview);

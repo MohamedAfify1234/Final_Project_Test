@@ -7,9 +7,9 @@
 <h1 class="mb-4">Course Reviews Catalog</h1>
 <hr />
 
-<p>
+@* <p>
     <a asp-action="Create" class="btn btn-primary btn-lg mb-4 shadow-sm">Create New Review</a>
-</p>
+</p> *@
 
 <div class="row">
     @if (Model.Any())
@@ -52,7 +52,7 @@
                                 <i class="bi bi-person-check me-1"></i> Teaching: @item.TeachingRating/5
                             </div>
                             <div class="col">
-                                <i class="bi bi-person me-1"></i> User: @item.User?.UserName
+                                <i class="bi bi-person me-1"></i> User: @item.User?.FullName
                             </div>
                             <div class="col">
                                 <i class="bi bi-calendar me-1"></i> @item.ReviewDate.ToString("MMM yyyy")
@@ -61,15 +61,15 @@
 
                         @* Actions (Pushed to the bottom) *@
                         <div class="mt-auto pt-3 border-top">
-                            <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a>
+                            @* <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a> *@
                             <a asp-action="Edit" asp-route-id="@item.Id" style="color:black" class="btn btn-secondary btn-sm me-1">Edit</a>
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Delete</a>
                         </div>
                     </div>
 
-                    <div class="card-footer text-muted small">
+                  @*   <div class="card-footer text-muted small">
                         Review ID: @Html.DisplayFor(modelItem => item.Id)
-                    </div>
+                    </div> *@
                 </div>
             </div>
         }

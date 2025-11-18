@@ -10,7 +10,7 @@ namespace Core.Interfaces.Reviews
 {
     public interface ICourseReviewRepository
     {
-        public List<CourseReview> GetAll();
+        public List<CourseReview> GetAll(Guid id);
         public void Add(CourseReview CourseReview);
         public CourseReview GetById(Guid Id);
         public void Delete(CourseReview CourseReview);

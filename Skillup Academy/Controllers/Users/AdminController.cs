@@ -186,5 +186,6 @@ namespace Skillup_Academy.Controllers.Admin
 
             return View(model);
         }
+
     }
 }

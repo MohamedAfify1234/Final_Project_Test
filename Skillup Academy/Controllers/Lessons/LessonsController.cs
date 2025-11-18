@@ -169,20 +169,21 @@ namespace Skillup_Academy.Controllers.Lessons
 		public async Task<IActionResult> DeleteConfirmed(Guid id)
 		{
 			var lesson = await _repoLesson.GetByIdAsync(id);
-             
-			if (lesson != null)
+            Guid courseId = lesson.CourseId;
+            if (lesson != null)
 			{
 				_repoLesson.Delete(lesson);
 
 				var course = await _repoCourses.GetByIdAsync(lesson.CourseId);
-				course.TotalLessons += 1;
-				course.TotalDuration += lesson.Duration;
+				course.TotalLessons -= 1;
+				course.TotalDuration -= lesson.Duration;
 
 			}
             await _repoLesson.SaveChangesAsync();
             _deleteImage.DeleteImg(lesson.VideoUrl);
             _deleteImage.DeleteImg(lesson.AttachmentUrl);
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Index), new { id = courseId });
 		}
 
          

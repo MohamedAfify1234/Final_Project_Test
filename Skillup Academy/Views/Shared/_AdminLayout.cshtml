@@ -91,20 +91,26 @@
                 </a>
             </li> *@
 
-            <li class="nav-item">
+            @*<li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseContent"
                    aria-expanded="true" aria-controls="collapseContent">
                     <i class="fas fa-fw fa-book-open"></i>
                     <span>Courses & Lessons</span>
                 </a>
-                <div id="collapseContent" class="collapse" aria-labelledby="headingContent" data-parent="#accordionSidebar">
+                 <div id="collapseContent" class="collapse" aria-labelledby="headingContent" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Course Details:</h6>
                         <a class="collapse-item" asp-controller="Course" asp-action="ShowAll">Courses</a>
-                        @* <a class="collapse-item" asp-controller="Lessons" asp-action="Index">Lessons</a> *@
+                         <a class="collapse-item" asp-controller="Lessons" asp-action="Index">Lessons</a> 
                         <a class="collapse-item" asp-controller="CourseReviews" asp-action="Index">Course Reviews</a>
                     </div>
-                </div>
+                </div> *@
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Course" asp-action="ShowAll">
+                    <i class="fas fa-fw fa-sitemap"></i>
+                    <span>Courses</span>
+                </a>
+            </li>
             </li>
 
             <hr class="sidebar-divider">
@@ -121,19 +127,19 @@
                 </a>
             </li> *@
 
-            @* <li class="nav-item">
+          <li class="nav-item">
                 <a class="nav-link" asp-controller="Subscription" asp-action="ShowAll">
                     <i class="fas fa-fw fa-hand-holding-usd"></i>
-                    <span>Subscriptions</span>
+                    <span> Subscription </span> @*this is the subscribtion but I call it subscription plan*@
                 </a>
             </li>
-            <li class="nav-item">
+             <li class="nav-item">
                 <a class="nav-link" asp-controller="SubscriptionPlan" asp-action="ShowAll">
                     <i class="fas fa-fw fa-hand-holding-usd"></i>
-                    <span>SubscriptionPlans</span>
+                    <span>SubscriptionPlans </span> @*this is the subscribtionplan but I call it subscriptions*@
                 </a>
-            </li> *@
-            <li class="nav-item">
+            </li> 
+            @* <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinance"
                    aria-expanded="true" aria-controls="collapseFinance">
                     <i class="fas fa-fw fa-hand-holding-usd"></i>
@@ -153,7 +159,7 @@
                         </a>
                     </div>
                 </div>
-            </li>
+            </li> *@
             <hr class="sidebar-divider d-none d-md-block">
 
             
