@@ -2,6 +2,7 @@
 
 @{
     ViewData["Title"] = "Course Reviews";
+    Guid courseId = ViewBag.CourseId;
 }
 
 <h1 class="mb-4">Course Reviews Catalog</h1>
@@ -86,7 +87,11 @@
         </div>
     }
 </div>
-
+<div class="text-center mt-4">
+    <a asp-controller="Course" asp-action="Details" asp-route-id="@courseId" class="btn btn-outline-secondary btn-lg shadow-sm">
+        <i class="bi bi-arrow-left me-2"></i> Return to Course Page
+    </a>
+</div>
 @section Scripts {
     @* Add a reference to Bootstrap Icons if you're using them, or remove the <i> tags if not. *@
     @* <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"> *@

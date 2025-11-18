@@ -224,7 +224,7 @@
                             }
                             @if (ViewBag.IsEnrolled as bool? == true)
                             {
-                                <a class="btn btn-success start-btn" asp-action="AddReview" asp-controller="Review" asp-route-courseId="@Model.Id" role="button">
+                                    <a class="btn btn-success start-btn" asp-action="Create" asp-controller="CourseReviews" asp-route-courseId="@Model.Id" role="button">
                                     <i class="fas fa-star me-2"></i> Add Review
                                 </a>
                             }

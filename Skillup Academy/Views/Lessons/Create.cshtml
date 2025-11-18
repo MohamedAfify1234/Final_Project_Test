@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Create";
-    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
 
 <h1>Create New Lesson</h1>
@@ -154,7 +153,7 @@
 </div>
 
 <div class="mt-4 text-center">
-    <a asp-action="Index" class="btn btn-outline-secondary">Back to List</a>
+    <a asp-controller="Lessons" asp-action="Index" asp-route-id="@Model.CourseId" class="btn btn-outline-secondary">Back to List</a>
 </div>
 
 @section Scripts {

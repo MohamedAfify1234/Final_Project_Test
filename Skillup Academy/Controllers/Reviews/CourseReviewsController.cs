@@ -37,7 +37,7 @@ namespace Skillup_Academy.Controllers.Reviews
         public IActionResult Index(Guid id)
         {
             List<CourseReview> CourseReviews = CourseReviewRepository.GetAll(id);
-
+            ViewBag.CourseId = id;
             return View("Index", CourseReviews);
         }
 
