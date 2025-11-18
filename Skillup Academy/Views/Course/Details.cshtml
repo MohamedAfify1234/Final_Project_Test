@@ -218,16 +218,16 @@
                          <div class="d-grid mb-3">
                             @if (Model.IsFree)
                             {
-                                <a class="btn btn-primary start-btn" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
+                                    <a class="btn btn-primary start-btn mb-3" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
                                     <i class="fas fa-play me-2"></i> Start Course
                                 </a>
-                            } 
-                            @* @if (Model.IsEnrolled)
+                            }
+                            @if (ViewBag.IsEnrolled as bool? == true)
                             {
                                 <a class="btn btn-success start-btn" asp-action="AddReview" asp-controller="Review" asp-route-courseId="@Model.Id" role="button">
                                     <i class="fas fa-star me-2"></i> Add Review
                                 </a>
-                            } *@
+                            }
                         </div>
                         }
                          <dl class="row details-compact small mb-0 text-muted"> 

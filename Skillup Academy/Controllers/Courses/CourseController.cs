@@ -3,6 +3,7 @@ using Core.DTOs.TeacherDashboardDTOs;
 using Core.Interfaces;
 using Core.Interfaces.Users;
 using Core.Models.Courses;
+using Core.Models.Enrollments;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Repositories.Users;
@@ -27,7 +28,8 @@ namespace Educational_Platform.Controllers.Courses
 		private readonly IRepository<SubscriptionPlan> _repoSubSubscriptionPlan;
 		private readonly IRepository<CourseCategory> _repoCategory;
 		private readonly IRepository<Student> _repoStudent;
-		private readonly IMapper _mapper;
+        private readonly IRepository<Enrollment> _repoEnrollment;
+        private readonly IMapper _mapper;
 		private readonly SaveImage _saveImage;
 		private readonly UserManager<User> _userManager;
 		private readonly DeleteImage _deleteImage;
@@ -35,7 +37,7 @@ namespace Educational_Platform.Controllers.Courses
 		public CourseController(IRepository<Course> repository,IRepository<SubCategory> repoSubCategory,
  
             IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage,ITeacherRepository repoTeacher, IRepository<Student> repoStudent,
-			UserManager<User> UserManager,DeleteImage deleteImage, IRepository<SubscriptionPlan> repoSubSubscriptionPlan)
+			UserManager<User> UserManager,DeleteImage deleteImage, IRepository<SubscriptionPlan> repoSubSubscriptionPlan, IRepository<Enrollment> repoEnrollment)
  		{
 			_repository = repository;
 			_repoSubCategory = repoSubCategory;
@@ -47,7 +49,9 @@ namespace Educational_Platform.Controllers.Courses
 			_deleteImage = deleteImage;
             _repoTeacher = repoTeacher;
 			_repoSubSubscriptionPlan = repoSubSubscriptionPlan;
-		}
+            _repoEnrollment = repoEnrollment;
+
+        }
  
         [AllowAnonymous]
 		[HttpGet]
@@ -256,8 +260,13 @@ namespace Educational_Platform.Controllers.Courses
 					canView = false; 
 				} 
 			}
- 
-			var course = await _repository.Query()
+            var userId = _userManager.GetUserId(User);
+
+            var enrollmentExists = await _repoEnrollment.Query()
+                    .AnyAsync(e => e.CourseId == id && e.StudentId == Guid.Parse(userId));
+
+            ViewBag.IsEnrolled = enrollmentExists;
+            var course = await _repository.Query()
 				.Include(c => c.Category)
 				.Include(l => l.Lessons)
 				.Include(t => t.Teacher)
