@@ -491,9 +491,6 @@ namespace Infrastructure.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<int>("MaxCourses")
-                        .HasColumnType("int");
-
                     b.Property<decimal>("PaidAmount")
                         .HasColumnType("decimal(18,2)");
 
@@ -765,6 +762,9 @@ namespace Infrastructure.Data.Migrations
                     b.HasBaseType("Core.Models.Users.User");
 
                     b.Property<int>("CompletedCourses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentStatus")
                         .HasColumnType("int");
 
                     b.Property<int>("TotalEnrollments")
