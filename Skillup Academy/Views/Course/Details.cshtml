@@ -224,9 +224,23 @@
                             }
                             @if (ViewBag.IsEnrolled as bool? == true)
                             {
-                                    <a class="btn btn-success start-btn" asp-action="Create" asp-controller="CourseReviews" asp-route-courseId="@Model.Id" role="button">
-                                    <i class="fas fa-star me-2"></i> Add Review
-                                </a>
+          
+                                    @if (ViewBag.HasReviewed as bool? == true)
+                                    {
+                                        <a class="btn btn-warning start-btn mb-3" asp-action="Edit" asp-controller="CourseReviews" asp-route-id="@ViewBag.ReviewId" role="button">
+                                            <i class="fas fa-edit me-2"></i> Edit My Review
+                                        </a>
+
+                                        <a class="btn btn-danger start-btn mb-3" asp-action="Delete" asp-controller="CourseReviews" asp-route-id="@ViewBag.ReviewId" role="button">
+                                            <i class="fas fa-trash-alt me-2"></i> Delete My Review
+                                        </a>
+                                    }
+                                    else
+                                    {
+                                        <a class="btn btn-success start-btn" asp-action="Create" asp-controller="CourseReviews" asp-route-courseId="@Model.Id" role="button">
+                                            <i class="fas fa-star me-2"></i> Add Review
+                                        </a>
+                                    }
                             }
                         </div>
                         }

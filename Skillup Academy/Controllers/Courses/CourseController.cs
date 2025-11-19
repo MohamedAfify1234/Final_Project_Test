@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Core.Interfaces.Users;
 using Core.Models.Courses;
 using Core.Models.Enrollments;
+using Core.Models.Reviews;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Repositories.Users;
@@ -29,6 +30,7 @@ namespace Educational_Platform.Controllers.Courses
 		private readonly IRepository<CourseCategory> _repoCategory;
 		private readonly IRepository<Student> _repoStudent;
         private readonly IRepository<Enrollment> _repoEnrollment;
+        private readonly IRepository<CourseReview> _courseReviewRepository;
         private readonly IMapper _mapper;
 		private readonly SaveImage _saveImage;
 		private readonly UserManager<User> _userManager;
@@ -37,7 +39,8 @@ namespace Educational_Platform.Controllers.Courses
 		public CourseController(IRepository<Course> repository,IRepository<SubCategory> repoSubCategory,
  
             IRepository<CourseCategory> repoCategory, IMapper mapper,SaveImage saveImage,ITeacherRepository repoTeacher, IRepository<Student> repoStudent,
-			UserManager<User> UserManager,DeleteImage deleteImage, IRepository<SubscriptionPlan> repoSubSubscriptionPlan, IRepository<Enrollment> repoEnrollment)
+			UserManager<User> UserManager,DeleteImage deleteImage, IRepository<SubscriptionPlan> repoSubSubscriptionPlan
+            , IRepository<Enrollment> repoEnrollment ,IRepository<CourseReview> courseReviewRepository)
  		{
 			_repository = repository;
 			_repoSubCategory = repoSubCategory;
@@ -50,7 +53,7 @@ namespace Educational_Platform.Controllers.Courses
             _repoTeacher = repoTeacher;
 			_repoSubSubscriptionPlan = repoSubSubscriptionPlan;
             _repoEnrollment = repoEnrollment;
-
+            _courseReviewRepository = courseReviewRepository;
         }
  
         [AllowAnonymous]
@@ -266,6 +269,15 @@ namespace Educational_Platform.Controllers.Courses
                     .AnyAsync(e => e.CourseId == id && e.StudentId == Guid.Parse(userId));
 
             ViewBag.IsEnrolled = enrollmentExists;
+
+            var userReview = await _courseReviewRepository.Query() 
+                                     .FirstOrDefaultAsync(r => r.CourseId == id && r.UserId == Guid.Parse(userId));
+
+            ViewBag.HasReviewed = (userReview != null); 
+
+            ViewBag.ReviewId = userReview?.Id;
+            //ViewBag.HasReviewed = reviewExists; 
+
             var course = await _repository.Query()
 				.Include(c => c.Category)
 				.Include(l => l.Lessons)
