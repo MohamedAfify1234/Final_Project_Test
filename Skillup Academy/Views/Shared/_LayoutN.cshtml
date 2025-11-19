@@ -11,8 +11,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Educational_Platform.styles.css" asp-append-version="true" />
-
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link href="~/css/StyleHomePage.css" rel="stylesheet">
     <style>
@@ -81,25 +80,16 @@
                 <li class="me-4"><a href="#">About</a></li>
 
                 <li class="mobile-auth">
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <a class="btn btn-profile" asp-action="Profile" asp-controller="Account">
-                            <i class="fas fa-user-circle"></i> Profile
-                        </a>
-                        <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="background-color:red;color:white;">
-                            Logout
-                        </a>
-                    }
-                    else
-                    {
-                        <a class="btn btn-login" asp-action="Login" asp-controller="Account">Login</a>
-                        <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account">Register</a>
-                    }
+                            @if (!User.Identity.IsAuthenticated)
+                            {
+                                <a class="btn btn-login" asp-action="Login" asp-controller="Account">Login</a>
+                                <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account">Register</a>
+                            }   
                 </li>
             </ul>
 
             <div class="auth-buttons">
-                 @if (User.Identity.IsAuthenticated)
+            @*      @if (User.Identity.IsAuthenticated)
                 {
                         <a class="btn btn-profile" href="#" style="
                 display: flex;
@@ -130,8 +120,8 @@
             ">
                         Logout
                     </a>
-                }
-                else
+                } *@
+                        @if (!User.Identity.IsAuthenticated)
                 {
                         <a class="btn btn-login" asp-action="Login" asp-controller="Account" style="
                 /* تصميم الزر الأساسي (Login) */
@@ -174,7 +164,7 @@
         </form>
         
         <div class="auth-buttons">
-            @if (User.Identity.IsAuthenticated)
+            @* @if (User.Identity.IsAuthenticated)
             {
                     <a class="btn btn-profile" href="#" style="
                 display: flex;
@@ -205,8 +195,8 @@
             ">
                      Logout
                 </a>
-             }
-            else
+             } *@
+                @if (!User.Identity.IsAuthenticated)
             {
                     <a class="btn btn-login" asp-action="Login" asp-controller="Account" style="
                 /* تصميم الزر الأساسي (Login) */
@@ -232,51 +222,32 @@
             ">Register</a>
             }
         </div>
-            @* Menu for student*@
+
             @if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
             {
-                <div class="dropdown ms-3 alert-dark ">
-                    <button class="btn text-white fw-semibold dropdown-toggle"
-                            style="background-color: #0d6efd;"
-                            type="button" data-bs-toggle="dropdown">
-                        Student Menu
+                <div class="dropdown me-3">
+                    <button class="btn btn-primary fw-semibold dropdown-toggle"
+                            type="button" data-bs-toggle="dropdown" style="border-radius: 8px;">
+                        Settings
                     </button>
 
-                    <ul class="dropdown-menu dropdown-menu-end shadow-sm"
-                        style="border-radius: 10px; min-width: 180px;">
+                    <ul class="dropdown-menu shadow-sm" style="border-radius: 10px; min-width: 180px;">
+                        <a class="dropdown-item" asp-controller="Student" asp-action="Profile">👤 Profile</a>
+                        <a class="dropdown-item" asp-controller="Home" asp-action="Index">🏠 Home</a>
+                        <a class="dropdown-item" asp-controller="Course" asp-action="AllCaurseIsPublished">🎓 All Courses</a>
+                        <a class="dropdown-item" asp-controller="Student" asp-action="MyCourse">📚 My Courses</a>
+                        <a class="dropdown-item" asp-controller="Student" asp-action="MySubscription">💳 My Subscription</a>
 
-                        <li>
-                            <a class="dropdown-item fw-semibold"
-                               style="color: #0d6efd;"
-                               href="/Student/Dashboard">📊 Dashboard</a>
-                        </li>
+                        <div class="dropdown-divider"></div>
 
-                        <li>
-                            <a class="dropdown-item fw-semibold"
-                               style="color: #0d6efd;"
-                               href="/Student/MyCourse">📚 My Courses</a>
-                        </li>
-
-                        <li>
-                            <a class="dropdown-item fw-semibold"
-                               style="color: #0d6efd;"
-                               href="/Student/MySubscription">💳 My Subscription</a>
-                        </li>
-
-                        <li><hr class="dropdown-divider" /></li>
-
-                        <li>
-                            <a class="dropdown-item fw-bold"
-                               style="color: #dc3545;"
-                               href="/Account/Logout">🚪 Logout</a>
-                        </li>
-
+                        <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">🚪 Logout</a>
                     </ul>
+
+                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+                    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
                 </div>
-                <!-- Scripts -->
-                <script src="~/lib/jquery/dist/jquery.min.js"></script>
-                <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
             }
+
     </nav>
 </header>
  		<main role="main" class="pb-3 my-1 mx-2">

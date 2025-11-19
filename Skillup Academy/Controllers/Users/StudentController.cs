@@ -226,9 +226,52 @@ namespace Skillup_Academy.Controllers.Users
             return RedirectToAction("Profile");
         }
 
+        //My Course
+        public async Task<IActionResult> MyCourse()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null) return Unauthorized();
+
+            var student = await _userManager.FindByIdAsync(userId) as Student;
+            if (student == null) return Unauthorized();
+
+            var courses = await _studentRepository.GetStudentCourses(student.Id);
+
+            return View("MyCourse",courses);
+        }
 
 
+        //My Subscription
+        public async Task<IActionResult> MySubscription()
+        {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            if (userId == null)
+                return Unauthorized();
 
+            var student = await _userManager.FindByIdAsync(userId) as Student;
+            if (student == null)
+                return Unauthorized();
+
+            var subscription = await _studentRepository.GetStudentActiveSubscriptionAsync(student.Id);
+
+            if (subscription == null)
+            {
+                return View("MySubscription", null); // لسه مشتركش
+            }
+
+            var vm = new StudentSubscriptionViewModel
+            {
+                SubscriptionName = subscription.Subscription?.Name,
+                StartDate = subscription.StartDate,
+                EndDate = subscription.EndDate,
+                IsActive = subscription.IsActive,
+                MaxCourses = subscription.MaxCourses,
+                PaidAmount = subscription.PaidAmount,
+                TransactionId = subscription.TransactionId
+            };
+
+            return View("MySubscription", vm);
+        }
 
 
         public async Task<IActionResult> Index()
