@@ -1,13 +1,9 @@
-﻿using System.Numerics;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
+﻿using System.Text.Json;
 using Core.Enums;
 using Core.Interfaces;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Services.Payment;
-using Infrastructure.Services.Subscriptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -154,6 +150,25 @@ namespace Skillup_Academy.Controllers.Subscriptions
 			}
 			return BadRequest();
 		}
+
+
+		[AllowAnonymous]
+		public IActionResult PaymobResult()
+		{
+ 			var successParam = Request.Query["success"].ToString();
+			var orderId = Request.Query["order"].ToString();  
+			var message = Request.Query["data.message"].ToString();
+
+ 			bool isSuccess = successParam == "true";
+
+ 			if (isSuccess)
+			{
+				return RedirectToAction("Success");
+			}
+
+ 			return RedirectToAction("Failure", new { id = orderId });
+		}
+
 
 		[AllowAnonymous]
 		public IActionResult Success()
