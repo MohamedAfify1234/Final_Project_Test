@@ -1,4 +1,5 @@
 ﻿using Core.Models.Courses;
+using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Microsoft.AspNetCore.Identity;
 using System;
@@ -23,6 +24,10 @@ namespace Core.Interfaces.Users
         Task<int> GetTotalStudentCountAsync();
 
         // Additional Methods Specific to Students can be added here
+
+        Task<List<Course>> GetStudentCourses(Guid studentId);
+
+        Task<SubscriptionPlan?> GetStudentActiveSubscriptionAsync(Guid studentId);
 
 
     }

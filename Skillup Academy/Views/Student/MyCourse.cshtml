@@ -1,0 +1,23 @@
+﻿@model List<Course>
+
+<h2 class="mb-4">My Courses</h2>
+
+@if (!Model.Any())
+{
+    <div class="alert alert-info">You are not enrolled in any course yet.</div>
+}
+else
+{
+    <div class="row">
+        @foreach (var c in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card p-3 shadow-sm">
+                    <h4>@c.Title</h4>
+                    <p>@c.ShortDescription</p>
+                    <a href="/Course/Details/@c.Id" class="btn btn-primary">View Course</a>
+                </div>
+            </div>
+        }
+    </div>
+}

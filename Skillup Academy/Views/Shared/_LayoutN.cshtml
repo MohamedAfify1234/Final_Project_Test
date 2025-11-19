@@ -229,15 +229,15 @@
                 <div class="dropdown me-3">
                     <button class="btn btn-primary fw-semibold dropdown-toggle"
                             type="button" data-bs-toggle="dropdown" style="border-radius: 8px;">
-                        ☰ Settings
+                        Settings
                     </button>
 
                     <ul class="dropdown-menu shadow-sm" style="border-radius: 10px; min-width: 180px;">
                         <a class="dropdown-item" asp-controller="Student" asp-action="Profile">👤 Profile</a>
                         <a class="dropdown-item" asp-controller="Home" asp-action="Index">🏠 Home</a>
                         <a class="dropdown-item" asp-controller="Course" asp-action="AllCaurseIsPublished">🎓 All Courses</a>
-                        <a class="dropdown-item" href="@Url.Action("MyCourse", "Student")">📚 My Courses</a>
-                        <a class="dropdown-item" href="@Url.Action("MySubscription", "Student")">💳 My Subscription</a>
+                        <a class="dropdown-item" asp-controller="Student" asp-action="MyCourse">📚 My Courses</a>
+                        <a class="dropdown-item" asp-controller="Student" asp-action="MySubscription">💳 My Subscription</a>
 
                         <div class="dropdown-divider"></div>
 

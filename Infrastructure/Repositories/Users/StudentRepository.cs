@@ -1,4 +1,6 @@
 ﻿using Core.Interfaces.Users;
+using Core.Models.Courses;
+using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Identity;
@@ -56,5 +58,22 @@ namespace Infrastructure.Repositories.Users
         {
             return await _context.Students.CountAsync();
         }
+
+        public async Task<List<Course>> GetStudentCourses(Guid studentId)
+        {
+            return await _context.Enrollments
+                .Where(e => e.StudentId == studentId)
+                .Select(e => e.Course)
+                .ToListAsync();
+        }
+
+        public async Task<SubscriptionPlan?> GetStudentActiveSubscriptionAsync(Guid studentId)
+        {
+            return await _context.SubscriptionPlans
+                .Where(s => s.UserId == studentId && s.IsActive == true)
+                .OrderByDescending(s => s.StartDate)
+                .FirstOrDefaultAsync();
+        }
+
     }
 }

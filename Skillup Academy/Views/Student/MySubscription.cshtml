@@ -1,0 +1,39 @@
+﻿@using Skillup_Academy.ViewModels.StudentsViewModels
+@model StudentSubscriptionViewModel
+
+<div class="container mt-5">
+
+    @if (Model == null)
+    {
+        <div class="alert alert-warning">
+            You don't have an active subscription.
+        </div>
+    }
+    else
+    {
+        <div class="card shadow p-4">
+            <h3 class="text-primary">My Subscription</h3>
+            <hr />
+
+            <p><strong>Plan:</strong> @Model.SubscriptionName</p>
+            <p><strong>Start Date:</strong> @Model.StartDate.ToString("yyyy/MM/dd")</p>
+            <p><strong>End Date:</strong> @Model.EndDate.ToString("yyyy/MM/dd")</p>
+
+            <p>
+                <strong>Status:</strong>
+                @if (Model.IsActive)
+                {
+                    <span class="text-success">Active</span>
+                }
+                else
+                {
+                    <span class="text-danger">Expired</span>
+                }
+            </p>
+
+            <p><strong>Max Courses:</strong> @Model.MaxCourses</p>
+            <p><strong>Paid Amount:</strong> @Model.PaidAmount EGP</p>
+            <p><strong>Transaction ID:</strong> @Model.TransactionId</p>
+        </div>
+    }
+</div>
