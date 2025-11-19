@@ -21,10 +21,10 @@ namespace Infrastructure.Services.Payment
 			_broker = broker;
 		}
 
-		public async Task<string> StartPaymentAsync(decimal Price, User user)
+		public async Task<string> StartPaymentAsync(decimal Price, User user , string subPlan)
 		{
 			var amountCents = (int)(Price * 100);
- 			var orderRequest = CashInCreateOrderRequest.CreateOrder(amountCents,"EGP");
+ 			var orderRequest = CashInCreateOrderRequest.CreateOrder(amountCents,"EGP", subPlan);
  
 			var orderResponse = await _broker.CreateOrderAsync(orderRequest);
 

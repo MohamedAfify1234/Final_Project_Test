@@ -4,6 +4,7 @@ using Core.Interfaces;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Services.Payment;
+using Infrastructure.Services.Subscriptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -64,25 +65,27 @@ namespace Skillup_Academy.Controllers.Subscriptions
 			var user = _userManager.GetUserAsync(User).Result;
 			if (user == null)
 				return RedirectToAction("Login","Account");
-			var plan = _repoSubscription.GetByIdAsync(checkoutVM.PlanId);
+
+			var plan =await _repoSubscription.GetByIdAsync(checkoutVM.PlanId);
 
 			if (checkoutVM.TypeMethod == PaymentMethod.Paymob.ToString())
 			{
-
-				//var paymentUrl = await _paymentByPaymob.StartPaymentAsync(checkoutVM.Price,user);
-				var paymentUrl = await _paymentByPaymobCustom.StartPaymentAsync(checkoutVM.Price,user);
-
-				await _repoSubscriptionPlan.AddAsync(new SubscriptionPlan
+ 				var subscriptionPlan = new SubscriptionPlan
 				{ 
 					StartDate = DateTime.Now,
-					EndDate = DateTime.Now,
-					PaidAmount =0,
-					MaxCourses = 0,
+					EndDate = DateTime.Now.AddDays(plan.DurationDays),
+ 					PaidAmount =plan.Price,
+					MaxCourses = plan.MaxCourses,
 					TransactionId = checkoutVM.PlanId.ToString(),
 					IsActive = true,
 					SubscriptionId = checkoutVM.PlanId,
 					UserId = user.Id
-				});
+				};
+				await _repoSubscriptionPlan.AddAsync(subscriptionPlan);
+				//var paymentUrl = await _paymentByPaymob.StartPaymentAsync(checkoutVM.Price,user);
+				var paymentUrl = await _paymentByPaymobCustom.StartPaymentAsync(checkoutVM.Price,user,subscriptionPlan.Id.ToString());
+
+				TempData["SubscriptionId"] = plan.Id.ToString();
 
 				await _repoSubscriptionPlan.SaveChangesAsync();
 				return Redirect(paymentUrl);	
@@ -102,51 +105,40 @@ namespace Skillup_Academy.Controllers.Subscriptions
 				var transaction = JsonSerializer.Deserialize<CashInCallbackTransaction>(rawJson);
 
 				// كده ترجع المعرف اللي انت بعته
-				string subscriptionId = transaction.Order.MerchantOrderId?.ToString();
-				Guid subscriptionGuid = Guid.Parse(subscriptionId);
+				string subscriptionPlanId = transaction.Order.MerchantOrderId?.ToString();
+				Guid subscriptionPlanIdGuid = Guid.Parse(subscriptionPlanId);
 				 
+
 				bool valid = _broker.Validate(transaction, hmac);
 				if(!valid)
 					return BadRequest();
 
-				var user = await _userManager.GetUserAsync(User);
-				if (user == null)
-					return RedirectToAction("Login", "Account");
-
-				var subscriptionPlan = await _repoSubscriptionPlan.Query()
-					.Where(i => i.UserId == user.Id).FirstOrDefaultAsync();
+				 
+				var subscriptionPlan = await _repoSubscriptionPlan.GetByIdAsync(subscriptionPlanIdGuid);
 
 				if (subscriptionPlan != null)
 				{
 					if (transaction.Success)
 					{
-						var subscription = await _repoSubscription.GetByIdAsync(subscriptionGuid);
-						if (subscription != null)
-						{  
-							subscriptionPlan.StartDate = DateTime.Now;
-							subscriptionPlan.EndDate = DateTime.Now.AddDays(subscription.DurationDays);
-							subscriptionPlan.PaidAmount = subscription.Price;
-							subscriptionPlan.MaxCourses = subscription.MaxCourses;
+						var user = await _userManager.FindByIdAsync(subscriptionPlan.UserId.ToString());
 
-							_repoSubscriptionPlan.Update(subscriptionPlan);
-
-							user.CanViewPaidCourses = true;
-							await _userManager.UpdateAsync(user);
-							await _repoSubscriptionPlan.SaveChangesAsync();
- 							 
-						} 
-						return RedirectToAction("Success"); 
+						user.CanViewPaidCourses = true;
+						await _userManager.UpdateAsync(user);
+						await _repoSubscriptionPlan.SaveChangesAsync();
+ 				 
+						return Ok(); 
 					}
 					else
 					{
 						_repoSubscriptionPlan.Delete(subscriptionPlan);
 						await _repoSubscriptionPlan.SaveChangesAsync();
 
-						return RedirectToAction("Failure",new {id= subscriptionGuid });
+						return BadRequest();
 					}
+
 				}
 
-				return RedirectToAction("Failure", new { id = subscriptionGuid });
+				return BadRequest();
 			}
 			return BadRequest();
 		}
@@ -161,12 +153,14 @@ namespace Skillup_Academy.Controllers.Subscriptions
 
  			bool isSuccess = successParam == "true";
 
- 			if (isSuccess)
+			var subscriptionId = TempData["SubscriptionId"];
+			
+			if (isSuccess)
 			{
 				return RedirectToAction("Success");
 			}
 
- 			return RedirectToAction("Failure", new { id = orderId });
+ 			return RedirectToAction("Failure", new { id = subscriptionId });
 		}
 
 
