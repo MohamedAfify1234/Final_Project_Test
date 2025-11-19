@@ -23,13 +23,13 @@
                     <div class="card-body d-flex flex-column">
 
                         @* Rating Stars *@
-                        <div class="text-center mb-3">
+                        @* <div class="text-center mb-3">
                             @for (int i = 1; i <= 5; i++)
                             {
                                 <i class="bi @(i <= item.Rating ? "bi-star-fill text-warning" : "bi-star text-muted")"></i>
                             }
                             <span class="ms-2 text-muted small">@item.Rating/5</span>
-                        </div>
+                        </div> *@
 
                         @* Title & Status Badges *@
                         <h6 class="card-subtitle mb-2 text-muted">@item.Course?.Title</h6>

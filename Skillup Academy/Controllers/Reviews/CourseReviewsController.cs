@@ -66,9 +66,8 @@ namespace Skillup_Academy.Controllers.Reviews
             if (ModelState.IsValid)
             {
                 CourseReview CourseReview = new CourseReview();
-                CourseReview.Rating = CRVM.Rating;
                 CourseReview.Comment = CRVM.Comment;
-                CourseReview.ReviewDate = CRVM.ReviewDate;
+                CourseReview.ReviewDate = DateTime.Now;
                 CourseReview.Id = Guid.NewGuid();
                 CourseReview.ContentRating = CRVM.ContentRating;
                 CourseReview.TeachingRating = CRVM.TeachingRating;
@@ -93,7 +92,7 @@ namespace Skillup_Academy.Controllers.Reviews
             CourseReviewViewModel CRVM = new CourseReviewViewModel();
             CRVM.Rating = CourseReview.Rating;
             CRVM.Comment = CourseReview.Comment;
-            CRVM.ReviewDate = CourseReview.ReviewDate;
+            CRVM.ReviewDate = DateTime.Now;
             CRVM.Id = CourseReview.Id;
             CRVM.ContentRating = CourseReview.ContentRating;
             CRVM.TeachingRating = CourseReview.TeachingRating;
@@ -119,9 +118,8 @@ namespace Skillup_Academy.Controllers.Reviews
             if (ModelState.IsValid)
             {
                     CourseReview OldCourseReview = CourseReviewRepository.GetById(id);
-                    OldCourseReview.Rating = CRVM.Rating;
                     OldCourseReview.Comment = CRVM.Comment;
-                    OldCourseReview.ReviewDate = CRVM.ReviewDate;
+                    OldCourseReview.ReviewDate = DateTime.Now;
                     OldCourseReview.ContentRating = CRVM.ContentRating;
                     OldCourseReview.TeachingRating = CRVM.TeachingRating;
                     OldCourseReview.IsApproved = CRVM.IsApproved;
