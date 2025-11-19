@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Core.DTOs.TeacherDashboardDTOs;
 using Core.Interfaces;
 using Core.Interfaces.Users;
 using Core.Models.Courses;
@@ -7,7 +6,6 @@ using Core.Models.Enrollments;
 using Core.Models.Reviews;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
-using Infrastructure.Repositories.Users;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -16,7 +14,6 @@ using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.ViewModels.CoursesViewModels;
 using Skillup_Academy.ViewModels.SearchViewModels;
-using Skillup_Academy.ViewModels.TeacherDashboard;
 
 namespace Educational_Platform.Controllers.Courses
 {
@@ -252,7 +249,7 @@ namespace Educational_Platform.Controllers.Courses
 
             var subPlan = _repoSubSubscriptionPlan
                 .Query().Where(i=>i.UserId==user.Id).FirstOrDefault();
-
+              
 			if (subPlan != null) 
 			{
 				if (student.TotalEnrollments == subPlan.MaxCourses)
@@ -288,7 +285,7 @@ namespace Educational_Platform.Controllers.Courses
 			if (course == null)
 				return NotFound();
              
-			if (course.IsFree || canView || User.IsInRole("Admin"))
+			if (course.IsFree || canView || User.IsInRole("Admin")||User.IsInRole("Instructor"))
 			{
 				return View(course);
 			} 

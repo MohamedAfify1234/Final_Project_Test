@@ -2,7 +2,6 @@
 
 @{
     ViewData["Title"] = "Delete Course";
-    Layout = "~/Views/Shared/_TeacherLayout.cshtml";
 }
 
 <div class="container mt-5">
@@ -48,7 +47,7 @@
                 <button type="submit" class="btn btn-danger btn-lg px-5 me-3">
                     <i class="bi bi-trash"></i> Delete Permanently
                 </button>
-                <a asp-action="Index" class="btn btn-secondary btn-lg">Cancel & Back to List</a>
+                <a asp-action="ShowAll" class="btn btn-secondary btn-lg">Cancel & Back to List</a>
             </form>
         </div>
     </div>
