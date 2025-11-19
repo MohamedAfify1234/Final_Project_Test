@@ -23,22 +23,22 @@
                     <div class="card-body d-flex flex-column">
 
                         @* Rating Stars *@
-                        <div class="text-center mb-3">
+                        @* <div class="text-center mb-3">
                             @for (int i = 1; i <= 5; i++)
                             {
                                 <i class="bi @(i <= item.Rating ? "bi-star-fill text-warning" : "bi-star text-muted")"></i>
                             }
                             <span class="ms-2 text-muted small">@item.Rating/5</span>
-                        </div>
+                        </div> *@
 
                         @* Title & Status Badges *@
                         <h6 class="card-subtitle mb-2 text-muted">@item.Course?.Title</h6>
                         <p class="card-text">@Html.DisplayFor(modelItem => item.Comment)</p>
 
                         <div class="mb-3">
-                            <span class="badge @(item.IsApproved ? "bg-success" : "bg-warning text-dark") me-2">
+                            @* <span class="badge @(item.IsApproved ? "bg-success" : "bg-warning text-dark") me-2">
                                 @(item.IsApproved ? "Approved" : "Pending")
-                            </span>
+                            </span> *@
                             <span class="badge bg-info">
                                 @item.ReviewDate.ToString("dd MMM yyyy")
                             </span>
@@ -61,14 +61,14 @@
                         </div>
 
                         @* Actions (Pushed to the bottom) *@
-                        <div class="mt-auto pt-3 border-top">
-                            @* <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a> *@
-                            @if (User.IsInRole("Admin"))
+                        @* <div class="mt-auto pt-3 border-top">
+                             <a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm me-1">Details</a> 
+                             @if (User.IsInRole("Admin"))
                             { 
                             <a asp-action="Edit" asp-route-id="@item.Id" style="color:black" class="btn btn-secondary btn-sm me-1">Edit</a>
                             <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-outline-danger btn-sm">Delete</a>
-                            }
-                        </div>
+                            } 
+                        </div> *@
                     </div>
 
                   @*   <div class="card-footer text-muted small">
@@ -88,9 +88,21 @@
     }
 </div>
 <div class="text-center mt-4">
-    <a asp-controller="Course" asp-action="Details" asp-route-id="@courseId" class="btn btn-outline-secondary btn-lg shadow-sm">
-        <i class="bi bi-arrow-left me-2"></i> Return to Course Page
-    </a>
+    @if (User.IsInRole("Student"))
+    {
+        @* <a asp-controller="Course" asp-action="AllCaurseIsPublished" class="btn btn-outline-secondary btn-lg shadow-sm">
+            <i class="bi bi-arrow-left me-2"></i> Return to Courses
+        </a> *@
+        <a asp-action="Details" asp-controller="Course" asp-route-id="@courseId" class="btn btn-outline-secondary btn-lg shadow-sm">
+            <i class="bi bi-arrow-left me-2"></i> Return to Course
+        </a>
+    }
+    else{
+        @* <a asp-controller="Course" asp-action="ShowAll" asp-route-id="@courseId" class="btn btn-outline-secondary btn-lg shadow-sm"> *@
+        <a asp-controller="Course" asp-action="ShowAll"  class="btn btn-outline-secondary btn-lg shadow-sm">
+            <i class="bi bi-arrow-left me-2"></i> Return to Courses
+        </a>
+    }
 </div>
 @section Scripts {
     @* Add a reference to Bootstrap Icons if you're using them, or remove the <i> tags if not. *@

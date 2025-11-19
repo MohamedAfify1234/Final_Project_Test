@@ -7,9 +7,11 @@ using Core.Interfaces;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Services.Payment;
+using Infrastructure.Services.Subscriptions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Skillup_Academy.ViewModels.PaymentViewModels;
 using X.Paymob.CashIn;
 using X.Paymob.CashIn.Models.Callback;
@@ -70,7 +72,23 @@ namespace Skillup_Academy.Controllers.Subscriptions
 
 			if (checkoutVM.TypeMethod == PaymentMethod.Paymob.ToString())
 			{
-				var paymentUrl = await _paymentByPaymobCustom.StartPaymentAsync(checkoutVM.Price,user,checkoutVM.PlanId);
+
+				//var paymentUrl = await _paymentByPaymob.StartPaymentAsync(checkoutVM.Price,user);
+				var paymentUrl = await _paymentByPaymobCustom.StartPaymentAsync(checkoutVM.Price,user);
+
+				await _repoSubscriptionPlan.AddAsync(new SubscriptionPlan
+				{ 
+					StartDate = DateTime.Now,
+					EndDate = DateTime.Now,
+					PaidAmount =0,
+					MaxCourses = 0,
+					TransactionId = checkoutVM.PlanId.ToString(),
+					IsActive = true,
+					SubscriptionId = checkoutVM.PlanId,
+					UserId = user.Id
+				});
+
+				await _repoSubscriptionPlan.SaveChangesAsync();
 				return Redirect(paymentUrl);	
 			} 
 
@@ -94,38 +112,49 @@ namespace Skillup_Academy.Controllers.Subscriptions
 				bool valid = _broker.Validate(transaction, hmac);
 				if(!valid)
 					return BadRequest();
-  
-				if (transaction.Success)
+
+				var user = await _userManager.GetUserAsync(User);
+				if (user == null)
+					return RedirectToAction("Login", "Account");
+
+				var subscriptionPlan = await _repoSubscriptionPlan.Query()
+					.Where(i => i.UserId == user.Id).FirstOrDefaultAsync();
+
+				if (subscriptionPlan != null)
 				{
-					var subscription = await _repoSubscription.GetByIdAsync(subscriptionGuid);
-					if (subscription != null)
- 					{				
-						var user = await _userManager.GetUserAsync(User); 
-						await _repoSubscriptionPlan.AddAsync(new SubscriptionPlan
-						{
-							StartDate = DateTime.Now,
-							EndDate = DateTime.Now.AddDays(subscription.DurationDays),
-							PaidAmount = subscription.Price,
-							MaxCourses = subscription.MaxCourses,
-							TransactionId = transaction.Id.ToString(),
-							IsActive = true,
-							SubscriptionId = subscription.Id,
-							UserId = user.Id
-						});
- 						user.CanViewPaidCourses = true;
-						await _userManager.UpdateAsync(user);
+					if (transaction.Success)
+					{
+						var subscription = await _repoSubscription.GetByIdAsync(subscriptionGuid);
+						if (subscription != null)
+						{  
+							subscriptionPlan.StartDate = DateTime.Now;
+							subscriptionPlan.EndDate = DateTime.Now.AddDays(subscription.DurationDays);
+							subscriptionPlan.PaidAmount = subscription.Price;
+							subscriptionPlan.MaxCourses = subscription.MaxCourses;
+
+							_repoSubscriptionPlan.Update(subscriptionPlan);
+
+							user.CanViewPaidCourses = true;
+							await _userManager.UpdateAsync(user);
+							await _repoSubscriptionPlan.SaveChangesAsync();
+ 							 
+						} 
+						return RedirectToAction("Success"); 
+					}
+					else
+					{
+						_repoSubscriptionPlan.Delete(subscriptionPlan);
 						await _repoSubscriptionPlan.SaveChangesAsync();
-					} 
-					return RedirectToAction("Success"); 
-				}
-				else
-				{
-					return RedirectToAction("Failure",new {id= subscriptionGuid });
+
+						return RedirectToAction("Failure",new {id= subscriptionGuid });
+					}
 				}
 
- 			}
+				return RedirectToAction("Failure", new { id = subscriptionGuid });
+			}
 			return BadRequest();
 		}
+
 		[AllowAnonymous]
 		public IActionResult Success()
 		{

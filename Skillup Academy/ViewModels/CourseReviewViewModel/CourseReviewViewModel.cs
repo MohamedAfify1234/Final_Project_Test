@@ -8,10 +8,8 @@ namespace Skillup_Academy.ViewModels.CourseReviewViewModel
     public class CourseReviewViewModel
     {
         public Guid Id { get; set; }                       // المعرف الفريد للتقييم
-        [Required(ErrorMessage = "Required Feild")]
-        [Range(1, 5, ErrorMessage = "Enter valid Rating from 1 to 5")]
-
-        public int Rating { get; set; }                    // التقييم (1-5)
+       
+        public int? Rating { get; set; }                    // التقييم (1-5)
         [Required(ErrorMessage = "Required Feild")]
 
         public string Comment { get; set; }                // التعليق
@@ -34,9 +32,9 @@ namespace Skillup_Academy.ViewModels.CourseReviewViewModel
 
         // العلاقات	
         public Guid CourseId { get; set; }                 // الكورس
-        public SelectList? Courses { get; set; }                 // الكورس
+        //public SelectList? Courses { get; set; }                 // الكورس
 
-        public Guid UserId { get; set; }                 // المستخدم
-        public SelectList? Users { get; set; }                     // المستخدم
+        //public Guid? UserId { get; set; }                 // المستخدم
+        //public SelectList? Users { get; set; }                     // المستخدم
     }
 }

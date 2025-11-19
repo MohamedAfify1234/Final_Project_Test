@@ -1,4 +1,5 @@
-﻿@model CourseReviewViewModel
+﻿
+@model CourseReviewViewModel
 
 @{
     ViewData["Title"] = "Create Course Review";
@@ -30,13 +31,13 @@
         <form asp-controller="CourseReviews" asp-action="Create" method="post">
 
             <div asp-validation-summary="All" class="text-danger" role="alert"></div>
-
+            <input type="hidden" asp-for="CourseId" />
             <div class="card shadow mb-4">
                 <div class="card-header bg-primary text-white">
-                    <h5 class="mb-0">Basic Review Create</h5>
+                    <h5 class="mb-0">Basic Review Details</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
+                    @* <div class="row">
                         <div class="col-md-6">
                             <div class="form-group mb-3">
                                 <label asp-for="Rating" class="form-label"></label>
@@ -51,7 +52,7 @@
                                 <span asp-validation-for="ReviewDate" class="text-danger"></span>
                             </div>
                         </div>
-                    </div>
+                    </div> *@
 
                     <div class="form-group mb-3">
                         <label asp-for="Comment" class="form-label"></label>
@@ -84,48 +85,28 @@
                     </div>
                 </div>
             </div>
-
+            @* @if (User.IsInRole("Admin"))
+            {
             <div class="card shadow mb-4">
                 <div class="card-header bg-secondary text-white">
-                    <h5 class="mb-0">Relations & Status</h5>
+                    <h5 class="mb-0">Status</h5>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="CourseId" class="form-label"></label>
-                                <select asp-for="CourseId" class="form-control" asp-items="@Model.Courses">
-                                    <option value="">-- Select Course --</option>
-                                </select>
-                                <span asp-validation-for="CourseId" class="text-danger"></span>
+
+                        <div class="row">
+                            <div class="col-md-4 d-flex align-items-center">
+                                <div class="form-group form-check mb-3">
+                                    <input class="form-check-input" asp-for="IsApproved" />
+                                    <label class="form-check-label" asp-for="IsApproved">
+                                        @Html.DisplayNameFor(model => model.IsApproved)
+                                    </label>
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="UserId" class="form-label"></label>
-                                <select asp-for="UserId" class="form-control" asp-items="@Model.Users">
-                                    <option value="">-- Select User --</option>
-                                </select>
-                                <span asp-validation-for="UserId" class="text-danger"></span>
-                            </div>
-                        </div>
-                    </div>
-                    @if (User.IsInRole("Admin"))
-                    {
-                    <div class="row mt-3">
-                        <div class="col-md-4 d-flex align-items-center">
-                            <div class="form-group form-check mb-3">
-                                <input class="form-check-input" asp-for="IsApproved" />
-                                <label class="form-check-label" asp-for="IsApproved">
-                                    @Html.DisplayNameFor(model => model.IsApproved)
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                    }
+                
                 </div>
             </div>
-
+            } *@
             <div class="form-group pt-3 text-center">
                 <input type="submit" value="Create Review" class="btn btn-primary btn-lg px-5" />
             </div>
