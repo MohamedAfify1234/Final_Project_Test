@@ -39,13 +39,23 @@
 
             <div class="form-group mb-3">
                 <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
+                <div class="input-group">
+                    <input asp-for="Password" type="password" class="form-control" id="PasswordInput" />
+                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="PasswordInput">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
 
             <div class="form-group mb-3">
                 <label asp-for="ConfirmPassword" class="control-label"></label>
-                <input asp-for="ConfirmPassword" class="form-control" />
+                <div class="input-group">
+                    <input asp-for="ConfirmPassword" type="password" class="form-control" id="ConfirmPasswordInput" />
+                    <button type="button" class="btn btn-outline-secondary toggle-password" data-target="ConfirmPasswordInput">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                </div>
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
 
@@ -66,4 +76,21 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.querySelectorAll('.toggle-password').forEach(btn => {
+            btn.addEventListener('click', function () {
+                const targetId = this.getAttribute('data-target');
+                const input = document.getElementById(targetId);
+
+                if (input.type === "password") {
+                    input.type = "text";
+                    this.innerHTML = '<i class="fa fa-eye-slash"></i>'; 
+                } else {
+                    input.type = "password";
+                    this.innerHTML = '<i class="fa fa-eye"></i>'; 
+                }
+            });
+        });
+    </script>
 }
