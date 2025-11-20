@@ -249,7 +249,7 @@ namespace Educational_Platform.Controllers.Courses
 
             var subPlan = _repoSubSubscriptionPlan
                 .Query().Where(i=>i.UserId==user.Id).FirstOrDefault();
-              
+
 			if (subPlan != null) 
 			{
 				if (student.TotalEnrollments == subPlan.MaxCourses)
