@@ -30,11 +30,11 @@ namespace Skillup_Academy.Controllers.Users
             _signInManager = signInManager;
         }
         //DashBoard for student
-        public async Task<IActionResult> DashBoard()
-        {
-            var viewmodel = new StudentDashboardViewModel();
-            return View("DashBoard", viewmodel);
-        }
+        //public async Task<IActionResult> DashBoard()
+        //{
+        //    var viewmodel = new StudentDashboardViewModel();
+        //    return View("DashBoard", viewmodel);
+        //}
         //Profile 
         public async Task<IActionResult> Profile()
         {
@@ -235,9 +235,9 @@ namespace Skillup_Academy.Controllers.Users
             var student = await _userManager.FindByIdAsync(userId) as Student;
             if (student == null) return Unauthorized();
 
-            var courses = await _studentRepository.GetStudentCourses(student.Id);
+            var enrollments = await _studentRepository.GetStudentEnrollments(student.Id);
 
-            return View("MyCourse",courses);
+            return View("MyCourse",enrollments);
         }
 
 

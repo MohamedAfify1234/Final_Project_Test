@@ -1,5 +1,6 @@
 ﻿using Core.Interfaces.Users;
 using Core.Models.Courses;
+using Core.Models.Enrollments;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Infrastructure.Data;
@@ -59,11 +60,20 @@ namespace Infrastructure.Repositories.Users
             return await _context.Students.CountAsync();
         }
 
-        public async Task<List<Course>> GetStudentCourses(Guid studentId)
+        //public async Task<List<Course>> GetStudentCourses(Guid studentId)
+        //{
+        //    return await _context.Enrollments
+        //        .Where(e => e.StudentId == studentId)
+        //        .Select(e => e.Course)
+        //        .ToListAsync();
+        //}
+        public async Task<List<Enrollment>> GetStudentEnrollments(Guid studentId)
         {
             return await _context.Enrollments
+                .Include(e => e.Course)
+                    .ThenInclude(c => c.Teacher)
                 .Where(e => e.StudentId == studentId)
-                .Select(e => e.Course)
+                .OrderByDescending(e => e.EnrolledAt)
                 .ToListAsync();
         }
 

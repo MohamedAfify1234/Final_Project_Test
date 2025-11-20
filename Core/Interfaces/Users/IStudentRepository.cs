@@ -1,4 +1,5 @@
 ﻿using Core.Models.Courses;
+using Core.Models.Enrollments;
 using Core.Models.Subscriptions;
 using Core.Models.Users;
 using Microsoft.AspNetCore.Identity;
@@ -25,10 +26,11 @@ namespace Core.Interfaces.Users
 
         // Additional Methods Specific to Students can be added here
 
-        Task<List<Course>> GetStudentCourses(Guid studentId);
+        //Task<List<Course>> GetStudentCourses(Guid studentId);
 
         Task<SubscriptionPlan?> GetStudentActiveSubscriptionAsync(Guid studentId);
 
+        Task<List<Enrollment>> GetStudentEnrollments(Guid studentId);
 
     }
 }

@@ -2,7 +2,7 @@
 @using Core.Enums
 
 @{
-    ViewData["Title"] = "Edit Subscription";
+    ViewData["Title"] = "Create Subscription";
 }
 
 <div class="container py-5">
@@ -11,11 +11,11 @@
 
             <div class="card shadow-lg border-0 rounded-lg">
                 <div class="card-header bg-primary text-white">
-                    <h2 class="text-center font-weight-light my-4">Edit Subscription Plan</h2>
+                    <h2 class="text-center font-weight-light my-4">Create Subscription Plan</h2>
                 </div>
                 <div class="card-body p-5">
 
-                    <form asp-action="SaveEdit" method="post">
+                    <form asp-action="SaveCreate" method="post">
 
                         <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert">
                             Please check the required fields below.
