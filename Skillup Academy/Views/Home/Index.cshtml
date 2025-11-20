@@ -123,11 +123,12 @@
         flex-direction: column;
         height: 100%;
         text-decoration: none;
-        color: inherit;  
+        color: inherit;
     }
-        .course-meta .fa-star {
-            color: var(--warning-yellow);
-        }
+
+    .course-meta .fa-star {
+        color: var(--warning-yellow);
+    }
 </style>
 
 <section class="hero">
@@ -139,7 +140,7 @@
             <a asp-controller="Subscription" asp-action="ShowAllPlanInHome" class="hero-btn btn-primary" style="text-decoration: none;">
                 Subscribe Now
             </a>
-            
+
             <a asp-controller="Course" asp-action="AllCaurseIsPublished" class="hero-btn btn-secondary" style="text-decoration: none;">
                 Browse Courses
             </a>
@@ -156,40 +157,44 @@
     <div class="features-grid container">
         <div class="row text-center">
 
+            <!-- Feature 1 -->
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
                     <div class="feature-icon mb-3">
-                        <span style="font-size: 3rem;">📚</span>
+                        <img src="https://img.icons8.com/color/100/000000/books.png" alt="Thousands of Courses" style="width:80px;height:auto;margin:0 auto;">
                     </div>
                     <h3 class="fs-5 fw-bold text-dark">Thousands of Courses</h3>
                     <p class="text-secondary">Diverse courses in various fields suitable for all levels.</p>
                 </div>
             </div>
 
+            <!-- Feature 2 -->
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
                     <div class="feature-icon mb-3">
-                        <span style="font-size: 3rem;">👨‍🏫</span>
+                        <img src="https://img.icons8.com/color/100/teacher.png" alt="Professional Instructors" style="width:80px;height:auto;margin:0 auto;">
                     </div>
                     <h3 class="fs-5 fw-bold text-dark">Professional Instructors</h3>
                     <p class="text-secondary">Learn from the best instructors and experts in their fields.</p>
                 </div>
             </div>
 
+            <!-- Feature 3 -->
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
                     <div class="feature-icon mb-3">
-                        <span style="font-size: 3rem;">⏱️</span>
+                        <img src="https://img.icons8.com/color/100/time.png" alt="Fully Flexible" style="width:80px;height:auto;margin:0 auto;">
                     </div>
                     <h3 class="fs-5 fw-bold text-dark">Fully Flexible</h3>
                     <p class="text-secondary">Study anytime, anywhere, at your own pace.</p>
                 </div>
             </div>
 
+            <!-- Feature 4 -->
             <div class="col-lg-3 col-md-6 mb-4">
                 <div class="feature-card h-100 p-4 shadow-sm border border-primary rounded-3">
                     <div class="feature-icon mb-3">
-                        <span style="font-size: 3rem;">📜</span>
+                        <img src="https://img.icons8.com/color/100/diploma.png" alt="Accredited Certificates" style="width:80px;height:auto;margin:0 auto;">
                     </div>
                     <h3 class="fs-5 fw-bold text-dark">Accredited Certificates</h3>
                     <p class="text-secondary">Get recognized and accredited certificates upon course completion.</p>
@@ -201,7 +206,7 @@
 </section>
 
 <section class="categories py-5 bg-light">
-    <div class="container"> 
+    <div class="container">
         <div class="section-title">
             <h2>Categories</h2>
             <p>Explore a wide range of educational fields</p>
@@ -210,29 +215,29 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
             gap: 15px;
-        "> 
-        @foreach (var item in Model.ListCategory)
-        {
+        ">
+            @foreach (var item in Model.ListCategory)
+            {
                 <a asp-controller="CourseCategories" asp-action="GetByIdWithSubCategory" asp-route-Id="@item.Id" class="category-card shadow-sm text-decoration-none text-center p-0 rounded-3 overflow-hidden"
                    style="display: block; background-color: #ffffff; transition: transform 0.3s ease, box-shadow 0.3s ease;">
 
                     <div class="category-image-wrapper" style="
-                        height: 120px;
-                        overflow: hidden;
-                        border-bottom: 3px solid #007bff;
-                      ">
+                            height: 120px;
+                            overflow: hidden;
+                            border-bottom: 3px solid #007bff;
+                          ">
                         <img src="/img/@item.Image" alt="@item.Name"
                              style="
-                                width: 100%;
-                                height: 100%;
-                                object-fit: cover;  
-                                transition: transform 0.5s ease;
-                         " />
+                                    width: 100%;
+                                    height: 100%;
+                                    object-fit: cover;
+                                    transition: transform 0.5s ease;
+                             " />
                     </div>
 
                     <p class="category-name fw-semibold py-3 m-0 text-dark">@item.Name</p>
                 </a>
-    } 
+            }
         </div>
     </div>
 </section>
@@ -340,4 +345,3 @@
 </section>
 
 
-   

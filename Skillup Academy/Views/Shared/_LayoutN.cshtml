@@ -50,8 +50,9 @@
 
     </style>
 </head>
-<body><header>
-    <nav class="navbar">
+<body>
+    <header>
+        <nav class="navbar">
             <div class="logo" style="display: flex; align-items: center;">
                 <a asp-controller="Home" asp-action="Index" style="display: flex; align-items: center; text-decoration: none;">
 
@@ -64,202 +65,260 @@
                 </a>
 
             </div>
-        <div class="menu-toggle" id="menuToggle">
-            <span></span>
-            <span></span>
-            <span></span>
-        </div>
+            <div class="menu-toggle" id="menuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
 
-         <ul class="nav-links" id="navLinks"> 
-            <li class="me-4"><a asp-action="AllCourseInHeader" asp-controller="Course">Courses</a></li>
-            <li class="me-4"><a asp-action="GetAllInstructors" asp-controller="Account">Instructors</a></li>
-            <li class="mobile-auth">
- 
             <ul class="nav-links" id="navLinks">
-                <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                <li class="me-4"><a asp-action="ShowAll" asp-controller="Course">Courses</a></li>
-                <li class="me-4"><a asp-action="Dashboard" asp-controller="Teacher">Instructors</a></li>
-                <li class="me-4"><a asp-action="Index" asp-controller="CourseCategories">Categories</a></li>
-                <li class="me-4"><a href="#">About</a></li>
-
+                <li class="me-4"><a asp-action="AllCourseInHeader" asp-controller="Course">Courses</a></li>
+                <li class="me-4"><a asp-action="GetAllInstructors" asp-controller="Account">Instructors</a></li>
                 <li class="mobile-auth">
-                            @if (!User.Identity.IsAuthenticated)
-                            {
-                                <a class="btn btn-login" asp-action="Login" asp-controller="Account">Login</a>
-                                <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account">Register</a>
-                            }   
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
+                        {
+                            <div class="dropdown me-3">
+                                <button class="btn fw-semibold dropdown-toggle"
+                                        type="button" data-bs-toggle="dropdown"
+                                        style="
+                                                    text-decoration: none;
+                                                    border-radius:6px;
+                                                    padding: 8px 15px;
+                                                    border: 1px solid #007bff;
+                                                    background: linear-gradient(45deg, #007bff, #4da3ff);
+                                                    color: white;
+                                                    font-weight: 500;
+                                                    font-size: 0.95rem;
+                                                    display: flex;
+                                                    align-items: center;
+                                                    gap: 6px;
+                                                    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+                                                    transition: 0.25s ease-in-out;
+                                                "
+                                        onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)'"
+                                        onmouseout="this.style.boxShadow='0 3px 8px rgba(0,0,0,0.15)'">
+                                    <i class="fas fa-cog"></i> Settings
+                                </button>
+                                <ul class="dropdown-menu shadow-sm" style="border-radius: 10px; min-width: 180px;">
+                                    <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Student" asp-action="Profile">
+                                        <i class="fas fa-user-circle" style="color:#0d6efd;"></i> Profile
+                                    </a>
+
+                                    <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                                        <i class="fas fa-home" style="color:#28a745;"></i> Home
+                                    </a>
+
+                                    <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Course" asp-action="AllCaurseIsPublished">
+                                        <i class="fas fa-graduation-cap" style="color:#ff9800;"></i> All Courses
+                                    </a>
+
+                                    <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Student" asp-action="MyCourse">
+                                        <i class="fas fa-book" style="color:#6f42c1;"></i> My Courses
+                                    </a>
+
+                                    <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Student" asp-action="MySubscription">
+                                        <i class="fas fa-credit-card" style="color:#dc3545;"></i> My Subscription
+                                    </a>
+                                </ul>
+
+                            </div>
+                        }
+                        else
+                        {
+                            <a class="btn btn-profile" href="#" style="
+                                                display: flex;
+                                                align-items: center;
+                                                padding: 8px 15px;
+                                                border-radius: 6px;
+                                                font-size: 0.95rem;
+                                                margin-inline-end: 10px;
+                                                text-decoration: none;
+                                                /* تصميم زر بحدود لملف شخصي */
+                                                background-color: #f0f8ff;
+                                                color: #007bff;
+                                                border: 1px solid #007bff;
+                                                font-weight: 500;">
+                                <i class="fas fa-user-circle"></i> Profile
+                            </a>
+                        }
+                        <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="
+                             background-color: #dc3545;
+                            color: white;
+                            padding: 8px 15px;
+                            border-radius: 6px;
+                            font-size: 0.95rem;
+                            text-decoration: none;
+                            border: 1px solid #dc3545;
+                            font-weight: 500;
+                        ">
+                            Logout
+                        </a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-login" asp-action="Login" asp-controller="Account" style="
+                             padding: 8px 15px;
+                            border-radius: 6px;
+                            font-size: 0.95rem;
+                            margin-inline-end: 10px;
+                            text-decoration: none;
+                            background-color: #007bff;
+                            color: white;
+                            border: 1px solid #007bff;
+                            font-weight: 600;
+                        ">Login</a>
+                        <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
+                             padding: 8px 15px;
+                            border-radius: 6px;
+                            font-size: 0.95rem;
+                            text-decoration: none;
+                            background-color: transparent;
+                            color: #007bff;
+                            border: 1px solid #007bff;
+                            font-weight: 600;
+                        ">Register</a>
+                    }
                 </li>
             </ul>
 
+            <form asp-action="SearchResults" asp-controller="Home" method="get" style="flex-grow: 1; max-width: 450px;">
+                <div class="search-bar d-flex justify-content-center ">
+                    <input type="text" name="query"
+                           class="form-control shadow-sm"
+                           placeholder="Search for a course, topic, or instructor..."
+                           style="max-width: 350px; border-top-left-radius: 30px; border-bottom-left-radius: 30px; padding: 8px 15px; border: 1px solid #ced4da; font-size: 0.9rem;">
+                    <button type="submit" class="btn btn-primary fw-semibold"
+                            style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; padding: 8px 20px; font-size: 0.9rem;">
+                        <i class="fas fa-search me-1"></i> Search
+                    </button>
+                </div>
+            </form>
+
             <div class="auth-buttons">
-            @*      @if (User.Identity.IsAuthenticated)
+                @if (User.Identity.IsAuthenticated)
                 {
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
+                    {
+
+                        <div class="dropdown me-3">
+                            <button class="btn fw-semibold dropdown-toggle"
+                                    type="button" data-bs-toggle="dropdown"
+                                    style="
+                                                    text-decoration: none;
+                                                    border-radius:6px;
+                                                    padding: 8px 15px;
+                                                    border: 1px solid #007bff;
+                                                    background: linear-gradient(45deg, #007bff, #4da3ff);
+                                                    color: white;
+                                                    font-weight: 500;
+                                                    font-size: 0.95rem;
+                                                    display: flex;
+                                                    align-items: center;
+                                                    gap: 6px;
+                                                    box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+                                                    transition: 0.25s ease-in-out;
+                                                "
+                                    onmouseover="this.style.boxShadow='0 4px 12px rgba(0,0,0,0.25)'"
+                                    onmouseout="this.style.boxShadow='0 3px 8px rgba(0,0,0,0.15)'">
+                                <i class="fas fa-cog"></i> Settings
+                            </button>
+
+                            <ul class="dropdown-menu shadow-sm" style="border-radius: 10px; min-width: 180px;">
+                                <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Student" asp-action="Profile">
+                                    <i class="fas fa-user-circle" style="color:#0d6efd;"></i> Profile
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Home" asp-action="Index">
+                                    <i class="fas fa-home" style="color:#28a745;"></i> Home
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Course" asp-action="AllCaurseIsPublished">
+                                    <i class="fas fa-graduation-cap" style="color:#ff9800;"></i> All Courses
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Student" asp-action="MyCourse">
+                                    <i class="fas fa-book" style="color:#6f42c1;"></i> My Courses
+                                </a>
+
+                                <a class="dropdown-item d-flex align-items-center gap-2" asp-controller="Student" asp-action="MySubscription">
+                                    <i class="fas fa-credit-card" style="color:#dc3545;"></i> My Subscription
+                                </a>
+                            </ul>
+
+                        </div>
+                    }
+                    else
+                    {
                         <a class="btn btn-profile" href="#" style="
-                display: flex;
-                align-items: center;
-                padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                margin-inline-end: 10px;
-                text-decoration: none;
-                /* تصميم زر بحدود لملف شخصي */
-                background-color: #f0f8ff;
-                color: #007bff;
-                border: 1px solid #007bff;
-                font-weight: 500;
-            ">
-                        <i class="fas fa-user-circle"></i> Profile
-                    </a>
-                        <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="
-                /* تصميم زر الإجراء الهام (Logout) */
-                background-color: #dc3545;
-                color: white;
-                padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                text-decoration: none;
-                border: 1px solid #dc3545;
-                font-weight: 500;
-            ">
+                                            display: flex;
+                                            align-items: center;
+                                            padding: 8px 15px;
+                                            border-radius: 6px;
+                                            font-size: 0.95rem;
+                                            margin-inline-end: 10px;
+                                            text-decoration: none;
+                                            /* تصميم زر بحدود لملف شخصي */
+                                            background-color: #f0f8ff;
+                                            color: #007bff;
+                                            border: 1px solid #007bff;
+                                            font-weight: 500; ">
+                            <i class="fas fa-user-circle"></i> Profile
+                        </a>
+                    }
+                    <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="
+                            /* تصميم زر الإجراء الهام (Logout) */
+                            background-color: #dc3545;
+                            color: white;
+                            padding: 8px 15px;
+                            border-radius: 6px;
+                            font-size: 0.95rem;
+                            text-decoration: none;
+                            border: 1px solid #dc3545;
+                            font-weight: 500;
+                        ">
                         Logout
                     </a>
-                } *@
-                        @if (!User.Identity.IsAuthenticated)
-                {
-                        <a class="btn btn-login" asp-action="Login" asp-controller="Account" style="
-                /* تصميم الزر الأساسي (Login) */
-                padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                margin-inline-end: 10px;
-                text-decoration: none;
-                background-color: #007bff;
-                color: white;
-                border: 1px solid #007bff;
-                font-weight: 600;
-            ">Login</a>
-                        <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
-                 padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                text-decoration: none;
-                background-color: transparent;
-                color: #007bff;
-                border: 1px solid #007bff;
-                font-weight: 600;
-            ">Register</a>
                 }
-            </li>
-        </ul>
-      
-        
-        <form asp-action="SearchResults" asp-controller="Home" method="get" style="flex-grow: 1; max-width: 450px;">
-            <div class="search-bar d-flex justify-content-center ">
-                <input type="text" name="query"
-                       class="form-control shadow-sm"
-                       placeholder="Search for a course, topic, or instructor..."
-                       style="max-width: 350px; border-top-left-radius: 30px; border-bottom-left-radius: 30px; padding: 8px 15px; border: 1px solid #ced4da; font-size: 0.9rem;">
-                <button type="submit" class="btn btn-primary fw-semibold"
-                        style="border-top-right-radius: 30px; border-bottom-right-radius: 30px; padding: 8px 20px; font-size: 0.9rem;">
-                    <i class="fas fa-search me-1"></i> Search
-                </button>
-            </div>
-        </form>
-        
-        <div class="auth-buttons">
-            @* @if (User.Identity.IsAuthenticated)
-            {
-                    <a class="btn btn-profile" href="#" style="
-                display: flex;
-                align-items: center;
-                padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                margin-inline-end: 10px;
-                text-decoration: none;
-                /* تصميم زر بحدود لملف شخصي */
-                background-color: #f0f8ff;
-                color: #007bff;
-                border: 1px solid #007bff;
-                font-weight: 500;
-            ">
-                        <i class="fas fa-user-circle"></i> Profile
-                    </a>
-                    <a asp-action="Logout" asp-controller="Account" type="submit" class="btn btn-logout" style="
-                /* تصميم زر الإجراء الهام (Logout) */
-                background-color: #dc3545;
-                color: white;
-                padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                text-decoration: none;
-                border: 1px solid #dc3545;
-                font-weight: 500;
-            ">
-                     Logout
-                </a>
-             } *@
-                @if (!User.Identity.IsAuthenticated)
-            {
+                else
+                {
                     <a class="btn btn-login" asp-action="Login" asp-controller="Account" style="
-                /* تصميم الزر الأساسي (Login) */
-                padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                margin-inline-end: 10px;
-                text-decoration: none;
-                background-color: #007bff;
-                color: white;
-                border: 1px solid #007bff;
-                font-weight: 600;
-            ">Login</a>
+                            /* تصميم الزر الأساسي (Login) */
+                            padding: 8px 15px;
+                            border-radius: 6px;
+                            font-size: 0.95rem;
+                            margin-inline-end: 10px;
+                            text-decoration: none;
+                            background-color: #007bff;
+                            color: white;
+                            border: 1px solid #007bff;
+                            font-weight: 600;
+                        ">Login</a>
                     <a class="btn btn-register" asp-action="StudentRegister" asp-controller="Account" style="
-                 padding: 8px 15px;
-                border-radius: 6px;
-                font-size: 0.95rem;
-                text-decoration: none;
-                background-color: transparent;
-                color: #007bff;
-                border: 1px solid #007bff;
-                font-weight: 600;
-            ">Register</a>
-            }
+                            /* تصميم زر التسجيل بحدود (Outline) */
+                            padding: 8px 15px;
+                            border-radius: 6px;
+                            font-size: 0.95rem;
+                            text-decoration: none;
+                            background-color: transparent;
+                            color: #007bff;
+                            border: 1px solid #007bff;
+                            font-weight: 600;
+                        ">Register</a>
+                }
+            </div>
+        </nav>
+    </header>
+
+    <main role="main" class="pb-3 my-1 mx-2">
+        <div style="background-color:aliceblue ">
+            @RenderBody()
         </div>
 
-            @if (User.Identity.IsAuthenticated && User.IsInRole("Student"))
-            {
-                <div class="dropdown me-3">
-                    <button class="btn btn-primary fw-semibold dropdown-toggle"
-                            type="button" data-bs-toggle="dropdown" style="border-radius: 8px;">
-                        Settings
-                    </button>
+    </main>
 
-                    <ul class="dropdown-menu shadow-sm" style="border-radius: 10px; min-width: 180px;">
-                        <a class="dropdown-item" asp-controller="Student" asp-action="Profile">👤 Profile</a>
-                        <a class="dropdown-item" asp-controller="Home" asp-action="Index">🏠 Home</a>
-                        <a class="dropdown-item" asp-controller="Course" asp-action="AllCaurseIsPublished">🎓 All Courses</a>
-                        <a class="dropdown-item" asp-controller="Student" asp-action="MyCourse">📚 My Courses</a>
-                        <a class="dropdown-item" asp-controller="Student" asp-action="MySubscription">💳 My Subscription</a>
-
-                        <div class="dropdown-divider"></div>
-
-                        <a class="dropdown-item text-danger" asp-controller="Account" asp-action="Logout">🚪 Logout</a>
-                    </ul>
-
-                    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-                    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-                </div>
-            }
-
-    </nav>
-</header>
- 		<main role="main" class="pb-3 my-1 mx-2">
-			<div style="background-color:aliceblue ">
-				@RenderBody()
-			</div>
-        
-		</main>
-          
     <footer>
         <div class="footer-content">
             <div class="footer-column">
@@ -307,19 +366,24 @@
     </footer>
 
 
-    <script>  
+    <script>
+
         // Activate mobile menu toggle
-        document.getElementById('menuToggle').addEventListener('click', function() {
-            document.getElementById('navLinks').classList.toggle('active');
-        });
+        var menuToggleBtn = document.getElementById('menuToggle');
+        if (menuToggleBtn) {
+            menuToggleBtn.addEventListener('click', function() {
+                var nav = document.getElementById('navLinks');
+                if (nav) nav.classList.toggle('active');
+            });
+        }
 
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
-            renderCourses();
+            if (typeof renderCourses === 'function') {
+                renderCourses();
+            }
         });
     </script>
-  
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
