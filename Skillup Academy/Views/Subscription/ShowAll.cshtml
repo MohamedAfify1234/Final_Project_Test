@@ -1,7 +1,8 @@
 ﻿@model IEnumerable<Subscription>
 
 @{
-    ViewData["Title"] = "Subscriptions Management";
+    // ViewData["Title"] = "Subscriptions Management";
+    ViewData["Title"] = "Subscription plans Management";
 }
 
 <style>
@@ -105,13 +106,18 @@
 
 <div class="container catalog-container">
     <div class="d-flex align-items-center justify-content-between mb-5">
-        <div>
+        @* <div>
             <h1 class="page-title mb-1">Subscriptions Catalog</h1>
+            <p class="text-muted">Manage and maintain all available subscription plans.</p>
+        </div> *@
+        <div>
+            <h1 class="page-title mb-1">Subscription plans Catalog</h1>
             <p class="text-muted">Manage and maintain all available subscription plans.</p>
         </div>
         <div>
             <a asp-action="Create" asp-controller="Subscription" class="btn btn-create-new btn-lg text-white shadow">
-                <i class="fas fa-plus-circle me-2"></i> Create New Subscription
+                @* <i class="fas fa-plus-circle me-2"></i> Create New Subscription *@
+                <i class="fas fa-plus-circle me-2"></i> Create New Subscription plan
             </a>
         </div>
     </div>

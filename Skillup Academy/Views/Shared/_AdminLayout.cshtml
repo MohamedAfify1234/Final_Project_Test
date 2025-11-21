@@ -132,7 +132,7 @@
                     <span>SubscriptionPlans </span> 
                 </a>
             </li>  *@
-             <li class="nav-item">
+            @*  <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinance"
                    aria-expanded="true" aria-controls="collapseFinance">
                     <i class="fas fa-fw fa-hand-holding-usd"></i>
@@ -148,6 +148,26 @@
                         </a>
                         <a class="collapse-item" asp-controller="SubscriptionPlan" asp-action="ShowAll">
                             Subscription Plans
+                        </a> 
+                    </div>
+                </div>
+            </li>  *@
+             <li class="nav-item">
+                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinance"
+                   aria-expanded="true" aria-controls="collapseFinance">
+                    <i class="fas fa-fw fa-hand-holding-usd"></i>
+                    <span>Billing</span>
+                </a>
+
+                <div id="collapseFinance" class="collapse" aria-labelledby="headingFinance" data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <h6 class="collapse-header">Financial:</h6>
+
+                        <a class="collapse-item" asp-controller="Subscription" asp-action="ShowAll">
+                            Subscription plans
+                        </a>
+                        <a class="collapse-item" asp-controller="SubscriptionPlan" asp-action="ShowAll">
+                            Subscriptions
                         </a> 
                     </div>
                 </div>

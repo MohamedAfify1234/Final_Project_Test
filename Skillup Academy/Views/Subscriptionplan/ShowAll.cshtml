@@ -1,16 +1,19 @@
 ﻿@model IEnumerable<SubscriptionPlan>
 
 @{
-    ViewData["Title"] = "Subscription Plans Management";
+    // ViewData["Title"] = "Subscription Plans Management";
+    ViewData["Title"] = "Subscriptions Management";
 }
 
-<h1 class="mb-4">Subscription Plans Catalog</h1>
+@* <h1 class="mb-4">Subscription Plans Catalog</h1> *@
+<h1 class="mb-4">Subscriptions Catalog</h1>
 <hr />
-
+@if(!User.IsInRole("Admin"))
+{
 <p>
     <a asp-action="Create" class="btn btn-primary btn-lg mb-4 shadow-sm">Create New Plan</a>
 </p>
-
+}
 <div class="row">
     @if (Model.Any())
     {
@@ -123,6 +126,8 @@
                         </div>
 
                         <!-- Actions -->
+                        @if (!User.IsInRole("Admin"))
+                        {
                         <div class="mt-auto pt-3 border-top">
                             <a asp-action="Details"
                                asp-route-id="@item.Id"
@@ -136,8 +141,9 @@
                             <a asp-action="Delete"
                                asp-route-id="@item.Id"
                                class="btn btn-outline-danger btn-sm">Delete</a>
+                           
                         </div>
-
+                        }
                     </div>
 
                     <!-- Footer -->
