@@ -297,7 +297,8 @@
 
     }
 </style>
-
+<div class="container my-3">
+     
 <div class="page-header">
     <h2>
         <svg width="32" height="32" viewBox="0 0 20 20" fill="currentColor">
@@ -354,7 +355,7 @@ else
                 <div class="course-card">
                     @if (!string.IsNullOrEmpty(course.ThumbnailUrl))
                     {
-                        <img src="@course.ThumbnailUrl" alt="@course.Title" class="course-thumbnail" />
+                        <img src="/img/@course.ThumbnailUrl" alt="@course.Title" class="course-thumbnail" />
                     }
                     else
                     {
@@ -452,3 +453,5 @@ else
         }
     </div>
 }
+
+</div>
