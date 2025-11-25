@@ -92,7 +92,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("TeacherId");
 
-                    b.ToTable("Courses", (string)null);
+                    b.ToTable("Courses");
                 });
 
             modelBuilder.Entity("Core.Models.Courses.CourseCategory", b =>
@@ -118,7 +118,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("CourseCategories", (string)null);
+                    b.ToTable("CourseCategories");
                 });
 
             modelBuilder.Entity("Core.Models.Courses.SubCategory", b =>
@@ -145,7 +145,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("SubCategories", (string)null);
+                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Core.Models.Enrollments.Enrollment", b =>
@@ -181,7 +181,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("Enrollments", (string)null);
+                    b.ToTable("Enrollments");
                 });
 
             modelBuilder.Entity("Core.Models.Exams.Exam", b =>
@@ -229,7 +229,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Exams", (string)null);
+                    b.ToTable("Exams");
                 });
 
             modelBuilder.Entity("Core.Models.Exams.ExamAttempt", b =>
@@ -271,7 +271,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("StudentId");
 
-                    b.ToTable("ExamAttempts", (string)null);
+                    b.ToTable("ExamAttempts");
                 });
 
             modelBuilder.Entity("Core.Models.Learning.Answer", b =>
@@ -305,7 +305,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Answers", (string)null);
+                    b.ToTable("Answers");
                 });
 
             modelBuilder.Entity("Core.Models.Learning.Question", b =>
@@ -350,7 +350,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Question", (string)null);
+                    b.ToTable("Question");
                 });
 
             modelBuilder.Entity("Core.Models.Lessons.Lesson", b =>
@@ -399,7 +399,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("CourseId");
 
-                    b.ToTable("Lessons", (string)null);
+                    b.ToTable("Lessons");
                 });
 
             modelBuilder.Entity("Core.Models.Reviews.CourseReview", b =>
@@ -439,7 +439,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("CourseReviews", (string)null);
+                    b.ToTable("CourseReviews");
                 });
 
             modelBuilder.Entity("Core.Models.Subscriptions.Subscription", b =>
@@ -473,7 +473,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Subscriptions", (string)null);
+                    b.ToTable("Subscriptions");
                 });
 
             modelBuilder.Entity("Core.Models.Subscriptions.SubscriptionPlan", b =>
@@ -515,7 +515,7 @@ namespace Infrastructure.Data.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("SubscriptionPlans", (string)null);
+                    b.ToTable("SubscriptionPlans");
                 });
 
             modelBuilder.Entity("Core.Models.Users.Role", b =>
@@ -564,8 +564,8 @@ namespace Infrastructure.Data.Migrations
 
                     b.Property<string>("Discriminator")
                         .IsRequired()
-                        .HasMaxLength(8)
-                        .HasColumnType("nvarchar(8)");
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -757,7 +757,7 @@ namespace Infrastructure.Data.Migrations
                     b.HasDiscriminator().HasValue("Admin");
                 });
 
-            modelBuilder.Entity("Core.Models.Users.Student", b =>
+            modelBuilder.Entity("Core.Models.Users.Instructor", b =>
                 {
                     b.HasBaseType("Core.Models.Users.User");
 
@@ -804,7 +804,23 @@ namespace Infrastructure.Data.Migrations
                     b.Property<int>("TotalStudents")
                         .HasColumnType("int");
 
-                    b.HasDiscriminator().HasValue("Teacher");
+                    b.HasDiscriminator().HasValue("Instructor");
+                });
+
+            modelBuilder.Entity("Core.Models.Users.Student", b =>
+                {
+                    b.HasBaseType("Core.Models.Users.User");
+
+                    b.Property<int>("CompletedCourses")
+                        .HasColumnType("int");
+
+                    b.Property<int>("StudentStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalEnrollments")
+                        .HasColumnType("int");
+
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("Core.Models.Courses.Course", b =>
@@ -819,7 +835,7 @@ namespace Infrastructure.Data.Migrations
                         .HasForeignKey("SubCategoryId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("Core.Models.Users.Teacher", "Teacher")
+                    b.HasOne("Core.Models.Users.Instructor", "Teacher")
                         .WithMany("Courses")
                         .HasForeignKey("TeacherId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -1099,16 +1115,16 @@ namespace Infrastructure.Data.Migrations
                     b.Navigation("Subscribes");
                 });
 
+            modelBuilder.Entity("Core.Models.Users.Instructor", b =>
+                {
+                    b.Navigation("Courses");
+                });
+
             modelBuilder.Entity("Core.Models.Users.Student", b =>
                 {
                     b.Navigation("Enrollments");
 
                     b.Navigation("ExamAttempt");
-                });
-
-            modelBuilder.Entity("Core.Models.Users.Teacher", b =>
-                {
-                    b.Navigation("Courses");
                 });
 #pragma warning restore 612, 618
         }

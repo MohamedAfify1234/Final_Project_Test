@@ -14,7 +14,8 @@ namespace Core.Models.Users
         public string Bio { get; set; }                    // السيرة الذاتية
 		public string Qualifications { get; set; }         // المؤهلات العلمية
 		public string Expertise { get; set; }              // التخصص
-		public bool IsApproved { get; set; } = false;      // موافقة الأدمن
+		//public int Experience { get; set; }              // الخبرة
+        public bool IsApproved { get; set; } = false;      // موافقة الأدمن
 		public DateTime? ApprovalDate { get; set; }        // تاريخ الموافقة
 
 		// الإحصائيات

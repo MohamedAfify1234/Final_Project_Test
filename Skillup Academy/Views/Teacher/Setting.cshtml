@@ -22,7 +22,7 @@
                 </div>
             }
 
-            <form asp-action="Settings" method="post" enctype="multipart/form-data">
+            <form asp-action="Setting" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger mb-4 alert alert-danger" role="alert"></div>
 
                 <div class="card shadow-lg border-0 rounded-4">
@@ -92,6 +92,12 @@
                                                 <strong>Recommended:</strong> 400×400px
                                             </small>
                                         </div>
+                                        <!-- Hidden input عشان الصورة القديمة -->
+                                        <input type="hidden" asp-for="ProfilePicture" />
+
+                                        <!-- File input عشان الصورة الجديدة -->
+                                        <input type="file" id="ProfilePictureFile" name="ProfilePictureFile"
+                                               class="d-none" accept="image/*" onchange="previewProfilePicture(this)" />
                                     </div>
                                 </div>
                             </div>

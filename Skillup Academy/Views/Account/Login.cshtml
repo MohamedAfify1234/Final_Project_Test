@@ -10,6 +10,8 @@
     <title>Login - Bedaya</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    @* <script src="https://apis.google.com/js/platform.js" async defer></script> *@
+    
     <style>
         :root {
             --primary-color: #3498db;
@@ -521,6 +523,7 @@
             }
         }
     </style>
+    
 </head>
 <body>
     <div class="login-container">
@@ -573,10 +576,39 @@
                 <span>Or continue with</span>
             </div>
 
-            <button class="google-login" id="googleLogin">
-                <i class="fab fa-google google-icon"></i>
-                Continue with Google
-            </button>
+            
+            <!-- 1. Google Identity Services Library -->
+            <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+            <!-- 2. Onload config -->
+            <div id="g_id_onload"
+                 data-client_id="456017434644-a0utmvjnak5vqvbqcr5vlco8n7gb93n0.apps.googleusercontent.com"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-login_uri="http://localhost:5226/Account/GoogleResponse"
+                 data-auto_prompt="false">
+            </div>
+
+            <!-- 3. Google Sign-in Button -->
+            <div class="g_id_signin"
+                 data-type="standard"
+                 data-shape="pill"
+                 data-theme="filled_blue"
+                 data-text="signin_with"
+                 data-size="large"
+                 data-logo_alignment="left">
+            </div>
+
+            <!-- 4. Optional styling -->
+            <style>
+                .g_id_signin {
+                    margin-top: 20px;
+                    display: flex;
+                    justify-content: center;
+                }
+            </style>
+
+            
 
             <!-- Registration Options - Below Google Login -->
             <div class="registration-divider">
@@ -614,6 +646,7 @@
     </div>
 
     <script>
+        
         document.addEventListener('DOMContentLoaded', function() {
             // Password toggle functionality
             const passwordToggle = document.getElementById('passwordToggle');
@@ -626,19 +659,19 @@
             });
 
             // Google Login functionality
-            const googleLoginBtn = document.getElementById('googleLogin');
+            // const googleLoginBtn = document.getElementById('googleLogin');
 
-            googleLoginBtn.addEventListener('click', function() {
-                // Simulate Google OAuth process
-                this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting to Google...';
-                this.disabled = true;
+            // googleLoginBtn.addEventListener('click', function() {
+            //     // Simulate Google OAuth process
+            //     this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting to Google...';
+            //     this.disabled = true;
 
-                // In a real application, this would redirect to Google OAuth
-                setTimeout(() => {
-                    this.innerHTML = '<i class="fab fa-google google-icon"></i> Continue with Google';
-                    this.disabled = false;
-                }, 2000);
-            });
+            //     // In a real application, this would redirect to Google OAuth
+            //     setTimeout(() => {
+            //         this.innerHTML = '<i class="fab fa-google google-icon"></i> Continue with Google';
+            //         this.disabled = false;
+            //     }, 2000);
+            // });
 
             // Form submission enhancement
             const loginForm = document.querySelector('.login-form');
@@ -673,5 +706,6 @@
             });
         });
     </script>
+    
 </body>
 </html>

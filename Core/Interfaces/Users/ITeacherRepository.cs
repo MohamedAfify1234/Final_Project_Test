@@ -19,14 +19,15 @@ namespace Core.Interfaces.Users
         Task<int> GetTotalStudentsAsync(Guid teacherId);
         Task<TeacherDashboardDTO> GetTeacherDashboardAsync(Guid teacherId);
         Task<TeacherInfoDTO> GetTeacherInfoAsync(Guid teacherId);
-        Task<IdentityResult> UpdateTeacherInfoAsync(Teacher teacher,Guid teacherId);
+        Task<IdentityResult> UpdateTeacherInfoAsync(TeacherInfoDTO teacher,Guid teacherId);
+
 
         // Mahmoud / For TeacherDashboard - Students
          Task<StudentDetailsDTO> GetStudentDetailsAsync(Guid teacherId,Guid studentId);
          Task<int> TotalStudentOfCourse(Guid CourseId, Guid teacherId);
          Task<StudentListDTO> GetStudentsAsync(Guid teacherId,int pageNumber,int pageSize,string? searchQuery,Guid? courseId, string? status);
          Task<int> GetActiveStudentsAsync(Guid teacherId);
-        Task<int> GetCompleteStudentsAsync(Guid teacherId);
+         Task<int> GetCompleteStudentsAsync(Guid teacherId);
 
 
 

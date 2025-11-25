@@ -9,9 +9,15 @@ namespace Core.DTOs.TeacherDashboardDTOs
 {
     public class TeacherDashboardDTO
     {
-        public string InstructorName { get; set; }
+        public string TeacherName { get; set; }
+        public string TeacherBio { get; set; }
+        public string TeacherExpertise { get; set; }
+       // public string TeacherEmail { get; set; }
+        public string ProfilePictureUrl { get; set; }
+        public Decimal TeacherRating { get; set; }
+
         public int TotalCourses { get; set; }
         public int TotalStudents { get; set; }
-       public ICollection<CourseDashboardDTO> Courses { get; set; }
+        public List<CourseDashboardDTO> Courses { get; set; }
     }
 }

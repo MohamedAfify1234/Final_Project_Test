@@ -1,4 +1,5 @@
-﻿using Core.Interfaces.Users;
+﻿using Core.DTOs.TeacherDashboardDTOs.StudentsDTO;
+using Core.Interfaces.Users;
 using Core.Models.Courses;
 using Core.Models.Enrollments;
 using Core.Models.Subscriptions;
@@ -85,5 +86,48 @@ namespace Infrastructure.Repositories.Users
                 .FirstOrDefaultAsync();
         }
 
+
+
+        // Mahmoud / For TeacherDashboard - Students
+        public async Task<StudentDetailsDTO> GetStudentDetailsAsync(Guid teacherId, Guid studentId)
+        {
+            var student = await _context.Students
+            .FirstOrDefaultAsync(s => s.Id == studentId);
+
+            if (student == null)
+                return null;
+
+            var courses = await _context.Courses
+                .Where(c => c.TeacherId == teacherId)
+                .Select(c => new
+                {
+                    Course = c,
+                    Enrollment = c.Enrollments
+                        .Where(e => e.StudentId == studentId)
+                        .FirstOrDefault()
+                })
+                .Where(x => x.Enrollment != null)
+                .Select(x => new StudentCourseDTO
+                {
+                    CourseId = x.Course.Id,
+                    CourseTitle = x.Course.Title,
+                    CourseDescription = x.Course.Description,
+                    CourseImage = x.Course.ThumbnailUrl,
+                    EnrolledAt = x.Enrollment.EnrolledAt,
+                    Status = x.Enrollment.Status
+                })
+                .ToListAsync();
+
+            return new StudentDetailsDTO
+            {
+                StudentId = student.Id,
+                FullName = student.FullName,
+                Email = student.Email,
+                PhoneNumber = student.PhoneNumber,
+                ProfilePicture = student.ProfilePicture,
+                CoursesCount = courses.Count,
+                Courses = courses
+            };
+        }
     }
 }
