@@ -21,9 +21,9 @@
     <hr />
     @if (User.IsInRole("Instructor"))
     {
-    <p>
-        <a asp-action="Create" asp-route-coursId="@lessonsModel.FirstOrDefault()?.CourseId" class="btn btn-primary btn-lg mb-4 shadow-sm">Create New Lesson</a>
-    </p>
+        <p>
+            <a asp-action="Create" asp-route-coursId="@lessonsModel.FirstOrDefault()?.CourseId" class="btn btn-primary btn-lg mb-4 shadow-sm">Create New Lesson</a>
+        </p>
     }
     <div class="row">
         @if (lessonsModel.Any())
@@ -166,6 +166,12 @@ else
             border-left: 1px solid #ddd;
         }
 
+        .completed-lesson {
+            border-left: 6px solid #28a745 !important;
+            background: #eaf9ea !important;
+            transition: 0.3s;
+        }
+
         .lesson-item {
             cursor: pointer;
             padding: 12px;
@@ -181,6 +187,28 @@ else
                 background: #4e73df;
                 color: #fff !important;
             }
+
+        /* ✅ Animation للأيقونة */
+        .completed-lesson .complete-icon {
+            animation: checkPop 0.4s ease;
+        }
+
+        @@keyframes checkPop {
+            0%
+
+        {
+            transform: scale(0);
+        }
+
+        50% {
+            transform: scale(1.2);
+        }
+
+        100% {
+            transform: scale(1);
+        }
+
+        }
     </style>
 
     <div class="container-fluid mt-4">
@@ -244,9 +272,9 @@ else
                 <div class="mt-4 text-start">
                     <a asp-action="Details"
                        asp-controller="Course"
-					   asp-route-id="@ViewBag.courseId"
+                       asp-route-id="@ViewBag.courseId"
                        class="btn btn-outline-secondary btn-lg px-4">
-                       <i class="fas fa-arrow-left me-2"></i> Back to Courses
+                        <i class="fas fa-arrow-left me-2"></i> Back to Courses
                     </a>
                 </div>
 
@@ -264,16 +292,23 @@ else
                         @foreach (var lesson in lessonsModel)
                         {
                             <li class="lesson-item @(lesson.Id == firstLesson?.Id ? "active" : "")"
+                                data-id="@lesson.Id"
                                 data-video="@(string.IsNullOrEmpty(lesson.VideoUrl) ? "" : baseMediaPath + lesson.VideoUrl)"
                                 data-title="@lesson.Title"
                                 data-description="@lesson.Description?.Replace("\n", "<br/>")"
                                 data-content="@lesson.Content?.Replace("\n", "<br/>")"
                                 data-attachment="@(string.IsNullOrEmpty(lesson.AttachmentUrl) ? "" : baseMediaPath + lesson.AttachmentUrl)">
 
-                                @* <div class="fw-bold">@lesson.OrderInCourse. @lesson.Title</div> *@
-                                <div class="fw-bold">@lesson.Order. @lesson.Title</div>
-                                <div class="small @(lesson.Id == firstLesson?.Id ? "text-light" : "text-muted")">
-                                    <i class="far fa-clock me-1"></i> @lesson.Duration min
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="fw-bold">@lesson.Order. @lesson.Title</div>
+                                        <div class="small @(lesson.Id == firstLesson?.Id ? "text-light" : "text-muted")">
+                                            <i class="far fa-clock me-1"></i> @lesson.Duration min
+                                        </div>
+                                    </div>
+
+                                    <!-- ✅ أيقونة Complete (مخفية بشكل افتراضي) -->
+                                    <i class="fas fa-check-circle text-success complete-icon" style="display:none; font-size:1.5rem;"></i>
                                 </div>
 
                             </li>
@@ -299,7 +334,7 @@ else
 
                     this.classList.add("active");
 
-                    // Read lesson data from HTML attributes
+                    // Read lesson data
                     let video = this.dataset.video;
                     let title = this.dataset.title;
                     let desc = this.dataset.description;
@@ -312,23 +347,33 @@ else
                     player.load();
                     player.play();
 
-                    // Update text areas
+                    // Update lesson text
                     document.getElementById("lesson-title").innerHTML = title;
                     document.getElementById("lesson-description").innerHTML = desc;
                     document.getElementById("lesson-content").innerHTML = content;
 
                     // Update attachment
                     const attDiv = document.getElementById("lesson-attachment");
-
                     if (attachment) {
                         attDiv.innerHTML =
                             `<a href="${attachment}" download class="btn btn-info">
                                 <i class="fas fa-download me-2"></i> Download Attachment
-                             </a>`;
+                            </a>`;
                     } else {
                         attDiv.innerHTML = "";
                     }
 
+                    // ✅ NEW: Mark lesson as completed when video ends
+                    player.onended = () => {
+                        // إضافة الـ class للتنسيق
+                        this.classList.add("completed-lesson");
+
+                        // ✅ إظهار أيقونة Complete
+                        const icon = this.querySelector(".complete-icon");
+                        if (icon) {
+                            icon.style.display = "block";
+                        }
+                    };
                 });
             });
 

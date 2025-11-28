@@ -310,18 +310,18 @@
             <span class="stat-number">@Model.Count()</span>
             <span class="stat-label">Total Courses</span>
         </div>
-        <div class="stat-card">
+        @* <div class="stat-card">
             <span class="stat-number">@Model.Count(e => e.Status == Core.Enums.StudentStatus.Active)</span>
             <span class="stat-label">Active</span>
-        </div>
-        <div class="stat-card">
+        </div> *@
+        @* <div class="stat-card">
             <span class="stat-number">@Model.Count(e => e.Status == Core.Enums.StudentStatus.Completed)</span>
             <span class="stat-label">Completed</span>
-        </div>
-        <div class="stat-card">
+        </div> *@
+        @* <div class="stat-card">
             <span class="stat-number">@(Model.Any() ? Math.Round(Model.Average(e => e.Progress)) : 0)%</span>
             <span class="stat-label">Avg Progress</span>
-        </div>
+        </div> *@
     </div>
 </div>
 
@@ -335,7 +335,7 @@
         </div>
         <h3 class="empty-title">No Courses Yet</h3>
         <p class="empty-description">You haven't enrolled in any courses yet. Start learning today!</p>
-        <a href="/Course/Index" class="btn-course btn-primary-course" style="max-width: 250px; margin: 0 auto;">
+        <a asp-controller="Course" asp-action="AllCaurseIsPublished" class="btn-course btn-primary-course" style="max-width: 250px; margin: 0 auto;">
             <svg width="20" height="20" viewBox="0 0 20 20" fill="currentColor">
                 <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-11a1 1 0 10-2 0v2H7a1 1 0 100 2h2v2a1 1 0 102 0v-2h2a1 1 0 100-2h-2V7z" clip-rule="evenodd" />
             </svg>
@@ -421,7 +421,7 @@ else
                             </div>
                         </div>
 
-                        <div class="progress-section">
+                      @*   <div class="progress-section">
                             <div class="progress-header">
                                 <span class="progress-label">Progress</span>
                                 <span class="progress-percentage">@enrollment.Progress%</span>
@@ -429,7 +429,7 @@ else
                             <div class="progress-bar-container">
                                 <div class="progress-bar-fill" style="width: @enrollment.Progress%"></div>
                             </div>
-                        </div>
+                        </div> *@
 
                         <div class="enrolled-date">
                             <svg width="14" height="14" viewBox="0 0 20 20" fill="currentColor">

@@ -42,7 +42,7 @@ namespace Skillup_Academy.Controllers.Users
             if (userId == null)
                 return Unauthorized();
 
-            // نجلب آخر نسخة من قاعدة البيانات
+            // Take user
             var user = await _userManager.FindByIdAsync(userId);
 
             var student = user as Student;
