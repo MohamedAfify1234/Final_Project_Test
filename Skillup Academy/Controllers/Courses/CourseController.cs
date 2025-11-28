@@ -109,6 +109,7 @@ namespace Educational_Platform.Controllers.Courses
                 {
                     allCourse = allCourse.Where(c => c.TeacherId == teacher.Id).ToList();
                 }
+
             }
             return View(allCourse);
         }
@@ -318,6 +319,16 @@ namespace Educational_Platform.Controllers.Courses
             _deleteImage.DeleteImg(course.ThumbnailUrl);
             _deleteImage.DeleteImg(course.PreviewVideoUrl); 
 			return RedirectToAction("ShowAll");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> CourseShearch(string searchString,Guid teacherId)
+        {
+           var courses = await _repository.Query()
+                .Where(c => c.TeacherId == teacherId &&
+                       (c.Title.Contains(searchString) || c.Description.Contains(searchString)))
+                .ToListAsync();
+            return View("ShowAll", courses);
         }
 
 

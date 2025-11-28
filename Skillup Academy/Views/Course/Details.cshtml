@@ -216,12 +216,11 @@
                         @if (User.IsInRole("Student"))
                         {
                          <div class="d-grid mb-3">
-                            @if (Model.IsFree)
-                            {
-                                    <a class="btn btn-primary start-btn mb-3" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
-                                    <i class="fas fa-play me-2"></i> Start Course
-                                </a>
-                            }
+                         
+                            <a class="btn btn-primary start-btn mb-3" asp-action="Index" asp-controller="Lessons" asp-route-id="@Model.Id" role="button">
+                                <i class="fas fa-play me-2"></i> Start Course
+                            </a>
+                             
                             @if (ViewBag.IsEnrolled as bool? == true)
                             {
           

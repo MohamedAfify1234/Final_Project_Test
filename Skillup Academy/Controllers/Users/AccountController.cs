@@ -1,13 +1,19 @@
 ﻿using Core.Enums;
 using Core.Interfaces;
 using Core.Models.Users;
+using Google.Apis.Auth;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
 using Skillup_Academy.ViewModels.UsersViewModels;
+using System.Security.Claims;
 
 namespace Skillup_Academy.Controllers.Users
 {
@@ -20,7 +26,7 @@ namespace Skillup_Academy.Controllers.Users
 		private readonly IRepository<Teacher> _repoTeacher;
 
 		public AccountController(UserManager<User> UserManager, SignInManager<User> signInManager
-			, FileService fileService, SaveImage saveImage , IRepository<Teacher> repoTeacher)
+			, FileService fileService, SaveImage saveImage, IRepository<Teacher> repoTeacher)
 		{
 			_userManager = UserManager;
 			_signInManager = signInManager;
@@ -53,15 +59,15 @@ namespace Skillup_Academy.Controllers.Users
 					if (found)
 					{
 						await _signInManager.SignInAsync(result, account.RememberMe);
-						result.LastLoginDate = DateTime.Now; 
+						result.LastLoginDate = DateTime.Now;
 						if (User.IsInRole("Admin"))
 						{
-							return RedirectToAction("DashBoard", "Admin");  
- 						}
+							return RedirectToAction("DashBoard", "Admin");
+						}
 						if (User.IsInRole("Instructor"))
 						{
 							return RedirectToAction("Dashboard", "Teacher");
-						}
+						} 
                         return RedirectToAction(nameof(Index), "Home");
 					}
 				}
@@ -93,18 +99,18 @@ namespace Skillup_Academy.Controllers.Users
 		{
 			if (ModelState.IsValid)
 			{
-				var file = _fileService.GetDefaultAvatar();	
-				 
+				var file = _fileService.GetDefaultAvatar();
+
 				var user = new Teacher
-				{ 
+				{
 					Email = AccountUser.Email,
-					UserName = AccountUser.FirstName, 
+					UserName = AccountUser.FirstName,
 					RegistrationDate = DateTime.Now,
-					Bio=AccountUser.Bio,
-					Expertise=AccountUser.Expertise,
-					Qualifications=AccountUser.Qualifications??"Non", 
+					Bio = AccountUser.Bio,
+					Expertise = AccountUser.Expertise,
+					Qualifications = AccountUser.Qualifications ?? "Non",
 					LastLoginDate = DateTime.Now,
-					LastProfileUpdate= DateTime.Now,
+					LastProfileUpdate = DateTime.Now,
 					FullName = AccountUser.FirstName + " " + AccountUser.LastName,
 					PhoneNumber = AccountUser.PhoneNumber,
 					ProfilePicture = AccountUser.ClientFile != null
@@ -116,7 +122,7 @@ namespace Skillup_Academy.Controllers.Users
 				var result = await _userManager.CreateAsync(user, AccountUser.Password);
 				if (result.Succeeded)
 				{
-					var roleResult = await _userManager.AddToRoleAsync(user,UserType.Instructor.ToString());
+					var roleResult = await _userManager.AddToRoleAsync(user, UserType.Instructor.ToString());
 					if (roleResult.Succeeded)
 					{
 						await _signInManager.SignInAsync(user, AccountUser.RememberMe);
@@ -157,14 +163,14 @@ namespace Skillup_Academy.Controllers.Users
 			if (ModelState.IsValid)
 			{
 				var file = _fileService.GetDefaultAvatar();
-				 
+
 				var user = new Student
-				{ 
+				{
 					Email = AccountUser.Email,
-					UserName = AccountUser.FirstName, 
+					UserName = AccountUser.FirstName,
 					RegistrationDate = DateTime.Now,
 					LastLoginDate = DateTime.Now,
-					LastProfileUpdate= DateTime.Now,
+					LastProfileUpdate = DateTime.Now,
 					FullName = AccountUser.FirstName + " " + AccountUser.LastName,
 					PhoneNumber = AccountUser.PhoneNumber,
 					ProfilePicture = AccountUser.ClientFile != null
@@ -176,7 +182,7 @@ namespace Skillup_Academy.Controllers.Users
 				var result = await _userManager.CreateAsync(user, AccountUser.Password);
 				if (result.Succeeded)
 				{
-					var roleResult = await _userManager.AddToRoleAsync(user,UserType.Student.ToString());
+					var roleResult = await _userManager.AddToRoleAsync(user, UserType.Student.ToString());
 					if (roleResult.Succeeded)
 					{
 						await _signInManager.SignInAsync(user, AccountUser.RememberMe);
@@ -201,10 +207,10 @@ namespace Skillup_Academy.Controllers.Users
 
 			return View(AccountUser);
 		}
-		 
+
 
 		[HttpGet]
-		public async Task<IActionResult> GetAllInstructors() 
+		public async Task<IActionResult> GetAllInstructors()
 		{
 			var teachers = await _repoTeacher.GetAllAsync();
 
@@ -212,15 +218,65 @@ namespace Skillup_Academy.Controllers.Users
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetCoursesForInstructors(Guid Id) 
+		public async Task<IActionResult> GetCoursesForInstructors(Guid Id)
 		{
 			var Courses = await _repoTeacher.Query()
-				.Include(c=>c.Courses)
-				.FirstOrDefaultAsync(i=>i.Id==Id);
+				.Include(c => c.Courses)
+				.FirstOrDefaultAsync(i => i.Id == Id);
 
 			return View(Courses);
 		}
 
 
-	}
+
+		public IActionResult GoogleLogin()
+		{
+			var redirectUrl = Url.Action("GoogleResponse", "Account");
+			var properties = _signInManager.ConfigureExternalAuthenticationProperties(GoogleDefaults.AuthenticationScheme, redirectUrl);
+			return Challenge(properties, GoogleDefaults.AuthenticationScheme);
+		}
+
+        [HttpPost]
+        public async Task<IActionResult> GoogleResponse()
+        {
+            // 1) Token from Google Identity Services
+            var token = Request.Form["credential"];
+
+            if (string.IsNullOrEmpty(token))
+                return RedirectToAction("Login");
+
+            // 2) Validate token via Google
+            var payload = await GoogleJsonWebSignature.ValidateAsync(token);
+
+            var email = payload.Email;
+
+            // 3) Check if user exists
+            var user = await _userManager.FindByEmailAsync(email);
+
+            // 4) Create user if not exists
+            if (user == null)
+            {
+                user = new User
+                {
+                    UserName = email,
+                    Email = email,
+                    EmailConfirmed = true,
+                    FullName = payload.Name ?? "Google User",
+					ProfilePicture = payload.Picture ?? "\\img\\Profile\\download.png"
+                };
+                await _userManager.CreateAsync(user);
+            }
+
+            // 5) Sign in user
+            await _signInManager.SignInAsync(user, isPersistent: false);
+
+            // 6) Redirect anywhere you want
+            return RedirectToAction(nameof(Index), "Home");
+        }
+
+
+
+    }
+
+
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NuGet.DependencyResolver;
 using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
 using Skillup_Academy.ViewModels.TeacherDashboard;
@@ -40,20 +41,16 @@ namespace Skillup_Academy.Controllers.Users
         [HttpGet]
         public async Task<IActionResult> Dashboard()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-
-            if (userId == null)
+           
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
                 return Unauthorized();
+            //var teacher = await _userManager.FindByIdAsync(userId);
+            //if (teacher == null)
+            //    return NotFound("Teacher not found.");
+            //var teacherGuid = Guid.Parse(user.Id.ToString());
 
-            var teacher = await _userManager.FindByIdAsync(userId);
-
-            if (teacher == null)
-                return NotFound("Teacher not found.");
-
-            if (!Guid.TryParse(teacher.Id.ToString(), out var teacherGuid))
-                return BadRequest("Invalid teacher ID format.");
-
-            var dashboardData = await _teacherRepository.GetTeacherDashboardAsync(teacherGuid);
+            var dashboardData = await _teacherRepository.GetTeacherDashboardAsync(user.Id);
             if (dashboardData == null)
                 return NotFound("Dashboard data not available.");
 
@@ -62,8 +59,10 @@ namespace Skillup_Academy.Controllers.Users
              {
                  CourseId = c.CourseId,
                  Title = c.Title,
-                 Description = c.Description,
                  IsPublished = c.IsPublished,
+                 TotalDuration = c.TotalDuration,
+                 ThumbnailUrl = c.ThumbnailUrl,
+                 AverageRating = c.AverageRating,
                  CreatedDate = c.CreatedDate,
                  TotalLessons = c.TotalLessons,
                  TotalStudents = c.TotalStudents,
@@ -72,36 +71,92 @@ namespace Skillup_Academy.Controllers.Users
 
             var viewModel = new TeacherDashboardVM
             {
-                TeacherName = teacher.FullName ?? string.Empty,
+                TeacherName = user.FullName ?? string.Empty,
                 TotalCourses = dashboardData.TotalCourses,
                 TotalStudents = dashboardData.TotalStudents,
+                ProfilePictureUrl = dashboardData.ProfilePictureUrl,
+                TeacherBio = dashboardData.TeacherBio,
+                TeacherExpertise = dashboardData.TeacherExpertise,
+                TeacherRating = dashboardData.TeacherRating,
                 Courses = coursesList
             };
             return View(viewModel);
         }
+        [Authorize]
         [HttpGet]
-        public async Task<IActionResult> MyCourses()
-        {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
-                return Unauthorized();
-            var teacher = await _userManager.FindByIdAsync(userId);
-            if (teacher == null)
-                return NotFound("Teacher not found.");
-            if (!Guid.TryParse(teacher.Id.ToString(), out var teacherGuid))
-                return BadRequest("Invalid teacher ID format.");
-            var courses = await _teacherRepository.GetTeacherCoursesAsync(teacherGuid);
-            var viewModel = courses.Select(c => new CourseDashboardViewModel
+         public async Task<IActionResult> MyCourses()
+            {
+                var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                if (userId == null)
+                    return Unauthorized();
+
+                var teacher = await _teacherRepository.GetTeacherAsync(userId);
+                if (teacher == null)
+                    return NotFound("Teacher not found.");
+
+                if (!Guid.TryParse(teacher.Id.ToString(), out var teacherGuid))
+                    return BadRequest("Invalid teacher ID format.");
+
+                var courses = await _teacherRepository.GetTeacherCoursesAsync(teacherGuid);
+                var viewModel = courses.Select(c => new CourseDashboardViewModel
+                {
+                    CourseId = c.CourseId,
+                    Title = c.Title,
+                    Description = c.Description,
+                    IsPublished = c.IsPublished,
+                    ThumbnailUrl = c.ThumbnailUrl,
+                    IsFree = c.IsFree,
+                    AverageRating = c.AverageRating,
+                    TotalDuration = c.TotalDuration,
+                    CreatedDate = c.CreatedDate,
+                    TotalLessons = c.TotalLessons,
+                    TotalStudents = c.TotalStudents,
+                    teacherId = c.teacherId
+
+                }).ToList();
+                ViewBag.TeacherName = teacher.FullName;
+                ViewBag.ProfilePictureUrl = teacher.ProfilePicture;
+                ViewBag.TeacherExpertise = teacher.Expertise;
+                ViewBag.TeacherId = teacher.Id;
+                return View(viewModel);
+            }
+        
+        public async Task<IActionResult> CourseSearch(string searchString, Guid teacherId)
+  {
+            // هجيب كل كورسات المدرّس
+            var allCourses = await _teacherRepository.GetTeacherCoursesAsync(teacherId);
+
+            // فلترة لو فيه بحث
+            if (!string.IsNullOrWhiteSpace(searchString))
+            {
+                searchString = searchString.ToLower();
+
+                allCourses = allCourses
+                    .Where(c =>
+                        (!string.IsNullOrEmpty(c.Title) && c.Title.ToLower().Contains(searchString)) ||
+                        (!string.IsNullOrEmpty(c.Description) && c.Description.ToLower().Contains(searchString))
+                    )
+                    .ToList();
+            }
+
+            // لازم تحوّل للـ ViewModel زي MyCourses
+            var viewModel = allCourses.Select(c => new CourseDashboardViewModel
             {
                 CourseId = c.CourseId,
                 Title = c.Title,
                 Description = c.Description,
                 IsPublished = c.IsPublished,
+                ThumbnailUrl = c.ThumbnailUrl,
+                IsFree = c.IsFree,
+                AverageRating = c.AverageRating,
+                TotalDuration = c.TotalDuration,
                 CreatedDate = c.CreatedDate,
                 TotalLessons = c.TotalLessons,
                 TotalStudents = c.TotalStudents,
+                teacherId = c.teacherId
             }).ToList();
-            return View(viewModel);
+
+            return View("MyCourses", viewModel);
         }
 
         [Authorize]
@@ -114,19 +169,16 @@ namespace Skillup_Academy.Controllers.Users
         [HttpGet]
         public async Task<IActionResult> Setting()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
                 return Unauthorized();
 
-            var teacher = await _userManager.FindByIdAsync(userId);
-            if (teacher == null)
-                return NotFound("Teacher not found.");
+            //var teacherGuid = Guid.Parse(userId);
 
-            if (!Guid.TryParse(teacher.Id.ToString(), out var teacherGuid))
-                return BadRequest("Invalid teacher ID format.");
-            var teacherInfo = await _teacherRepository.GetTeacherInfoAsync(teacherGuid);
+           var teacherInfo = await _teacherRepository.GetTeacherInfoAsync(user.Id);
             if (teacherInfo == null)
                 return NotFound("Teacher info not available.");
+
             var viewModel = new TeacherInfoVM
             {
                 FullName = teacherInfo.FullName,
@@ -137,34 +189,101 @@ namespace Skillup_Academy.Controllers.Users
                 Expertise = teacherInfo.Expertise,
                 ProfilePicture = teacherInfo.ProfilePicture
             };
-            return View(viewModel);
+
+            return View(viewModel);        
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Setting(TeacherInfoVM model)
+        {
+            if(!ModelState.IsValid)
+            {
+                var errors = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                   .Select(e => e.ErrorMessage)
+                   .ToList();
+
+                // Debug in console
+                foreach (var error in errors)
+                {
+                    Console.WriteLine(error);
+                }
+                return View(model);
+            }
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
+            var teacherInfo = await _teacherRepository.GetTeacherInfoAsync(user.Id);
+            if(teacherInfo == null) 
+                return NotFound("Teacher info not available.");
+            // Update teacher info
+            teacherInfo.FullName = model.FullName;
+            teacherInfo.Email = model.Email;
+            teacherInfo.PhoneNumber = model.PhoneNumber;
+            teacherInfo.Bio = model.Bio;
+            teacherInfo.Qualifications = model.Qualifications;
+            teacherInfo.Expertise = model.Expertise;
+            // Update profile picture if provided
+            if (model.ProfilePictureFile != null)
+            {
+                // مكان حفظ الصور
+                var uploadPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/images/teachers");
+                if (!Directory.Exists(uploadPath))
+                    Directory.CreateDirectory(uploadPath);
+
+                var fileName = $"{Guid.NewGuid()}_{model.ProfilePictureFile.FileName}";
+                var filePath = Path.Combine(uploadPath, fileName);
+
+                using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    await model.ProfilePictureFile.CopyToAsync(stream);
+                }
+
+                // عدل الرابط في DB
+                teacherInfo.ProfilePicture = $"/images/teachers/{fileName}";
+            }
+            else if (!string.IsNullOrEmpty(model.ProfilePicture))
+            {
+                // لو ما غيرش المستخدم الصورة، احتفظ بالقيمة القديمة
+                teacherInfo.ProfilePicture = model.ProfilePicture;
+            }
+            // Save changes
+            var result = await _teacherRepository.UpdateTeacherInfoAsync(teacherInfo,user.Id);
+            if (result.Succeeded)
+            {
+                TempData["SuccessMessage"] = "Settings updated successfully!";
+                return RedirectToAction("Setting");
+            }
+            else
+            {
+                ModelState.AddModelError("", "Failed to update settings.");
+                return View(model);
+            }
 
         }
+
+
         [HttpGet]
         public async Task<IActionResult> Students()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            if (userId == null)
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
                 return Unauthorized();
-            var teacher = await _userManager.FindByIdAsync(userId);
-            if (teacher == null)
-                return NotFound("Teacher not found.");
+            var teacher = await _teacherRepository.GetTeacherAsync(user.Id.ToString());
             if (!Guid.TryParse(teacher.Id.ToString(), out var teacherGuid))
                 return BadRequest("Invalid teacher ID format.");
-            var totalStudents = await _teacherRepository.GetTotalStudentsAsync(teacherGuid);
-            //if (totalStudents == 0)
-            //    {
-            //    ViewBag.Message = "No students enrolled yet.";
-            //    return View(new List<StudentListViewModel>());
-            //    }
+             var totalStudents = await _teacherRepository.GetTotalStudentsAsync(teacherGuid);
+
              var activeStudents = await _teacherRepository.GetActiveStudentsAsync(teacherGuid);
+
              var completeStudents = await _teacherRepository.GetCompleteStudentsAsync(teacherGuid);
+
              var totalCourses = await _teacherRepository.GetTeacherCoursesAsync(teacherGuid);
+
              var studentVM = new StudentListViewModel
             {
                 TotalStudents = totalStudents,
                 ActiveStudents = activeStudents,
-                InactiveStudents = totalStudents - activeStudents,
                 CompletedStudents = completeStudents,
                 TeacherCourses = totalCourses.Select(c => new Core.DTOs.TeacherDashboardDTOs.CourseDashboardDTO
                 {
@@ -190,8 +309,40 @@ namespace Skillup_Academy.Controllers.Users
             studentVM.PageSize = studentsList.PageSize;
             studentVM.TotalRecords = studentsList.TotalRecords;
             return View(studentVM);
-
-
+        }
+        public async Task<IActionResult> StudentDetails(Guid id)
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                return Unauthorized();
+            var teacher = await _teacherRepository.GetTeacherAsync(user.Id.ToString());
+            var studentDetails = await _teacherRepository.GetStudentDetailsAsync(user.Id, id);
+            if (studentDetails == null)
+                return NotFound("Student details not available.");
+            var viewModel = new StudentDetailsVM
+            {
+                //StudentId = studentDetails.StudentId,
+                FullName = studentDetails.FullName,
+                Email = studentDetails.Email,
+                PhoneNumber = studentDetails.PhoneNumber,
+                ProfilePicture = studentDetails.ProfilePicture,
+                CoursesCount = studentDetails.CoursesCount,
+                Status = studentDetails.Status,
+                Courses = studentDetails.Courses.Select(c => new Core.DTOs.TeacherDashboardDTOs.StudentsDTO.StudentCourseDTO
+                {
+                    CourseId = c.CourseId,
+                    CourseTitle = c.CourseTitle,
+                    CourseDescription = c.CourseDescription,
+                    CourseImage = c.CourseImage,
+                    EnrolledAt = c.EnrolledAt,
+                    Status = c.Status
+                }).ToList()
+            };
+            ViewBag.TeacherName = teacher.FullName;
+            ViewBag.ProfilePictureUrl = teacher.ProfilePicture;
+            ViewBag.TeacherExpertise = teacher.Expertise;
+            ViewBag.TeacherId = teacher.Id;
+            return View(viewModel);
         }
         [HttpGet]
         public async Task<IActionResult> CourseDetails(Guid id)
@@ -223,53 +374,7 @@ namespace Skillup_Academy.Controllers.Users
 
 
 
-        //public async Task<IActionResult> Setting(Teacher model, IFormFile ProfilePictureFile)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        try
-        //        {
-        //            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        //            if (userId == null)
-        //                return Unauthorized();
-
-        //            var teacher = await _userManager.FindByIdAsync(userId);
-        //            if (teacher == null)
-        //                return NotFound("Teacher not found.");
-
-        //            // حفظ الصورة إذا تم رفعها
-        //            if (ProfilePictureFile != null && ProfilePictureFile.Length > 0)
-        //            {
-        //                model.ProfilePicture = await _saveImage.SaveImgAsync(ProfilePictureFile);
-        //            }
-
-        //            // تحديث بيانات المعلم
-        //            var result = await _teacherRepository.UpdateTeacherAsync(model, teacher.Id);
-
-        //            if (result)
-        //            {
-        //                TempData["SuccessMessage"] = "Settings updated successfully!";
-        //                return RedirectToAction("Settings");
-        //            }
-        //            else
-        //            {
-        //                ModelState.AddModelError("", "Failed to update settings.");
-        //            }
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            ModelState.AddModelError("", $"An error occurred: {ex.Message}");
-        //        }
-        //    }
-
-        //    return View(model);
-        //}
-
-
-
-
-
-
+        
 
         //////////////////////////////////////////////////////////// For Admin Dashboard////////////////////////////////////////////
         [HttpGet]

@@ -8,8 +8,9 @@
         public string Bio { get; set; }                    // السيرة الذاتية
         public string Qualifications { get; set; }         // المؤهلات العلمية
         public string Expertise { get; set; }              // التخصص
-        public string ProfilePicture { get; set; }         // صورة البروفايل
-   
+        public string? ProfilePicture { get; set; }         // صورة البروفايل
+        public IFormFile? ProfilePictureFile { get; set; } // الصورة الجديدة
+
     }
 
 }

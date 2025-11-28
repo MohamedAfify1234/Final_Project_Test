@@ -11,7 +11,9 @@ namespace Core.DTOs.TeacherDashboardDTOs.StudentsDTO
     {
         public Guid CourseId { get; set; }
         public string CourseTitle { get; set; }
-       // public DateTime EnrolledDate { get; set; }
-      //  public StudentStatus Status { get; set; } // Active / Completed / Dropped
+        public string CourseDescription { get; set; }
+        public string CourseImage { get; set; }
+        public DateTime EnrolledAt { get; set; }
+        public StudentStatus Status { get; set; } // Active / Completed / Dropped
     }
 }

@@ -22,6 +22,8 @@ using Skillup_Academy.AppSettingsImages;
 using Skillup_Academy.Helper;
 using Skillup_Academy.Mappings;
 using X.Paymob.CashIn;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 
 namespace Skillup_Academy
 {
@@ -77,9 +79,25 @@ namespace Skillup_Academy
             builder.Services.AddScoped<SaveImage>();
             builder.Services.AddScoped<FileService>();
 
+
+            //builder.Services.AddAuthentication(options =>
+            ////options.DefaultScheme = IdentityConstants.ApplicationScheme
+            //{
+            //    options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            //})
+            //.AddCookie()
+            //.AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+            //{
+            //    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+            //    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+            //});
+
             builder.Services.AddAutoMapper(config =>
             { config.AddProfile<MappingProfile>(); });
+
             var app = builder.Build();
+             
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
