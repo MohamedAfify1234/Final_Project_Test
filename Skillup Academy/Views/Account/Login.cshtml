@@ -10,8 +10,7 @@
     <title>Login - Bedaya</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    @* <script src="https://apis.google.com/js/platform.js" async defer></script> *@
-    
+
     <style>
         :root {
             --primary-color: #3498db;
@@ -53,15 +52,18 @@
         }
 
         @@keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
+            from
 
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+        {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         }
 
         .login-card {
@@ -129,7 +131,6 @@
             font-size: 0.95rem;
         }
 
-        /* Registration Options - Smaller and below Google */
         .registration-options {
             display: flex;
             gap: 0.75rem;
@@ -233,7 +234,6 @@
             font-size: 0.9rem;
         }
 
-        /* Full-width inputs */
         .form-input {
             width: 100%;
             padding: 0.9rem 1rem;
@@ -364,33 +364,11 @@
                 font-size: 0.875rem;
             }
 
-        /* Wider Google Login Button */
-        .google-login {
+        .google-btn-wrapper {
+            margin-top: 1rem;
             display: flex;
-            align-items: center;
             justify-content: center;
-            gap: 0.75rem;
-            padding: 0.9rem;
-            border: 1.5px solid var(--border-color);
-            border-radius: 12px;
-            background-color: white;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
             width: 100%;
-            font-size: 1rem;
-        }
-
-            .google-login:hover {
-                background-color: var(--light-color);
-                transform: translateY(-2px);
-                box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-                border-color: #db4437;
-            }
-
-        .google-icon {
-            color: #db4437;
-            font-size: 1.2rem;
         }
 
         .registration-divider {
@@ -468,62 +446,71 @@
                 margin-bottom: 0.25rem;
             }
 
-        /* Responsive Styles */
         @@media (max-width: 480px) {
-            .login-card {
-                padding: 2rem 1.5rem;
-            }
+            .login-card
 
-            .form-options {
-                flex-direction: column;
-                gap: 1rem;
-                align-items: flex-start;
-            }
+        {
+            padding: 2rem 1.5rem;
+        }
 
-            .registration-options {
-                flex-direction: column;
-                gap: 0.75rem;
-            }
+        .form-options {
+            flex-direction: column;
+            gap: 1rem;
+            align-items: flex-start;
+        }
 
-            .reg-option {
-                min-height: 80px;
-                padding: 0.75rem 0.5rem;
-            }
+        .forgot-password {
+            align-self: flex-end;
+        }
+
+        .registration-options {
+            flex-direction: column;
+            gap: 0.75rem;
+        }
+
+        .reg-option {
+            min-height: 80px;
+            padding: 0.75rem 0.5rem;
+        }
+
         }
 
         @@media (max-width: 380px) {
-            .login-container {
-                max-width: 100%;
-            }
+            .login-container
 
-            .login-card {
-                padding: 1.5rem 1rem;
-            }
+        {
+            max-width: 100%;
+        }
 
-            .registration-options {
-                gap: 0.5rem;
-            }
+        .login-card {
+            padding: 1.5rem 1rem;
+        }
 
-            .reg-option {
-                padding: 0.75rem 0.25rem;
-            }
+        .registration-options {
+            gap: 0.5rem;
+        }
 
-            .reg-icon {
-                width: 35px;
-                height: 35px;
-                font-size: 0.9rem;
-            }
+        .reg-option {
+            padding: 0.75rem 0.25rem;
+        }
 
-            .reg-text {
-                font-size: 0.8rem;
-            }
+        .reg-icon {
+            width: 35px;
+            height: 35px;
+            font-size: 0.9rem;
+        }
 
-            .reg-subtext {
-                font-size: 0.65rem;
-            }
+        .reg-text {
+            font-size: 0.8rem;
+        }
+
+        .reg-subtext {
+            font-size: 0.65rem;
+        }
+
         }
     </style>
-    
+
 </head>
 <body>
     <div class="login-container">
@@ -554,7 +541,7 @@
                     <label for="Password" class="form-label">Password</label>
                     <div class="input-with-icon">
                         <i class="fas fa-lock input-icon"></i>
-                        <input type="password" id="Password"  asp-for="Password" class="form-input" placeholder="Enter your password" required>
+                        <input type="password" id="Password" asp-for="Password" class="form-input" placeholder="Enter your password" required>
                         <button type="button" class="password-toggle" id="passwordToggle">
                             <i class="fas fa-eye"></i>
                         </button>
@@ -566,21 +553,18 @@
                         <input type="checkbox" id="RememberMe" asp-for="RememberMe" value="true">
                         <label for="RememberMe">Remember me</label>
                     </div>
-                    @* <a href="/Users/ForgotPassword" class="forgot-password">Forgot password?</a> *@
+                    <a asp-controller="ForgetPassword" asp-action="ForgotPassword" class="forgot-password">Forgot password?</a>
                 </div>
 
                 <button type="submit" class="login-button">Sign In</button>
             </form>
-
+@* 
             <div class="login-divider">
                 <span>Or continue with</span>
             </div>
 
-            
-            <!-- 1. Google Identity Services Library -->
             <script src="https://accounts.google.com/gsi/client" async defer></script>
 
-            <!-- 2. Onload config -->
             <div id="g_id_onload"
                  data-client_id="456017434644-a0utmvjnak5vqvbqcr5vlco8n7gb93n0.apps.googleusercontent.com"
                  data-context="signin"
@@ -589,28 +573,17 @@
                  data-auto_prompt="false">
             </div>
 
-            <!-- 3. Google Sign-in Button -->
-            <div class="g_id_signin"
-                 data-type="standard"
-                 data-shape="pill"
-                 data-theme="filled_blue"
-                 data-text="signin_with"
-                 data-size="large"
-                 data-logo_alignment="left">
+            <div class="google-btn-wrapper">
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="pill"
+                     data-theme="outline"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-logo_alignment="left">
+                </div>
             </div>
-
-            <!-- 4. Optional styling -->
-            <style>
-                .g_id_signin {
-                    margin-top: 20px;
-                    display: flex;
-                    justify-content: center;
-                }
-            </style>
-
-            
-
-            <!-- Registration Options - Below Google Login -->
+ *@
             <div class="registration-divider">
                 <span>New to Bedaya?</span>
             </div>
@@ -637,18 +610,13 @@
                 <a href="/Home/Index" class="home-link">
                     <i class="fas fa-arrow-left"></i>
                     Back to Home
-                </a>                
-                <a class="home-link" asp-controller="ForgetPassword" asp-action="ForgotPassword" style="text-decoration: none;">
-                    Forgot Password?
                 </a>
             </div>
         </div>
     </div>
 
     <script>
-        
         document.addEventListener('DOMContentLoaded', function() {
-            // Password toggle functionality
             const passwordToggle = document.getElementById('passwordToggle');
             const passwordInput = document.getElementById('Password');
 
@@ -658,41 +626,21 @@
                 this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
             });
 
-            // Google Login functionality
-            // const googleLoginBtn = document.getElementById('googleLogin');
-
-            // googleLoginBtn.addEventListener('click', function() {
-            //     // Simulate Google OAuth process
-            //     this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Redirecting to Google...';
-            //     this.disabled = true;
-
-            //     // In a real application, this would redirect to Google OAuth
-            //     setTimeout(() => {
-            //         this.innerHTML = '<i class="fab fa-google google-icon"></i> Continue with Google';
-            //         this.disabled = false;
-            //     }, 2000);
-            // });
-
-            // Form submission enhancement
             const loginForm = document.querySelector('.login-form');
 
             loginForm.addEventListener('submit', function(e) {
                 const submitBtn = this.querySelector('button[type="submit"]');
                 const originalText = submitBtn.innerHTML;
 
-                // Show loading state
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
                 submitBtn.disabled = true;
 
-                // In a real application, the form would be submitted to the server
-                // This is just for visual feedback
                 setTimeout(() => {
                     submitBtn.innerHTML = originalText;
                     submitBtn.disabled = false;
                 }, 2000);
             });
 
-            // Add focus effects to form inputs
             const formInputs = document.querySelectorAll('.form-input');
 
             formInputs.forEach(input => {
@@ -706,6 +654,6 @@
             });
         });
     </script>
-    
+
 </body>
 </html>
