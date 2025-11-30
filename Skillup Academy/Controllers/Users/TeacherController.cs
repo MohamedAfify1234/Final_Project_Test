@@ -349,7 +349,9 @@ namespace Skillup_Academy.Controllers.Users
         {
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
-                return RedirectToAction("Login", "Account");
+                return RedirectToAction("Lo" +
+                    "" +
+                    "gin", "Account");
 
             bool canView = user.CanViewPaidCourses;
 
